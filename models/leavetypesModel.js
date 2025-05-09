@@ -1,7 +1,11 @@
 const database = require('../config/db');
-
 exports.getAllLeaveTypes = async () => {
     const [result] = await database.query('SELECT * FROM leavetypes');
+    return result;
+}
+
+exports.getLeaveTypeById = async (leavetype_id) => {
+    const [result] = await database.query('SELECT * FROM leavetypes WHERE leavetype_id=?',[leavetype_id]);
     return result;
 }
 
@@ -19,11 +23,4 @@ exports.deleteLeaveType = async (id) => {
     const result = await database.query('DELETE FROM leavetypes where leavetype_id=?', [id]);
     return result;
 }
-
-
-
-
-
-
-
 

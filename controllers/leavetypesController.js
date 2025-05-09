@@ -1,5 +1,6 @@
-const pool = require('../config/db');
-const leavetypesModel = require('../models/leavetypesModel')
+// const pool = require('../config/db');
+
+const leavetypesModel = require('../models/leavetypesModel');
 
 exports.getAllLeaveTypes = async (request, h) => {
     try {
@@ -8,6 +9,22 @@ exports.getAllLeaveTypes = async (request, h) => {
     } catch (error) {
         console.error("failed to get leavetypes ", error);
         return h.response({ error: 'Failes to get all leavetypes' }).code(500);
+    }
+}
+
+exports.getLeaveTypeById = async (request, h) => {
+    
+    const { id } = request.params;
+    try {
+        const result = await leavetypesModel.getLeaveTypeById(id);
+        if (result.length == 0) {
+            return h.response({ error: 'Leave type is not found' }).code(404);
+        }
+        console.log(result)
+        return h.response({ message: "successfully get the date" }).code(200);
+    }catch (error) {
+        console.error("Failed to get leavetypes", error);
+        return h.response({ error: 'Failed to get leavetye' }).code(500);
     }
 }
 

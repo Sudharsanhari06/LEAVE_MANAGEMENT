@@ -6,18 +6,24 @@ const employeeRoutes = [
         handler: employeesController.getAllEmployees
     },
     {
+        method: 'GET',
+        path: '/employees/{id}',
+        handler: employeesController.getEmployeesById
+    },
+
+    {
         method: 'post',
         path: '/employees',
         handler: employeesController.addEmployee
     },
     {
         method: 'PUT',
-        path: '/employees/{id}',
+        path: '/employees/{id}/update',
         handler: employeesController.updateEmployee
     },
     {
         method: 'DELETE',
-        path: '/employees/{id}',
+        path: '/employees/{id}/delete',
         handler: employeesController.deleteEmployee
     }
 ]

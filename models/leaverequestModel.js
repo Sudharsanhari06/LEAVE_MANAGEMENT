@@ -9,6 +9,18 @@ exports.getAllLeaverequest = async () => {
     const [result] = await database.query('SELECT * FROM leaverequests');
     return result;
 }
+
+exports.getLeaverequestIdDelete=async(req_id)=>{
+
+}
+
+
+exports.getLeaverequestById=async(req_id)=>{
+    const[result]= await database.query('SELECT * FROM leaverequests WHERE request_id=?',[req_id]);
+    return result;
+}
+
+
 exports.getAllLeaverequestById = async (id) => {
     const [result] = await database.query('SELECT * FROM leaverequests WHERE employee_id=?', [id]);
     return result;

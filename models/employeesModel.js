@@ -5,6 +5,11 @@ exports.getAllEmployees = async () => {
     return rows;
 }
 
+exports.getEmployeesById = async (id) => {
+    const [result] = await database.query('SELECT * FROM employees WHERE employee_id=?',[id]);
+    return result;
+}
+
 exports.addEmployee = async (name, role, manager_id, hr_id, director_id, join_date) => {
     const [result] = await database.query('INSERT INTO employees (name,role,manager_id,hr_id,director_id,join_date) VALUES (?,?,?,?,?,?)', [name, role, manager_id, hr_id, director_id, join_date]);
     return result;
@@ -15,10 +20,15 @@ exports.updateEmployee = async (name, role, manager_id, hr_id, director_id, join
     return result;
 }
 
-exports.deleteEmployee=async(id)=>{
-    const[result,fields]=await database.query('DELETE FROM employees WHERE employee_id=?', [id]);
-    console.log("fields:",fields);
+exports.deleteEmployee = async (id) => {
+    const [result, fields] = await database.query('DELETE FROM employees WHERE employee_id=?', [id]);
+    console.log("fields:", fields);
     return result;
 }
+
+
+
+
+
 
 

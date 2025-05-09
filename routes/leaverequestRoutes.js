@@ -10,7 +10,14 @@ const leaverequestRoutes = [
         method: 'GET',
         path: '/leaverequest',
         handler: leaverequestController.getAllLeaverequest
-    }, {
+    }, 
+    {
+        method: 'GET',
+        path: '/leaverequest/{id}/',
+        handler: leaverequestController.getLeaverequestById
+    }
+    ,
+    {
         method: 'GET',
         path: '/leaverequest/employee/{id}',
         handler: leaverequestController.getAllLeaverequestById
@@ -18,6 +25,11 @@ const leaverequestRoutes = [
         method: 'PUT',
         path: '/employee/{emp_id}/leaverequest/{req_id}',
         handler: leaverequestController.cancelLeaverequest
+    }
+    ,{
+        method: 'DELETE',
+        path: '/leaverequest/{id}/delete',
+        handler: leaverequestController.getLeaverequestIdDelete     
     }
 ]
 module.exports = leaverequestRoutes;

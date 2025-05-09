@@ -7,12 +7,29 @@ exports.getAllEmployees = async (request, h) => {
     try {
         const data = await employeeModel.getAllEmployees();
         return h.response(data).code(200);
-        
+
     } catch (error) {
         console.error('Error fetching employees:', error);
         return h.response({ error: 'Failed to fetch employees' }).code(500);
     }
 };
+
+
+exports.getEmployeesById = async (request, h) => {
+    const { id } = request.params;
+    try {
+        const result = await employeeModel.getEmployeesById(id);
+        if (result.length == 0) {
+            return h.response({ error: "The employee ID is not found" }).code(404);
+        }
+        return h.response({ message: "Successfully get "}).code(200);
+    } catch (error) {
+        console.error("Failed to get employee by ID", error);
+        return h.response({ error: "Failed to fetch the employee details" }).code(500);
+    }
+};
+
+
 
 exports.addEmployee = async (request, h) => {
     const { name, role, manager_id, hr_id, director_id, join_date } = request.payload;

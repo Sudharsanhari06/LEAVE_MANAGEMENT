@@ -1,4 +1,5 @@
 const leaverequestModel = require('../models/leaverequestModel');
+
 exports.addLeaverequest = async (request, h) => {
     const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop } = request.payload;
     try {
@@ -20,6 +21,23 @@ exports.getAllLeaverequest = async (request, h) => {
         return h.response({ error: "Fail to get leaverequest" }).code(500);
     }
 }
+exports.getLeaverequestById=async(request,h)=>{
+    
+    const{req_id}=request.params;
+    try{
+        const result=await leaverequestModel.getLeaverequestById(req_id);
+
+        if(result.length==0){
+            return h.response({error:"The Id is Not Found"}).code(404)
+        }
+        return h.response({message:"successfully get"}).cdoe(200);
+    }catch(error){
+        console.log("Failed to get",error);
+        return h.response({error:"Fail to get"}).code(500);
+    }
+}
+
+
 
 exports.getAllLeaverequestById = async (request, h) => {
     const { id } = request.params;
@@ -32,10 +50,11 @@ exports.getAllLeaverequestById = async (request, h) => {
     } catch (error) {
         console.error("Fail to get leaverequest", error);
         return h.response({ error: "Fail to get leaverequest" }).code(500)
-    }
+        }
 }
 
 exports.cancelLeaverequest = async (request, h) => {
+    
     const { req_id, emp_id } = request.params;
     try {
         const result = await leaverequestModel.cancelLeaverequest(req_id, emp_id);
@@ -50,6 +69,16 @@ exports.cancelLeaverequest = async (request, h) => {
 }
 
 
+exports.getLeaverequestIdDelete=async(request,h)=>{
+    const{req_id}=request.params;
+    try{
+        const result=await leaverequestModel.getLeaverequestIdDelete(req_id);
+        return h.response({message:"successfully deleted"}).code(200)
+    }catch(error){
+        console.error("Failed to get leaverequest",error);
+        return h.response({error:"Failed to get leaverequest"}).code(500)
+    }
+}
 
 
 

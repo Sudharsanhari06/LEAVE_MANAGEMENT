@@ -1,9 +1,14 @@
 const leavetypeController = require('../controllers/leavetypesController');
-const leavetypeRoutes = [
+const leavetypeRoutes =[
     {
         method: 'GET',
         path: '/leavetype',
         handler: leavetypeController.getAllLeaveTypes
+    },
+    {
+        method: 'GET',
+        path: '/leavetypeById/{id}',
+        handler: leavetypeController.getLeaveTypeById
     },
     {
         method: "POST",
@@ -12,11 +17,11 @@ const leavetypeRoutes = [
     },
     {
         method: 'PUT',
-        path: "/leavetype/{id}",
+        path: "/leavetype/{id}/update",
         handler: leavetypeController.updateLeaveType
     }, {
         method: 'DELETE',
-        path: '/leavetype/{id}',
+        path: '/leavetype/{id}/delete',
         handler: leavetypeController.deleteLeaveType
     }
 ]

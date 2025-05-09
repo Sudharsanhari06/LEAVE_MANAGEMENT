@@ -6,8 +6,7 @@ const leaveapprovalRoutes=[
      path:'/leaverequest/{req_id}/leaveapproval',
      handler:leaveapprovalController.approveLeave
     }
-]
-
+];
 module.exports=leaveapprovalRoutes;
 
 

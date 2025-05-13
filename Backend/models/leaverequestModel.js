@@ -10,9 +10,9 @@ exports.getAllLeaverequest = async () => {
     return result;
 }
 
-exports.getLeaverequestIdDelete=async(req_id)=>{
+// exports.getLeaverequestIdDelete=async(req_id)=>{
 
-}
+// }
 
 
 exports.getLeaverequestById=async(req_id)=>{
@@ -30,5 +30,3 @@ exports.cancelLeaverequest = async (req_id, emp_id) => {
     const [result] = await database.query(`UPDATE leaverequests SET status='cancelled' WHERE request_id=? AND employee_id=?`, [req_id, emp_id])
     return result;
 }
-
-

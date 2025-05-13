@@ -10,9 +10,8 @@ const employeeRoutes = [
         path: '/employees/{id}',
         handler: employeesController.getEmployeesById
     },
-
     {
-        method: 'post',
+        method: 'POST',
         path: '/employees',
         handler: employeesController.addEmployee
     },

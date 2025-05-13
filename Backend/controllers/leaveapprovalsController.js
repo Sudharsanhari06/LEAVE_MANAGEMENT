@@ -1,8 +1,4 @@
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
-// const leavetypesModel = require('../models/leavetypesModel');
-// const leaveUtil = require('../utils/leaveUtils');
-// const leaverequestModel=require('../models/leaverequestModel');
-
 
 exports.approveLeave = async (request, h) => {
     const { req_id } = request.params;
@@ -15,7 +11,6 @@ exports.approveLeave = async (request, h) => {
         return h.response({ error: 'Failed to approve ' }).code(500);
     }
 }
-
 
 // exports.applyLeave = async (request, h) => {
 //     const { employee_id, leavetype_id, start_date, end_date, reason } = request.payload;
@@ -58,8 +53,31 @@ exports.approveLeave = async (request, h) => {
 //     return h.response({ message: `Leave ${status} successfull y`, request_id: leaveResult.insertId }).code(201);
 // }
 
+exports.getAllapprovalById = async (request, h) => {
+    const { req_id } = request.params;
+    try {
+        const result = await leaveapprovalModel.getAllapprovalById(req_id);
+        if (result.length == 0) {
+            return h.response({ error: "The ID is Not Found" }).code(404)
+        }
+        return h.response({ message: "successfully get", data: result[0] }).code(200);
+    } catch (error) {
+        console.error("Failed to get Id", error);
+        return h.response({ error: 'Failed to get the value' }).code(500);
+    }
+}
 
 
-
-
-
+exports.getAllapprovalByEmployeeId = async (request, h) => {
+    const { emp_id } = request.params;
+    try {
+        const result = await leaveapprovalModel.getAllapprovalByEmployeeId(emp_id);
+        if (result.length == 0) {
+            return h.response({ error: "The employee id is Not Found" }).code(404)
+        }
+        return h.response({ message: "Suuccessfully get the employee Id", data: result[0] }).code(200)
+    } catch (error) {
+        console.error("Failed to get Employee Id", error);
+        return h.response({ error: "Failed to get employee Id" }).code(500);
+    }
+}

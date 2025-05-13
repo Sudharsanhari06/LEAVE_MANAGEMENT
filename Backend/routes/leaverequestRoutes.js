@@ -1,5 +1,4 @@
 const leaverequestController = require('../controllers/leaverequestController');
-
 const leaverequestRoutes = [
     {
         method: 'POST',
@@ -10,10 +9,10 @@ const leaverequestRoutes = [
         method: 'GET',
         path: '/leaverequest',
         handler: leaverequestController.getAllLeaverequest
-    }, 
+    },
     {
         method: 'GET',
-        path: '/leaverequest/{id}/',
+        path: '/leaverequest/{req_id}',
         handler: leaverequestController.getLeaverequestById
     }
     ,
@@ -28,8 +27,12 @@ const leaverequestRoutes = [
     }
     ,{
         method: 'DELETE',
-        path: '/leaverequest/{id}/delete',
-        handler: leaverequestController.getLeaverequestIdDelete     
+        path: '/leaverequest/{req_id}/delete',
+        handler: leaverequestController.getLeaverequestIdDelete
+    },{
+        method:'POST',
+        path:'/leaverequest/auto-approve',
+        handler:leaverequestController.autoApproveLeave
     }
 ]
 module.exports = leaverequestRoutes;

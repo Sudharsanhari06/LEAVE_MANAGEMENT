@@ -1,4 +1,3 @@
-
 const database = require('../config/db');
 
 exports.updateLeaveapproval = async (req_id, approved_by, role, status) => {
@@ -11,5 +10,4 @@ exports.updateLeaveapproval = async (req_id, approved_by, role, status) => {
         return await database.query('INSERT INTO leaveapprovals (requset_id,approved_by,role,status) VALUES (?,?,?,?)', [req_id, approved_by, role, status]);
     }
 }
-
 

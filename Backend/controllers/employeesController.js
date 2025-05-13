@@ -22,7 +22,7 @@ exports.getEmployeesById = async (request, h) => {
         if (result.length == 0) {
             return h.response({ error: "The employee ID is not found" }).code(404);
         }
-        return h.response({ message: "Successfully get "}).code(200);
+        return h.response({ message: "Successfully get " }).code(200);
     } catch (error) {
         console.error("Failed to get employee by ID", error);
         return h.response({ error: "Failed to fetch the employee details" }).code(500);
@@ -30,12 +30,20 @@ exports.getEmployeesById = async (request, h) => {
 };
 
 
-
 exports.addEmployee = async (request, h) => {
-    const { name, role, manager_id, hr_id, director_id, join_date } = request.payload;
-    const result = await employeeModel.addEmployee(name, role, manager_id, hr_id, director_id, join_date);
-    return h.response({ message: "employee is added", employee_id: result.insertId }).code(201);
-}
+    const { name, email, password, role, manager_id, hr_id, director_id, join_date } = request.payload;
+    try {
+        const result = await employeeModel.addEmployee({ name, email, password, role, manager_id, hr_id, director_id, join_date });
+        return h.response({ message: "Employee is added", employee_id: result.insertId }).code(200);
+    } catch (error) {
+        if (error.message === 'Email already exists') {
+            return h.response({ message: error.message }).code(400);
+        }
+        console.error('Internal server error in controller', error);
+        return h.response({ message: 'Internal server error controller' }).code(500);
+    }
+};
+
 
 exports.updateEmployee = async (request, h) => {
     const { id } = request.params;

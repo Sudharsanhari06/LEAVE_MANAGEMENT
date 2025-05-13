@@ -10,8 +10,14 @@ exports.getEmployeesById = async (id) => {
     return result;
 }
 
-exports.addEmployee = async (name, role, manager_id, hr_id, director_id, join_date) => {
-    const [result] = await database.query('INSERT INTO employees (name,role,manager_id,hr_id,director_id,join_date) VALUES (?,?,?,?,?,?)', [name, role, manager_id, hr_id, director_id, join_date]);
+exports.addEmployee = async ( name, email, password, role, manager_id, hr_id, director_id, join_date ) => {
+    const[exist]=await database.query('SELECT * FROM employees WHERE email=?',[email]);
+    if(exist.length>0){
+        throw new 'Email is already exist';
+    }
+
+    const [result] = await database.query('INSERT INTO employees (name,email, password,role,manager_id,hr_id,director_id,join_date) VALUES (?,?,?,?,?,?,?,?)', [name,email, password, role, manager_id, hr_id, director_id, join_date]);
+
     return result;
 }
 
@@ -25,10 +31,3 @@ exports.deleteEmployee = async (id) => {
     console.log("fields:", fields);
     return result;
 }
-
-
-
-
-
-
-

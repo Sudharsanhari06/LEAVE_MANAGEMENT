@@ -23,4 +23,3 @@ exports.deleteLeaveType = async (id) => {
     const result = await database.query('DELETE FROM leavetypes where leavetype_id=?', [id]);
     return result;
 }
-

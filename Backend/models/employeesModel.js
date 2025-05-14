@@ -1,4 +1,5 @@
 const database = require('../config/db');
+const bcrypt = require('bcrypt')
 
 exports.getAllEmployees = async () => {
     const [rows] = await database.query('SELECT * FROM employees');
@@ -6,17 +7,20 @@ exports.getAllEmployees = async () => {
 }
 
 exports.getEmployeesById = async (id) => {
-    const [result] = await database.query('SELECT * FROM employees WHERE employee_id=?',[id]);
+    const [result] = await database.query('SELECT * FROM employees WHERE employee_id=?', [id]);
     return result;
 }
 
-exports.addEmployee = async ( name, email, password, role, manager_id, hr_id, director_id, join_date ) => {
-    const[exist]=await database.query('SELECT * FROM employees WHERE email=?',[email]);
-    if(exist.length>0){
-        throw new 'Email is already exist';
+exports.addEmployee = async ({ name, email, password, role, manager_id, hr_id, director_id, join_date }) => {
+
+    const [exist] = await database.query('SELECT * FROM employees WHERE email=?', [email]);
+    if (exist.length > 0) {
+        throw new Error('Email already exists');
     }
 
-    const [result] = await database.query('INSERT INTO employees (name,email, password,role,manager_id,hr_id,director_id,join_date) VALUES (?,?,?,?,?,?,?,?)', [name,email, password, role, manager_id, hr_id, director_id, join_date]);
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const [result] = await database.query('INSERT INTO employees (name,email, password,role,manager_id,hr_id,director_id,join_date) VALUES (?,?,?,?,?,?,?,?)', [name, email, hashedPassword, role, manager_id, hr_id, director_id, join_date]);
 
     return result;
 }
@@ -29,5 +33,11 @@ exports.updateEmployee = async (name, role, manager_id, hr_id, director_id, join
 exports.deleteEmployee = async (id) => {
     const [result, fields] = await database.query('DELETE FROM employees WHERE employee_id=?', [id]);
     console.log("fields:", fields);
+    return result;
+}
+
+
+exports.getUsersRoles=async(role)=>{
+    const[result]=await database.query('SELECT employee_id,name FROM employees WHERE role=?',[role]);
     return result;
 }

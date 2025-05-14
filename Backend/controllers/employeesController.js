@@ -1,7 +1,9 @@
 const { request } = require('https');
 const { error } = require('console');
 const { console } = require('inspector');
-const employeeModel = require('../models/employeesModel');
+const employeeModel =require('../models/employeesModel');
+const { read } = require('fs');
+
 
 exports.getAllEmployees = async (request, h) => {
     try {
@@ -31,10 +33,13 @@ exports.getEmployeesById = async (request, h) => {
 
 
 exports.addEmployee = async (request, h) => {
+
     const { name, email, password, role, manager_id, hr_id, director_id, join_date } = request.payload;
+  
     try {
         const result = await employeeModel.addEmployee({ name, email, password, role, manager_id, hr_id, director_id, join_date });
-        return h.response({ message: "Employee is added", employee_id: result.insertId }).code(200);
+        return h.response({ message: "Employee is added ", employee_id: result.insertId }).code(200);
+
     } catch (error) {
         if (error.message === 'Email already exists') {
             return h.response({ message: error.message }).code(400);
@@ -72,4 +77,22 @@ exports.deleteEmployee = async (request, h) => {
         return h.response({ error: 'failed to delete employee' }).code(500);
     }
 }
+
+
+// get the role for admin
+exports.getUsersRoles=async(request,h)=>{
+    const{role}=request.params;
+    try{
+        const result=await employeeModel.getUsersRoles(role);
+        if(result.length==0){
+            return h.response({message:"the role is not Found"}).code(404)
+        }
+        return h.response({message:"Successfully get roles"}).code(200);
+    }catch(error){
+        console.error("Fail to get roles",error)
+        return h.response({message:"Internal server error"}).code(500)
+    }
+}
+
+
 

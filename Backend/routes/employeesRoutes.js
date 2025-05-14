@@ -1,4 +1,8 @@
 const employeesController = require('../controllers/employeesController');
+const {verifyToken, allowRoles}=require('../middleware/authMiddleware');
+
+
+
 const employeeRoutes = [
     {
         method: 'GET',
@@ -13,7 +17,13 @@ const employeeRoutes = [
     {
         method: 'POST',
         path: '/employees',
-        handler: employeesController.addEmployee
+        handler: employeesController.addEmployee,
+        options:{
+            pre:[
+                {method:verifyToken},
+                {method:allowRoles('Hr')}
+            ]
+        }
     },
     {
         method: 'PUT',
@@ -24,6 +34,10 @@ const employeeRoutes = [
         method: 'DELETE',
         path: '/employees/{id}/delete',
         handler: employeesController.deleteEmployee
+    },{
+        method:'GET',
+        path:'/employees/role/{role}',
+        handler:employeesController.getUsersRoles
     }
 ]
 module.exports = employeeRoutes;

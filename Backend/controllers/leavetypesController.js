@@ -1,5 +1,3 @@
-// const pool = require('../config/db');
-
 const leavetypesModel = require('../models/leavetypesModel');
 
 exports.getAllLeaveTypes = async (request, h) => {

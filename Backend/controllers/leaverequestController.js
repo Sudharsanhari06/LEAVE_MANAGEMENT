@@ -2,6 +2,7 @@ const leaverequestModel = require('../models/leaverequestModel');
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
 const leavetypesModel = require('../models/leavetypesModel');
 
+
 exports.addLeaverequest = async (request, h) => {
     const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop } = request.payload;
     try {
@@ -64,6 +65,7 @@ exports.cancelLeaverequest = async (request, h) => {
         return h.response({ error: 'Failed cancel leave request' }).code(500)
     }
 }
+
 
 exports.getLeaverequestIdDelete = async (request, h) => {
     const { req_id } = request.params;

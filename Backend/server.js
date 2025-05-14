@@ -6,12 +6,19 @@ const leavebalanceRoutes = require('./routes/leavebalanceRoutes');
 const leaverequestRoutes = require('./routes/leaverequestRoutes');
 const leaveapprovalRoutes=require('./routes/leaveapprovalsRoutes');
 const authRoutes=require('./routes/authRoutes');
+const dashboardRoutes=require('./routes/dashboardRoutes');
+
 
 async function initial() {
     const server = Hapi.server(
         {
             port: 3003,
-            host: 'localhost'
+            host: 'localhost',
+            routes:{
+                cors:{
+                    origin:['*']
+                }
+            }
         });
         
     server.route(employeeRoutes);
@@ -19,7 +26,10 @@ async function initial() {
     server.route(leavebalanceRoutes);
     server.route(leaverequestRoutes);
     server.route(leaveapprovalRoutes);
-    server.route(authRoutes);
+    // server.route(authRoutes);
+    server.route([...authRoutes,...dashboardRoutes]);
+
+
 
     await server.start();
     console.log("Server is running:", server.info.uri)

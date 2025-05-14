@@ -1,0 +1,19 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+.admin-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.admin-leftside{
+    width: 25%;
+    background-color: #cd6268;
+}
+.admin-rightside{
+    width: 70%;
+    background-color: #ffffff;
+}

@@ -1,11 +1,11 @@
 const { request } = require('https');
 const { error } = require('console');
 const { console } = require('inspector');
-const employeeModel =require('../models/employeesModel');
+const employeeModel = require('../models/employeesModel');
 const { read } = require('fs');
 
-
 exports.getAllEmployees = async (request, h) => {
+   
     try {
         const data = await employeeModel.getAllEmployees();
         return h.response(data).code(200);
@@ -15,7 +15,6 @@ exports.getAllEmployees = async (request, h) => {
         return h.response({ error: 'Failed to fetch employees' }).code(500);
     }
 };
-
 
 exports.getEmployeesById = async (request, h) => {
     const { id } = request.params;
@@ -35,7 +34,7 @@ exports.getEmployeesById = async (request, h) => {
 exports.addEmployee = async (request, h) => {
 
     const { name, email, password, role, manager_id, hr_id, director_id, join_date } = request.payload;
-  
+
     try {
         const result = await employeeModel.addEmployee({ name, email, password, role, manager_id, hr_id, director_id, join_date });
         return h.response({ message: "Employee is added ", employee_id: result.insertId }).code(200);
@@ -78,19 +77,14 @@ exports.deleteEmployee = async (request, h) => {
     }
 }
 
-
 // get the role for admin
-exports.getUsersRoles=async(request,h)=>{
-    const{role}=request.params;
-    try{
-        const result=await employeeModel.getUsersRoles(role);
-        if(result.length==0){
-            return h.response({message:"the role is not Found"}).code(404)
-        }
-        return h.response({message:"Successfully get roles"}).code(200);
-    }catch(error){
-        console.error("Fail to get roles",error)
-        return h.response({message:"Internal server error"}).code(500)
+exports.getUsersRoles = async (request, h) => {
+    try {
+        const users = await employeeModel.getUsersRoles();
+        return h.response({ message: "Successfully get roles", users }).code(200);
+    } catch (error) {
+        console.error("Fail to get roles", error)
+        return h.response({ message: "Internal server error" }).code(500)
     }
 }
 

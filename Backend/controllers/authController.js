@@ -1,6 +1,7 @@
 const bcrypt=require('bcrypt');
 const  jwt = require('jsonwebtoken');
 const  db=require('../config/db');
+require('dotenv').config();
 
 exports.login=async(request,h)=>{
 
@@ -27,7 +28,7 @@ exports.login=async(request,h)=>{
         return h.response({message:'Login successful',token}).code(200);
 
     }catch(error){
-        console.error('Login failed:', err);
+        console.error('Login failed:', error);
         return h.response({ message: 'Server error' }).code(500);
     }
 

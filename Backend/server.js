@@ -8,7 +8,6 @@ const leaveapprovalRoutes=require('./routes/leaveapprovalsRoutes');
 const authRoutes=require('./routes/authRoutes');
 const dashboardRoutes=require('./routes/dashboardRoutes');
 
-
 async function initial() {
     const server = Hapi.server(
         {
@@ -28,8 +27,6 @@ async function initial() {
     server.route(leaveapprovalRoutes);
     // server.route(authRoutes);
     server.route([...authRoutes,...dashboardRoutes]);
-
-
 
     await server.start();
     console.log("Server is running:", server.info.uri)

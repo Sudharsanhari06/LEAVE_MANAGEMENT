@@ -1,5 +1,5 @@
 const database = require('../config/db');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
 
 exports.getAllEmployees = async () => {
     const [rows] = await database.query('SELECT * FROM employees');
@@ -37,7 +37,8 @@ exports.deleteEmployee = async (id) => {
 }
 
 
-exports.getUsersRoles=async(role)=>{
-    const[result]=await database.query('SELECT employee_id,name FROM employees WHERE role=?',[role]);
+exports.getUsersRoles=async()=>{
+    
+    const[result]=await database.query('SELECT employee_id,name,role FROM employees WHERE role IN (?,?,?)',['Hr', 'manager', 'Director']);
     return result;
 }

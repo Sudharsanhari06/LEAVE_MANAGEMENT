@@ -1,19 +1,58 @@
-*{
+* {
     padding: 0%;
     margin: 0%;
     box-sizing: border-box;
 }
-.admin-container{
+
+.admin-container {
     width: 100vw;
     height: 100vh;
     display: flex;
 }
 
-.admin-leftside{
+.admin-leftside {
     width: 25%;
     background-color: #cd6268;
 }
-.admin-rightside{
+
+.admin-rightside {
     width: 70%;
     background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.admin-rightside form {
+    width: 300px;
+    border: 2px solid;
+    padding: 2rem;
+    border-radius: 0.5rem;
+}
+
+.admin-rightside form input,
+select {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.5rem 0.2rem;
+    border-radius: 0.3rem;
+    outline: none;
+}
+
+.admin-rightside form button{
+    padding: 0.5rem 1.6rem;
+    font-size: 1rem;
+    margin: 0.5rem auto;
+    display: block;
+    border-radius: 0.4rem;
+    background-color: #cd6268;
+    border: 0;
+    cursor: pointer;
+    transition: 0.9s all ease-in-out;
+}
+.admin-rightside form button:hover{
+    background-color: transparent;
+    border: 1px solid;
 }

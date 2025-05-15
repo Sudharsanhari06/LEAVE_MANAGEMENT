@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/dashboard.css';
+
+
 
 function Dashboard() {
   const [userData, setUserData] = useState(null);
@@ -15,14 +18,17 @@ function Dashboard() {
       }
       try {
         const response = await fetch('http://localhost:3003/api/dashboard', {
+          method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
 
+
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
+          console.log("DATA", data);
         } else {
           alert('Unauthorized or token expired');
           navigate('/');
@@ -42,17 +48,32 @@ function Dashboard() {
   };
 
   return (
-    <div style={{ padding: '50px' }}>
-      <h2>Dashboard</h2>
-      {userData ? (
-        <div>
-          <p>Welcome, {userData.name}</p>
-          <p>Role: {userData.role}</p>
-          <button onClick={logout}>Logout</button>
+    <div className='dashboard-container'>
+      <div className="left-side">
+        <button>Dashboard</button>
+        <button onClick={logout}>Logout</button>
+      </div>
+      <div className="right-side">
+        <h2>Welcome To Lumel</h2>
+
+        <p> Name:  { userData ? userData.name:'username'}</p>
+        <p>Role:{ userData ? userData.role:'user role'}</p>
+
+
+        <div className="line"></div>
+        <div className="leave-boxes">
+           <div className="leave-box">Total leave Remaings:</div>
+           <div className="leave-box"></div>
+           <div className="leave-box"></div>
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      </div>
+
+
+
+
+
+
+
     </div>
   );
 }

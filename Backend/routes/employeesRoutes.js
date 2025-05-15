@@ -17,12 +17,16 @@ const employeeRoutes = [
     {
         method: 'POST',
         path: '/employees',
-        handler: employeesController.addEmployee,
         options:{
             pre:[
                 {method:verifyToken},
                 {method:allowRoles('Hr')}
-            ]
+            ],
+            handler: employeesController.addEmployee,
+            payload: {
+                parse: true,
+                allow: 'application/json'
+            }
         }
     },
     {
@@ -36,8 +40,14 @@ const employeeRoutes = [
         handler: employeesController.deleteEmployee
     },{
         method:'GET',
-        path:'/employees/role/{role}',
-        handler:employeesController.getUsersRoles
+        path:'/employees/roles',
+        options: {
+            pre: [
+              { method: verifyToken },
+              { method: allowRoles('Hr','manager','Director') }
+            ]
+          },
+          handler:employeesController.getUsersRoles,
     }
 ]
 module.exports = employeeRoutes;

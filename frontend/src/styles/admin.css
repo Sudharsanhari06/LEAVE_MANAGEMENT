@@ -12,7 +12,17 @@
 
 .admin-leftside {
     width: 25%;
-    background-color: #cd6268;
+    /* background-color: #cd6268; */
+    background-color: #1d1b27;
+    color: #ffffff;
+    padding: 1rem 0;
+}
+.admin-leftside button{
+    width: 100%;
+    border: none;
+    padding: 0.7rem 0;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .admin-rightside {

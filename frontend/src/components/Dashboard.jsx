@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
-
-
-
+import LeaveRequest from './LeaveRequest';
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+
+
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -54,23 +54,29 @@ function Dashboard() {
         <button onClick={logout}>Logout</button>
       </div>
       <div className="right-side">
-        <h2>Welcome To Lumel</h2>
-
-        <p> Name:  { userData ? userData.name:'username'}</p>
-        <p>Role:{ userData ? userData.role:'user role'}</p>
-
+        <div className="right-side__header">
+          <h2>Welcome To Lumel</h2>
+          <p> Name:  {userData ? userData.name : 'username'}</p>
+          <p>Role:{userData ? userData.role : 'user role'}</p>
+        </div>
 
         <div className="line"></div>
-        <div className="leave-boxes">
-           <div className="leave-box">Total leave Remaings:</div>
-           <div className="leave-box"></div>
-           <div className="leave-box"></div>
+        <div className="leave-boxes__container">
+          <h2 >Leaves</h2>
+          <div className="leave-boxes">
+            <div className="leave-box total">Total leave Remaings</div>
+            <div className="leave-box sick">Available Sick Leaves</div>
+            <div className="leave-box casual">Available Casual Leaves</div>
+          </div>
+        </div>
+
+        <div className="leave-request__container">
+          {userData &&
+          <LeaveRequest employee_id={userData.employee_id} />
+
+          }
         </div>
       </div>
-
-
-
-
 
 
 

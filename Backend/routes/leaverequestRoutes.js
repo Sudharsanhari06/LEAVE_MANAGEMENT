@@ -1,8 +1,15 @@
 const leaverequestController = require('../controllers/leaverequestController');
+const { verifyToken } = require('../middleware/authMiddleware');
+
 const leaverequestRoutes = [
     {
         method: 'POST',
         path: '/leaverequest',
+        options: {
+            pre: [
+                {method:verifyToken}
+            ]
+        },
         handler: leaverequestController.addLeaverequest
     },
     {
@@ -18,21 +25,27 @@ const leaverequestRoutes = [
     ,
     {
         method: 'GET',
-        path: '/leaverequest/employee/{id}',
-        handler: leaverequestController.getAllLeaverequestById
+        path: '/leaverequest/employee/{employee_id}',
+        options: {
+            pre: [
+                {method:verifyToken}
+            ]
+        },
+        handler: leaverequestController.getAllLeaverequestById,
+
     }, {
         method: 'PUT',
         path: '/employee/{emp_id}/leaverequest/{req_id}',
         handler: leaverequestController.cancelLeaverequest
     }
-    ,{
+    , {
         method: 'DELETE',
         path: '/leaverequest/{req_id}/delete',
         handler: leaverequestController.getLeaverequestIdDelete
-    },{
-        method:'POST',
-        path:'/leaverequest/auto-approve',
-        handler:leaverequestController.autoApproveLeave
+    }, {
+        method: 'POST',
+        path: '/leaverequest/auto-approve',
+        handler: leaverequestController.autoApproveLeave
     }
 ]
 module.exports = leaverequestRoutes;

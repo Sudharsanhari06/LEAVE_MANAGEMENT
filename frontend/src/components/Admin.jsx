@@ -5,9 +5,9 @@ import '../styles/admin.css';
 const Admin = () => {
     const [formData, setFormData] = useState({
         name: '',
-        manager_id: ''||null,
-        hr_id: ''||null,
-        director_id: ''||null,
+        manager_id: '' || null,
+        hr_id: '' || null,
+        director_id: '' || null,
         join_date: '',
         role: '',
         email: '',
@@ -33,7 +33,7 @@ const Admin = () => {
                 });
                 const data = await response.json();
 
-                console.log(data)
+                console.log(data);
 
                 const hrEmployees = data.users.filter((emp) => emp.role == 'Hr');
                 const managerEmployees = data.users.filter((emp) => emp.role == 'manager');
@@ -103,11 +103,9 @@ const Admin = () => {
 
             <div className='admin-leftside'>
                 <h1>Welcome</h1>
-                <button>
-                    Add Employee
-                </button>
+                <button> Add Employee</button>
             </div>
-
+            
             <div className='admin-rightside'>
                 <h2>Add Employee</h2>
                 <form onSubmit={submitForm}>

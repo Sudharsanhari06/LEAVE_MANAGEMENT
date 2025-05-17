@@ -2,11 +2,10 @@ const leaverequestModel = require('../models/leaverequestModel');
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
 const leavetypesModel = require('../models/leavetypesModel');
 
-
 exports.addLeaverequest = async (request, h) => {
-    const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop } = request.payload;
+    const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days } = request.payload;
     try {
-        const result = await leaverequestModel.addLeaverequest(employee_id, leavetype_id, start_date, end_date, reason, status, is_lop);
+        const result = await leaverequestModel.addLeaverequest(employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days);
         return h.response(result).code(200);
     } catch (error) {
         console.error('Fail to add leave request', error);
@@ -39,9 +38,9 @@ exports.getLeaverequestById = async (request, h) => {
 }
 
 exports.getAllLeaverequestById = async (request, h) => {
-    const { id } = request.params;
+    const { employee_id } = request.params;
     try {
-        const result = await leaverequestModel.getAllLeaverequestById(id);
+        const result = await leaverequestModel.getAllLeaverequestById(employee_id);
         if (result.affectedRows == 0) {
             return h.response({ error: 'the Employee id is Not found' }).code(404)
         }
@@ -86,15 +85,14 @@ exports.autoApproveLeave = async (request, h) => {
         if (!leaveType) {
             return h.response({ error: "Invalid leave type ID" }).code(400);
         }
-
         const leaveTypeName = leaveType[0].type_name?.toLowerCase();
-        console.log("leaveTypeName",leaveTypeName)
+        console.log("leaveTypeName", leaveTypeName)
         const start = new Date(start_date);
         const end = new Date(end_date);
         const diffDays = (end - start) / (1000 * 60 * 60 * 24) + 1;
 
         console.log('for console:', { leaveTypeName, diffDays });
-        
+
         if ((leaveTypeName == 'sick' || leaveTypeName == 'emergency') && diffDays == 1) {
             console.log("Leave type:", leaveTypeName, "Days:", diffDays);
 

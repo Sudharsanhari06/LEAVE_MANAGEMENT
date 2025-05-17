@@ -25,8 +25,10 @@ exports.deleteByIdLeavebalance = async (id) => {
     return result;
 }
 
-exports.allLeavebalanceById = async (id) => {
-    const [result] = await database.query('SELECT lb.balance_id,lb.year,lb.allocated_days,lb.carry_forwarded,lt.leavetype_id,lt.type_name FROM leavebalances as lb JOIN leavetypes as lt ON lb.leavetype_id=lt.leavetype_id WHERE lb.employee_id=?', [id]); 
+exports.allLeavebalanceById = async (employee_id,currentYear) => {
+    
+    const [result] = await database.query('SELECT lt.type_name,lb.allocated_days,lb.used_days,lb.carry_forwarded,(lb.allocated_days-lb.used_days+lb.carry_forwarded) AS available_days FROM leavebalance as lb JOIN leavetypes as lt ON lb.leavetype_id=lt.leavetype_id WHERE lb.employee_id=? AND lb.year=?', [employee_id, currentYear]); 
     return result;
 }
+
 

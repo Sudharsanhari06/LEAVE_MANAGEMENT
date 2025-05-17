@@ -1,26 +1,30 @@
-*{
+* {
     padding: 0%;
     margin: 0%;
     box-sizing: border-box;
+    overflow-y: hidden;
 }
+
 /* #1d1b27
 white #ffffff\
 vilot #4a2dcf
 */
 
-.dashboard-container{
+.dashboard-container {
     width: 100vw;
     height: 100vh;
     display: flex;
     background-color: #efeef3;
 }
-.left-side{
-    width: 30%;
+
+.left-side {
+    width: 25%;
     background-color: #1d1b27;
     color: #efeef3;
     padding: 1rem 0;
 }
-.left-side button{
+
+.left-side button {
     width: 100%;
     font-weight: 600;
     font-size: 1.4rem;
@@ -30,30 +34,145 @@ vilot #4a2dcf
     padding: 0.6rem 0;
     border: none;
     background-color: transparent;
-    color:#efeef3 ;
+    color: #efeef3;
 }
-.left-side button:hover{
+
+.left-side button:hover {
     background-color: #efeef3;
     color: #1d1b27;
 }
-.right-side{
-    width: 70%;
+
+.right-side {
+    width: 75%;
 }
-.line{
-    
+
+.right-side__header {
+    margin: 1rem;
+}
+
+.right-side__header p {
+    margin: 0.5rem 0;
+    font-size: 1.3rem;
+}
+
+
+.line {
     height: 1px;
     width: 95%;
-    margin:0.8rem auto;
+    margin: 0.8rem auto;
     background-color: #3333336c;
 }
 
-.leave-boxes{
-    margin: 1rem 0;
-    display: flex;
-    justify-content: space-around;
+.leave-boxes__container {
+    width: 95%;
+    background-color: #ffffff;
+    padding: 1.3rem 0.7rem 0.9rem;
+    margin: 1rem auto;
 }
-.leave-boxes .leave-box{
-    padding: 1rem;
-    border: 1px solid #3333336c;
 
+.leave-boxes__container h2 {
+    margin-bottom: 0.5rem;
+}
+
+.leave-boxes {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+}
+
+.leave-boxes .leave-box {
+    width: 200px;
+    height: 120px;
+    padding: 1rem;
+    font-size: 1.3rem;
+    border-radius: 0.5rem;
+}
+
+.leave-box.total {
+    background-color: #ebf8f1;
+}
+
+.leave-box.sick {
+    background-color: #eaf6fd;
+}
+
+.leave-box.casual {
+    background-color: #f6ecfd;
+}
+
+.leave-boxes__container button {
+    padding: 0.5rem 1rem;
+    border: 0;
+    font-size: 1.2rem;
+    color: #eaf6fd;
+    background-color: #1d1b27;
+    margin: 0.5rem 0;
+    border-radius: 0.4rem;
+    cursor: pointer;
+
+}
+
+/* leave request table */
+.leave-request__section {
+    width: 95%;
+    margin: auto;
+    padding: 1.2rem 0.5rem;
+    background-color: #fff;
+}
+
+.leave-request__section .btn {
+    background-color: #050407;
+    padding: 0.7rem 1rem;
+    color: #eaf6fd;
+    border: 0;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.leave-request__section h2 {
+    display: inline;
+}
+
+.leave-request__section .open-btn {
+    float: right;
+}
+
+.leave-request__section .close-btn {
+    display: block;
+    font-size: 1.3rem;
+    padding: 0.3rem 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.leave-request__section .leaverequest-popup {
+    position: absolute;
+    top: 60%;
+    left: 70%;
+    transform: translate(-70%, -60%);
+    /* padding: 2rem 1rem; */
+    background-color: #eaf6fd;
+}
+
+.leaverequest-popup div {
+    width: 350px;
+    padding: 1.3rem 1rem;
+    border: 2px solid;
+    border-radius: 0.6rem;
+}
+
+.all-leaverequest table {
+    width: 100%;
+    margin: 1rem auto;
+    border: 1px solid;
+}
+
+.all-leaverequest table tr td,
+th {
+    padding: 0.5rem 0.3rem;
+}
+
+.all-leaverequest table tr:nth-child(odd) {
+    background-color: #f6f6f6;
 }

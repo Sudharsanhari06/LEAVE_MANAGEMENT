@@ -71,14 +71,24 @@ exports.deleteByIdLeavebalance = async (request, h) => {
     }
 }
 
+
 exports.allLeavebalanceById = async (request, h) => {
-    const { id } = request.params;
+    const { employee_id } = request.params;
+    const currentYear=new Date().getFullYear();
+
     try {
-        const result = await leavebalanceModel.allLeavebalanceById(id);
-        if(result.affectedRows==0){
-            return h.response({error:"the employee is Not Found"}).code(404);
-        }
-        return h.response(result).code(200);
+        const result = await leavebalanceModel.allLeavebalanceById(employee_id,currentYear);
+
+        const totalAvailable = result.reduce((sum, row) => sum + row.available_days, 0);
+
+
+        return h.response({
+            employee_id: employee_id,
+            total_available_days: totalAvailable,
+            leave_types: result
+          }).code(200);
+
+        // return h.response(result).code(200);
     } catch (error) {
         console.error("Fail to get leavebalance", error);
         return h.response({ error: "Fail to get leavebalance" }).code(500);

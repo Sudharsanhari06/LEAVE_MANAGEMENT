@@ -1,8 +1,7 @@
 const database = require('../config/db');
 
-exports.addLeaverequest = async (employee_id, leavetype_id, start_date, end_date, reason, status, is_lop) => 
-    {
-    const [result] = await database.query('INSERT INTO leaverequests (employee_id,leavetype_id,start_date,end_date,reason,status,is_lop) VALUES(?,?,?,?,?,?,?)', [employee_id, leavetype_id, start_date, end_date, reason, status, is_lop]);
+exports.addLeaverequest = async (employee_id, leavetype_id, start_date, end_date, reason, status, is_lop,days) => {
+    const [result] = await database.query('INSERT INTO leaverequests (employee_id,leavetype_id,start_date,end_date,reason,status,is_lop,days) VALUES(?,?,?,?,?,?,?,?)', [employee_id, leavetype_id, start_date, end_date, reason, status, is_lop,days]);
     return result;
 }
 
@@ -11,15 +10,17 @@ exports.getAllLeaverequest = async () => {
     return result;
 }
 
-
-exports.getLeaverequestById=async(req_id)=>{
-    const[result]= await database.query('SELECT * FROM leaverequests WHERE request_id=?',[req_id]);
+exports.getLeaverequestById = async (req_id) => {
+    const [result] = await database.query('SELECT * FROM leaverequests WHERE request_id=?', [req_id]);
     return result;
 }
 
 
-exports.getAllLeaverequestById = async (id) => {
-    const [result] = await database.query('SELECT * FROM leaverequests WHERE employee_id=?', [id]);
+exports.getAllLeaverequestById = async (employee_id) => {
+    const [result] = await database.query(`SELECT lr.*, lt.type_name 
+FROM leaverequests AS lr
+JOIN leavetypes AS lt ON lr.leavetype_id = lt.leavetype_id
+WHERE lr.employee_id = ?`,[employee_id]);
     return result;
 }
 

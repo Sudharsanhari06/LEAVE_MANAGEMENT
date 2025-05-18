@@ -1,4 +1,6 @@
 const leavebalanceController = require('../controllers/leavebalanceController');
+const { verifyToken } = require('../middleware/authMiddleware')
+
 const leavebalanceRoutes = [
     {
         method: 'POST',
@@ -27,8 +29,14 @@ const leavebalanceRoutes = [
     },
     {
         method: 'GET',
-        path: '/leavebalance/employee/{id}',
+        path: '/leavebalance/employee/{employee_id}',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
         handler: leavebalanceController.allLeavebalanceById
+
     }
 ]
 module.exports = leavebalanceRoutes;

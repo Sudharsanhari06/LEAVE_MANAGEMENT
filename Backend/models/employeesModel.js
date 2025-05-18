@@ -25,8 +25,10 @@ exports.addEmployee = async ({ name, email, password, role, manager_id, hr_id, d
     return result;
 }
 
-exports.updateEmployee = async (name, role, manager_id, hr_id, director_id, join_date, id) => {
-    const [result] = await database.query('UPDATE employees SET name=?, role = ?, manager_id = ?, hr_id = ?, director_id = ?, join_date = ? WHERE employee_id = ?', [name, role, manager_id, hr_id, director_id, join_date, id])
+exports.updateEmployee = async (name, role, manager_id, hr_id, director_id, join_date, email,password, id) => {
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const [result] = await database.query('UPDATE employees SET name=?, role = ?, manager_id = ?, hr_id = ?, director_id = ?, join_date = ?,email=?, password=? WHERE employee_id = ?', [name, role, manager_id, hr_id, director_id, join_date, email,hashedPassword, id])
     return result;
 }
 

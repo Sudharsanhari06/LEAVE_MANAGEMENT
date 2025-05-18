@@ -7,7 +7,7 @@ const leaverequestRoutes = [
         path: '/leaverequest',
         options: {
             pre: [
-                {method:verifyToken}
+                { method: verifyToken }
             ]
         },
         handler: leaverequestController.addLeaverequest
@@ -28,14 +28,19 @@ const leaverequestRoutes = [
         path: '/leaverequest/employee/{employee_id}',
         options: {
             pre: [
-                {method:verifyToken}
+                { method: verifyToken }
             ]
         },
         handler: leaverequestController.getAllLeaverequestById,
 
     }, {
         method: 'PUT',
-        path: '/employee/{emp_id}/leaverequest/{req_id}',
+        path: '/employee/{employee_id}/leaverequest/{req_id}',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
         handler: leaverequestController.cancelLeaverequest
     }
     , {

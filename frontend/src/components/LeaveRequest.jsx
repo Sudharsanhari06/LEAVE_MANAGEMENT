@@ -141,10 +141,7 @@ const LeaveRequest = ({ employee_id }) => {
                     </div>
                 )}
             </div>
-
-
-
-
+ 
             <section className='all-leaverequest'>
                 <table>
                     <thead>

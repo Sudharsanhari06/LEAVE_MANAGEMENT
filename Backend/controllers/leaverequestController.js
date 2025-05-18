@@ -1,6 +1,8 @@
 const leaverequestModel = require('../models/leaverequestModel');
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
 const leavetypesModel = require('../models/leavetypesModel');
+const database=require('../config/db');
+// const leavebalanceModel = require('../models/leavebalanceModel');
 
 exports.addLeaverequest = async (request, h) => {
     const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days } = request.payload;
@@ -52,17 +54,38 @@ exports.getAllLeaverequestById = async (request, h) => {
 }
 
 exports.cancelLeaverequest = async (request, h) => {
-    const { req_id, emp_id } = request.params;
+    const { req_id ,employee_id} = request.params;
+    console.log("req_id",req_id);
     try {
-        const result = await leaverequestModel.cancelLeaverequest(req_id, emp_id);
-        if (req_id.affectedRows == 0 || emp_id.affectedRows == 0) {
-            return h.response({ error: "Not Found" }).code(404);
+        const [rows] = await database.query(
+          `SELECT * FROM leaverequests WHERE request_id = ?`,
+          [req_id]
+        );
+        const leave = rows[0];
+        console.log("leave",leave);
+    
+        if (!leave) {
+          return h.response({ error: 'Leave request not found' }).code(404);
         }
-        return h.response({ message: 'Successfully cancel leave request' }).code(200);
-    } catch (error) {
-        console.error("Fail to cancel leave request", error);
-        return h.response({ error: 'Failed cancel leave request' }).code(500)
-    }
+        const today = new Date();
+        const startDate = new Date(leave.start_date);
+        if (leave.status === 'approved' && startDate > today) {
+          await leaverequestModel.cancelLeaverequest(req_id);
+          await leaverequestModel.backUsedLeaveDays(
+            leave.employee_id,
+            leave.leavetype_id,
+            leave.days
+          );
+    
+          return h.response({ message: 'Leave cancelled and balance updated' }).code(200);
+        } else {
+          return h.response({ error: 'Leave cannot be cancelled after the start date' }).code(400);
+        }
+      } catch (error) {
+        console.error('Cancel leave error:', error);
+        return h.response({ error: 'Failed to cancel leave' }).code(500);
+      }
+
 }
 
 

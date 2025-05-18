@@ -1,5 +1,8 @@
 const leavebalanceModel = require('../models/leavebalanceModel');
 
+
+
+
 exports.getAllLeavebalance = async (request, h) => {
     try {
         const result = await leavebalanceModel.getAllLeavebalance();
@@ -11,7 +14,6 @@ exports.getAllLeavebalance = async (request, h) => {
         ).code(500)
     }
 }
-
 exports.getByIdLeavebalance = async (request, h) => {
     const { id } = request.params;
     try {
@@ -78,17 +80,13 @@ exports.allLeavebalanceById = async (request, h) => {
 
     try {
         const result = await leavebalanceModel.allLeavebalanceById(employee_id,currentYear);
-
-        const totalAvailable = result.reduce((sum, row) => sum + row.available_days, 0);
-
-
+        const totalAvailable = result.reduce((sum, leave) => sum + leave.remaining_days, 0);
         return h.response({
             employee_id: employee_id,
             total_available_days: totalAvailable,
             leave_types: result
           }).code(200);
 
-        // return h.response(result).code(200);
     } catch (error) {
         console.error("Fail to get leavebalance", error);
         return h.response({ error: "Fail to get leavebalance" }).code(500);
@@ -96,6 +94,15 @@ exports.allLeavebalanceById = async (request, h) => {
 }
 
 
+exports.getLeaveBalanceByEmployee = async (request, h) => {
+    const { employee_id } = request.params;
+    try {
+      const balance = await leavebalanceModel.getLeaveBalanceByEmployee(employee_id);
+      return h.response(balance).code(200);
+    } catch (err) {
+      return h.response({ error: "Failed to fetch leave balance" }).code(500);
+    }
+  };
 
 
 

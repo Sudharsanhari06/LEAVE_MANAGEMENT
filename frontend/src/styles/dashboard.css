@@ -2,7 +2,7 @@
     padding: 0%;
     margin: 0%;
     box-sizing: border-box;
-    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 /* #1d1b27
@@ -162,15 +162,24 @@ vilot #4a2dcf
     border-radius: 0.6rem;
 }
 
-.all-leaverequest table {
+.all-leaverequest {
     width: 100%;
-    margin: 1rem auto;
+    margin: 1.5rem 0;
     border: 1px solid;
+    /* overflow-y: scroll; */
 }
+
+.all-leaverequest table{
+    width: 100%;
+}
+
+
 
 .all-leaverequest table tr td,
 th {
     padding: 0.5rem 0.3rem;
+    margin: 0;
+  
 }
 
 .all-leaverequest table tr:nth-child(odd) {

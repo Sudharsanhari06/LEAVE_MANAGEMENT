@@ -51,9 +51,9 @@ exports.addEmployee = async (request, h) => {
 
 exports.updateEmployee = async (request, h) => {
     const { id } = request.params;
-    const { name, role, manager_id, hr_id, director_id, join_date } = request.payload;
+    const { name, role, manager_id, hr_id, director_id, join_date,email,password} = request.payload;
     try {
-        const result = await employeeModel.updateEmployee(name, role, manager_id, hr_id, director_id, join_date, id);
+        const result = await employeeModel.updateEmployee(name, role, manager_id, hr_id, director_id, join_date,email,password, id);
         if (result.affectedRows == 0) {
             return h.response({
                 error: 'Employee is Not Found'

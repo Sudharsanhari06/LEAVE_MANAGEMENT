@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/dashboard.css';
 import LeaveRequest from './LeaveRequest';
+import LeaveBalance from './LeaveBalance';
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
@@ -64,16 +65,18 @@ function Dashboard() {
         <div className="leave-boxes__container">
           <h2 >Leaves</h2>
           <div className="leave-boxes">
-            <div className="leave-box total">Total leave Remaings</div>
+          {userData &&
+          <LeaveBalance employee_id={userData.employee_id} />
+        }
+            {/* <div className="leave-box total">Total leave Remaings</div>
             <div className="leave-box sick">Available Sick Leaves</div>
-            <div className="leave-box casual">Available Casual Leaves</div>
+            <div className="leave-box casual">Available Casual Leaves</div> */}
           </div>
         </div>
-
+      
         <div className="leave-request__container">
           {userData &&
-          <LeaveRequest employee_id={userData.employee_id} />
-
+            <LeaveRequest employee_id={userData.employee_id} />
           }
         </div>
       </div>

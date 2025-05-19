@@ -52,26 +52,24 @@ function Dashboard() {
     <div className='dashboard-container'>
       <div className="left-side">
         <button>Dashboard</button>
+        <button>Leave Approvals</button>
         <button onClick={logout}>Logout</button>
       </div>
+
       <div className="right-side">
         <div className="right-side__header">
           <h2>Welcome To Lumel</h2>
-          <p> Name:  {userData ? userData.name : 'username'}</p>
+          <p> Hey, {userData ? userData.name : 'username'} </p>
           <p>Role:{userData ? userData.role : 'user role'}</p>
         </div>
 
         <div className="line"></div>
         <div className="leave-boxes__container">
           <h2 >Leaves</h2>
-          <div className="leave-boxes">
           {userData &&
           <LeaveBalance employee_id={userData.employee_id} />
         }
-            {/* <div className="leave-box total">Total leave Remaings</div>
-            <div className="leave-box sick">Available Sick Leaves</div>
-            <div className="leave-box casual">Available Casual Leaves</div> */}
-          </div>
+            
         </div>
       
         <div className="leave-request__container">

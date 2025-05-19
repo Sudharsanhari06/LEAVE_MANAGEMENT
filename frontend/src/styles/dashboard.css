@@ -18,7 +18,7 @@ vilot #4a2dcf
 }
 
 .left-side {
-    width: 25%;
+    width: 23%;
     background-color: #1d1b27;
     color: #efeef3;
     padding: 1rem 0;
@@ -43,22 +43,26 @@ vilot #4a2dcf
 }
 
 .right-side {
-    width: 75%;
+    width: 100%;
 }
 
 .right-side__header {
-    margin: 1rem;
+    padding: 0.4rem 0;
+    padding: 0.6rem;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+
 }
 
 .right-side__header p {
-    margin: 0.5rem 0;
+    margin: 0.2rem 0;
     font-size: 1.3rem;
 }
 
 
 .line {
     height: 1px;
-    width: 95%;
+    width: 97%;
     margin: 0.8rem auto;
     background-color: #3333336c;
 }
@@ -77,15 +81,27 @@ vilot #4a2dcf
 .leave-boxes {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-radius: 0.5rem;
 }
 
-.leave-boxes .leave-box {
-    width: 200px;
+.leave-box {
+    width: 250px;
     height: 120px;
-    padding: 1rem;
+    padding: 0.5rem;
     font-size: 1.3rem;
     border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.leave-box h1{
+    font-size: 0.9rem;
+}
+.leave-box p{
+    font-size: 1.2rem;
+
 }
 
 .leave-box.total {
@@ -144,22 +160,6 @@ vilot #4a2dcf
     display: flex;
     justify-content: flex-end;
 
-}
-
-.leave-request__section .leaverequest-popup {
-    position: absolute;
-    top: 60%;
-    left: 70%;
-    transform: translate(-70%, -60%);
-    /* padding: 2rem 1rem; */
-    background-color: #eaf6fd;
-}
-
-.leaverequest-popup div {
-    width: 350px;
-    padding: 1.3rem 1rem;
-    border: 2px solid;
-    border-radius: 0.6rem;
 }
 
 .all-leaverequest {

@@ -2,7 +2,7 @@ const database = require('../config/db');
 const bcrypt = require('bcrypt');
 
 exports.getAllEmployees = async () => {
-    const [rows] = await database.query('SELECT * FROM employees');
+    const [rows] = await database.query('SELECT * FROM employees WHERE flag=true');
     return rows;
 }
 

@@ -1,7 +1,7 @@
 const leaverequestModel = require('../models/leaverequestModel');
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
 const leavetypesModel = require('../models/leavetypesModel');
-const database=require('../config/db');
+const database = require('../config/db');
 // const leavebalanceModel = require('../models/leavebalanceModel');
 
 exports.addLeaverequest = async (request, h) => {
@@ -53,38 +53,31 @@ exports.getAllLeaverequestById = async (request, h) => {
     }
 }
 
+
+
 exports.cancelLeaverequest = async (request, h) => {
-    const { req_id ,employee_id} = request.params;
-    console.log("req_id",req_id);
+    const { req_id } = request.params;
+    console.log("req_id", req_id);
     try {
-        const [rows] = await database.query(
-          `SELECT * FROM leaverequests WHERE request_id = ?`,
-          [req_id]
-        );
-        const leave = rows[0];
-        console.log("leave",leave);
-    
+        const result = await leaverequestModel.getLeaverequestById(req_id)
+        const leave = result[0];
+        console.log("leave", leave);
         if (!leave) {
-          return h.response({ error: 'Leave request not found' }).code(404);
+            return h.response({ error: 'Leave request not found' }).code(404);
         }
         const today = new Date();
         const startDate = new Date(leave.start_date);
-        if (leave.status === 'approved' && startDate > today) {
-          await leaverequestModel.cancelLeaverequest(req_id);
-          await leaverequestModel.backUsedLeaveDays(
-            leave.employee_id,
-            leave.leavetype_id,
-            leave.days
-          );
-    
-          return h.response({ message: 'Leave cancelled and balance updated' }).code(200);
+        if ((leave.status == 'approved' || leave.status == 'rejected' || leave.status == 'pending') && startDate > today) {
+            await leaverequestModel.cancelLeaverequest(req_id);
+            return h.response({ message: 'Leave cancelled and balance updated' }).code(200);
+            
         } else {
-          return h.response({ error: 'Leave cannot be cancelled after the start date' }).code(400);
+            return h.response({ error: 'Leave cannot be cancelled after the start date' }).code(400);
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Cancel leave error:', error);
         return h.response({ error: 'Failed to cancel leave' }).code(500);
-      }
+    }
 
 }
 
@@ -149,6 +142,20 @@ exports.autoApproveLeave = async (request, h) => {
     } catch (error) {
         console.error("Auto-approve failed", error);
         return h.response({ error: "Internal Server Error" }).code(500);
+    }
+}
+
+
+
+
+
+exports.usedLeavedaysEmployee = async (request, h) => {
+    const { employee_id } = request.params;
+    try {
+        const result = await usedLeavedaysEmployee(employee_id);
+        return result;
+    } catch (error) {
+        console.error("get the leave request some error")
     }
 }
 

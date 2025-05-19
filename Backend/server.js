@@ -7,6 +7,8 @@ const leaverequestRoutes = require('./routes/leaverequestRoutes');
 const leaveapprovalRoutes=require('./routes/leaveapprovalsRoutes');
 const authRoutes=require('./routes/authRoutes');
 const dashboardRoutes=require('./routes/dashboardRoutes');
+const holidaysRoutes=require('./routes/holidaysRoutes');
+
 
 async function initial() {
     const server = Hapi.server(
@@ -25,6 +27,7 @@ async function initial() {
     server.route(leavebalanceRoutes);
     server.route(leaverequestRoutes);
     server.route(leaveapprovalRoutes);
+    server.route(holidaysRoutes);
     // server.route(authRoutes);
     server.route([...authRoutes,...dashboardRoutes]);
 

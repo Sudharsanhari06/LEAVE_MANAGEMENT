@@ -1,6 +1,6 @@
 const database = require('../config/db');
 exports.getAllLeaveTypes = async () => {
-    const [result] = await database.query('SELECT * FROM leavetypes');
+    const [result] = await database.query('SELECT leavetype_id,type_name,max_days FROM leavetypes');
     return result;
 }
 

@@ -13,8 +13,11 @@ const Admin = () => {
         email: '',
         password: ''
     });
-
-
+    const [holidayData, setHolidayData] = useState({
+        holiday_name: '',
+        holiday_date: ''
+    })
+    const [employeeData, setEmployeeData] = useState([]);
     const [managers, setManagers] = useState([]);
     const [hr, setHr] = useState([]);
     const [directors, setDirectors] = useState([]);
@@ -31,9 +34,18 @@ const Admin = () => {
                         authorization: `Bearer ${token}`,
                     },
                 });
-                const data = await response.json();
+                const response2 = await fetch('http://localhost:3003/employees', {
+                    method: 'GET',
+                    headers: {
+                        authorization: `Bearer ${token}`
+                    }
+                })
 
-                console.log(data);
+
+                const data = await response.json();
+                const employee = await response2.json()
+                console.log("employee roles", data);
+                console.log("Employee data", employee)
 
                 const hrEmployees = data.users.filter((emp) => emp.role == 'Hr');
                 const managerEmployees = data.users.filter((emp) => emp.role == 'manager');
@@ -42,11 +54,11 @@ const Admin = () => {
                 setHr(hrEmployees);
                 setManagers(managerEmployees);
                 setDirectors(directorEmployees);
+                setEmployeeData(employee)
 
                 console.log('HR:', hrEmployees);
                 console.log('Managers:', managerEmployees);
                 console.log('Directors:', directorEmployees);
-
 
             } catch (error) {
                 console.error('failed to fetch the data', error);
@@ -61,6 +73,11 @@ const Admin = () => {
             ...prev,
             [e.target.name]: e.target.value
         }));
+        setHolidayData(pre => ({
+            ...pre,
+            [e.target.name]: e.target.value
+
+        }))
     };
 
     const submitForm = async (e) => {
@@ -75,6 +92,10 @@ const Admin = () => {
                 },
                 body: JSON.stringify(formData)
             })
+
+
+
+
             const data = await response.json();
 
             if (response.ok) {
@@ -89,6 +110,7 @@ const Admin = () => {
                     email: '',
                     password: ''
                 })
+
             } else {
                 setMessage('Failed to add employee');
             }
@@ -98,61 +120,118 @@ const Admin = () => {
         }
     }
 
+    const holidaySubmit = async (e) => {
+        try {
+            e.preventDefault();
+            const token = localStorage.getItem('token');
+            const holidayResponse = await fetch('http://localhost:3003/holidays', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(holidayData)
+            })
+
+            if (holidayResponse.ok) {
+                setHolidayData({
+                    holiday_name: '',
+                    holiday_date: ''
+                })
+            }
+
+        } catch (error) {
+            console.error('Fail to error', error);
+        }
+    }
+
+
+
     return (
         <section className='admin-container'>
 
             <div className='admin-leftside'>
                 <h1>Welcome</h1>
                 <button> Add Employee</button>
+                <button >Add Holidays</button>
+                <button>Add LeaveTypes</button>
             </div>
-            
+
             <div className='admin-rightside'>
                 <h2>Add Employee</h2>
-                <form onSubmit={submitForm}>
-                    <p>{message}</p>
-
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder='Enter the Name..' required />
-
-                    <select name="manager_id" value={formData.manager_id} onChange={handleChange} >
-                        <option value="">Select Manager</option>
-                        {managers.map(item => (
-                            <option key={item.employee_id} value={item.employee_id}>{item.name}</option>
-                        ))}
-                    </select>
 
 
-                    <select name="hr_id" value={formData.hr_id} onChange={handleChange}>
-                        <option value="">Select Hr</option>
-                        {hr.map(h => (
-                            <option key={h.employee_id} value={h.employee_id}>{h.name}</option>
-                        ))}
-                    </select>
+                    {/* <form onSubmit={submitForm}>
+                        <p>{message}</p>
 
-                    <select name="director_id" value={formData.director_id} onChange={handleChange}>
-                        <option value="">Select Director</option>
-                        {directors.map(d => (
-                            <option key={d.employee_id} value={d.employee_id}>{d.name}</option>
-                        ))}
-                    </select>
+                        <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder='Enter the Name..' required />
 
-                    <input type="email" value={formData.email} onChange={handleChange} name='email' placeholder='Enter the Email..' required />
+                        <select name="manager_id" value={formData.manager_id} onChange={handleChange} >
+                            <option value="">Select Manager</option>
+                            {managers.map(item => (
+                                <option key={item.employee_id} value={item.employee_id}>{item.name}</option>
+                            ))}
+                        </select>
+                        <select name="hr_id" value={formData.hr_id} onChange={handleChange}>
+                            <option value="">Select Hr</option>
+                            {hr.map(h => (
+                                <option key={h.employee_id} value={h.employee_id}>{h.name}</option>
+                            ))}
+                        </select>
 
-                    <input type="password" value={formData.password} onChange={handleChange} name='password' placeholder='Enter the password..' required />
+                        <select name="director_id" value={formData.director_id} onChange={handleChange}>
+                            <option value="">Select Director</option>
+                            {directors.map(d => (
+                                <option key={d.employee_id} value={d.employee_id}>{d.name}</option>
+                            ))}
+                        </select>
 
-                    <select name="role" value={formData.value} onChange={handleChange}>
-                        <option value="">Select role</option>
-                        <option value="Trainee">Trainee</option>
-                        <option value="Hr">Hr</option>
-                        <option value="Intern">Intern</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Director">Director</option>
-                        <option value="Developer">Developer</option>
-                    </select>
+                        <input type="email" value={formData.email} onChange={handleChange} name='email' placeholder='Enter the Email..' required />
 
-                    <input type="date" name="join_date" value={formData.join_date} onChange={handleChange} />
-                    <button type='submit'>Add </button>
+                        <input type="password" value={formData.password} onChange={handleChange} name='password' placeholder='Enter the password..' required />
+                        <select name="role" value={formData.value} onChange={handleChange}>
+                            <option value="">Select role</option>
+                            <option value="Trainee">Trainee</option>
+                            <option value="Hr">Hr</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Director">Director</option>
+                            <option value="Developer">Developer</option>
+                        </select>
 
-                </form>
+                        <input type="date" name="join_date" value={formData.join_date} onChange={handleChange} />
+                        <button type='submit'>Add </button>
+                    </form>
+                 */}
+
+
+                <div className="employee-details">
+                    {employeeData && employeeData.map((employee) => (
+                        <div key={employee.employee_id}>
+                            <p>{employee.name}</p>
+                            <p>{employee.email}</p>
+                            <p>{employee.role}</p>
+                            <p>{employee.join_date}</p>
+                        </div>
+                    ))}
+                </div>
+
+
+
+
+
+
+              
+
+                    <div className="holidays-container">
+                        <form onSubmit={holidaySubmit}>
+                            <input type="text" placeholder='Holiday Name.' name='holiday_name' value={holidayData.holiday_name} onChange={handleChange} required />
+                            <input type="date" name='holiday_date' value={holidayData.holiday_date} onChange={handleChange} required />
+                            <button type='submit'>Submit</button>
+                        </form>
+                    </div>
+                
+
             </div>
         </section>
     )

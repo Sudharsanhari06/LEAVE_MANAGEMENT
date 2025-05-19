@@ -17,8 +17,9 @@ const LeaveBalance = ({ employee_id }) => {
 
                 if (response.ok) {
                      var data = await response.json();
+                    console.log("leave balance now", data);
+                     
                     setLeaveBalance(data);
-                    console.log("leave balance", data);
                     console.log("total remailnkg",data.total_available_days);
                     console.log("total leavebalance",leavebBalance);
 
@@ -39,13 +40,14 @@ const LeaveBalance = ({ employee_id }) => {
         {leavebBalance &&
              <div className="leave-box total">
                 <h2>{leavebBalance.total_available_days} </h2> 
-            <p>Total Available Leaves </p> 
+                 <p>Total Available Leaves </p> 
              </div> 
         }        
            { leavebBalance.leave_types   && leavebBalance.leave_types.map((leave,index)=>(
                  <div className={`leave-box ${leave.type_name}`} key={index}> 
                  <h2>{leave.remaining_days}  </h2>
-                 <p>Total {leave.type_name} Leaves</p></div>
+                 <p>Total {leave.type_name} Leaves</p>
+                 </div>
             ))
         }
 

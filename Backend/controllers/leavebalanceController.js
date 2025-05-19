@@ -1,13 +1,12 @@
 const leavebalanceModel = require('../models/leavebalanceModel');
-
-
-
+const leavetypesModel = require('../models/leavetypesModel')
+const leaverequestModel = require('../models/leaverequestModel');
 
 exports.getAllLeavebalance = async (request, h) => {
     try {
         const result = await leavebalanceModel.getAllLeavebalance();
         return h.response(result).code(200);
-    }catch(error) {
+    } catch (error) {
         console.error("Fail to get all leavebalance", error);
         return h.response(
             { error: 'Fail to get all leavebalance' }
@@ -49,7 +48,7 @@ exports.updateByIdLeavebalance = async (request, h) => {
 
     try {
         const result = await leavebalanceModel.updateByIdLeavebalance(employee_id, leavetype_id, year, allocated_days, used_days, carry_forwarded, id);
-        return h.response({ message: 'the leave balance update successfully' }).code(200)
+        return h.response({ message: 'the leave balance update successfully' }).code(200);
     } catch (error) {
         console.error("Fail to update leave balance", error);
         return h.response({ error: 'Fail to update ' }).code(500);
@@ -74,22 +73,44 @@ exports.deleteByIdLeavebalance = async (request, h) => {
 }
 
 
-exports.allLeavebalanceById = async (request, h) => {
+exports.getLeavebalanceByEmployee = async (request, h) => {
     const { employee_id } = request.params;
-    const currentYear=new Date().getFullYear();
-
+    const currentYear = new Date().getFullYear();
     try {
-        const result = await leavebalanceModel.allLeavebalanceById(employee_id,currentYear);
-        const totalAvailable = result.reduce((sum, leave) => sum + leave.remaining_days, 0);
+        const types = await leavetypesModel.getAllLeaveTypes();
+        console.log("types",types);
+
+        const used = await leaverequestModel.usedLeavedaysEmployee(employee_id);
+        console.log("used days",used);
+
+        const usedMap = {};
+        used.forEach((entry) => {
+            usedMap[entry.leavetype_id] = entry.used_days;
+        });
+        let total_available_days = 0;
+
+        const leave_types = types.map((type) => {
+            const used_days = usedMap[type.leavetype_id] || 0;
+            const remaining_days = type.max_days - used_days;
+            total_available_days += remaining_days;
+
+            return {
+                type_name: type.type_name,
+                max_days: type.max_days,
+                used_days,
+                remaining_days,
+            };
+        });
+
         return h.response({
-            employee_id: employee_id,
-            total_available_days: totalAvailable,
-            leave_types: result
-          }).code(200);
+            employee_id,
+            total_available_days,
+            leave_types,
+        });
 
     } catch (error) {
-        console.error("Fail to get leavebalance", error);
-        return h.response({ error: "Fail to get leavebalance" }).code(500);
+        console.error('Error fetching leave balance:', error);
+        return h.response({ error: 'Server error' }).code(500);
     }
 }
 
@@ -97,12 +118,12 @@ exports.allLeavebalanceById = async (request, h) => {
 exports.getLeaveBalanceByEmployee = async (request, h) => {
     const { employee_id } = request.params;
     try {
-      const balance = await leavebalanceModel.getLeaveBalanceByEmployee(employee_id);
-      return h.response(balance).code(200);
+        const balance = await leavebalanceModel.getLeaveBalanceByEmployee(employee_id);
+        return h.response(balance).code(200);
     } catch (err) {
-      return h.response({ error: "Failed to fetch leave balance" }).code(500);
+        return h.response({ error: "Failed to fetch leave balance" }).code(500);
     }
-  };
+};
 
 
 

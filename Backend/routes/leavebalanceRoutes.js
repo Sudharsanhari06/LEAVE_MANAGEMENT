@@ -35,7 +35,7 @@ const leavebalanceRoutes = [
                 { method: verifyToken }
             ]
         },
-        handler: leavebalanceController.allLeavebalanceById
+        handler: leavebalanceController.getLeavebalanceByEmployee
 
     }
 ]

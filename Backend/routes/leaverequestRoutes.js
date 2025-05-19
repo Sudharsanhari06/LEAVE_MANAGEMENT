@@ -31,11 +31,11 @@ const leaverequestRoutes = [
                 { method: verifyToken }
             ]
         },
-        handler: leaverequestController.getAllLeaverequestById,
+        handler: leaverequestController.getAllLeaverequestById
 
     }, {
         method: 'PUT',
-        path: '/employee/{employee_id}/leaverequest/{req_id}',
+        path: '/employee/leaverequest/{req_id}',
         options: {
             pre: [
                 { method: verifyToken }

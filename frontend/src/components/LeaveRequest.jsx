@@ -1,5 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import '../styles/leaverequest.css';
+
+
 const LeaveRequest = ({ employee_id }) => {
     const [leaveTypes, setLeaveTypes] = useState([]);
     const [leaveRequestData, setLeaveRequeastData] = useState([]);
@@ -35,6 +38,32 @@ const LeaveRequest = ({ employee_id }) => {
         }
         fetchLeaveTypes();
     }, []);
+
+
+    const userCancel = async (req_id) => {
+        try {
+            const response = await fetch(`http://localhost:3003/employee/leaverequest/${req_id}`, {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            if(response.ok){
+                const data = response.json();
+                console.log("update status", data);
+            }else{
+                console.log("update status else part")
+            }
+        
+        } catch (error) {
+            console.error('Cancel failed:', error);
+        }
+    }
+
+
+
+
 
 
     const handleChange = (e) => {
@@ -118,13 +147,16 @@ const LeaveRequest = ({ employee_id }) => {
             <button onClick={openPopup} className='btn open-btn'>+ Apply Leave</button>
             <div className='leaverequest-popup'>
                 {showPopup && (
-                    <div>
+                    <div className='leaverequest-form'>
                         <button onClick={closePopup} className='btn close-btn'>X</button>
-
                         <form onSubmit={submitLeave}>
-                            <input type="date" name='start_date' value={formData.start_date} onChange={handleChange} required />
-                            <input type="date" name='end_date' value={formData.end_date} onChange={handleChange} required />
-                            <p>Leave Days:{formData.days}</p>
+                            <div className='form-date'>
+                                <input type="date" name='start_date' value={formData.start_date} onChange={handleChange} required />
+                                <p>{formData.days} days</p>
+
+                                <input type="date" name='end_date' value={formData.end_date} onChange={handleChange} required />
+                            </div>
+
                             <select name="leavetype_id" value={formData.leavetype_id} onChange={handleChange} required >
                                 <option value="">Select Leave Type</option>
                                 {
@@ -141,7 +173,7 @@ const LeaveRequest = ({ employee_id }) => {
                     </div>
                 )}
             </div>
- 
+
             <section className='all-leaverequest'>
                 <table>
                     <thead>
@@ -167,6 +199,7 @@ const LeaveRequest = ({ employee_id }) => {
                                     <td>{request.days}</td>
                                     <td>{request.reason}</td>
                                     <td>{request.status}</td>
+                                    <td><button onClick={()=>userCancel(request.request_id)}>Cancel</button></td>
                                 </tr>
                             ))
                         }

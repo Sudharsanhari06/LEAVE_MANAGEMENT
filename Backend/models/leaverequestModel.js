@@ -20,7 +20,7 @@ exports.getAllLeaverequestById = async (employee_id) => {
     const [result] = await database.query(`SELECT lr.*, lt.type_name 
 FROM leaverequests AS lr
 JOIN leavetypes AS lt ON lr.leavetype_id = lt.leavetype_id
-WHERE lr.employee_id = ?`, [employee_id]);
+WHERE lr.employee_id = ? ORDER BY lr.request_id DESC`, [employee_id]);
     return result;
 }
 
@@ -59,3 +59,15 @@ exports.backUsedLeaveDays = async (employee_id, leavetype_id, days) => {
 
 
 
+
+exports.usedLeavedaysEmployee=async(employee_id)=>{
+        const[used]= await database.query(
+            `SELECT leavetype_id, SUM(days) as used_days 
+            FROM leaverequests 
+            WHERE employee_id = ? AND status NOT IN('cancelled','rejected')
+            GROUP BY leavetype_id`,
+            [employee_id]
+        );
+        return used;
+
+}

@@ -15,7 +15,6 @@ exports.verifyToken = async (request, h) => {
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
         console.log("Decode token", decoded);
-
         request.auth = decoded;
         return h.continue;
     } catch (error) {

@@ -7,8 +7,6 @@ function Dashboard() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
-
-
   useEffect(() => {
     const fetchDashboard = async () => {
       const token = localStorage.getItem('token');
@@ -24,8 +22,6 @@ function Dashboard() {
             'Authorization': `Bearer ${token}`
           }
         });
-
-
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
@@ -39,7 +35,6 @@ function Dashboard() {
         navigate('/');
       }
     };
-
     fetchDashboard();
   }, []);
 
@@ -67,21 +62,19 @@ function Dashboard() {
         <div className="leave-boxes__container">
           <h2 >Leaves</h2>
           {userData &&
-          <LeaveBalance employee_id={userData.employee_id} />
-        }
-            
+            <LeaveBalance employee_id={userData.employee_id} />
+          }
+
         </div>
-      
+
         <div className="leave-request__container">
           {userData &&
             <LeaveRequest employee_id={userData.employee_id} />
           }
         </div>
-      </div>
-
-
-
+      </div>      
     </div>
   );
 }
 export default Dashboard;
+

@@ -19,7 +19,7 @@ const LeaveRequest = ({ employee_id }) => {
         const fetchLeaveTypes = async () => {
             try {
                 const response = await fetch('http://localhost:3003/leavetypes');
-                const b = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`, {
+                const b = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`,{
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`

@@ -1,13 +1,12 @@
 const database=require('../config/db');
 
 exports.addHolidays=async(holiday_name,holiday_date)=>{
-
     const [holidays]=await database.query('INSERT INTO holidays (holiday_name,holiday_date) VALUES(?,?)',[holiday_name,holiday_date])
     return holidays;
 }
 
 exports.getAllHolidays=async()=>{
-    const [holidays]=await database.query('SELECT * FROM holidays');
+    const [holidays]=await database.query('SELECT * FROM holidays ORDER BY holiday_id');
     return holidays;
 }
 

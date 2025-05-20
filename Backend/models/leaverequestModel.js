@@ -20,7 +20,7 @@ exports.getAllLeaverequestById = async (employee_id) => {
     const [result] = await database.query(`SELECT lr.*, lt.type_name 
 FROM leaverequests AS lr
 JOIN leavetypes AS lt ON lr.leavetype_id = lt.leavetype_id
-WHERE lr.employee_id = ? ORDER BY lr.request_id DESC`, [employee_id]);
+WHERE lr.employee_id = ? AND lr.flag=true ORDER BY lr.request_id DESC`, [employee_id]);
     return result;
 }
 

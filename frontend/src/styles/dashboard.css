@@ -96,12 +96,13 @@ vilot #4a2dcf
     align-items: center;
 
 }
-.leave-box h1{
+
+.leave-box h1 {
     font-size: 0.9rem;
 }
-.leave-box p{
-    font-size: 1.2rem;
 
+.leave-box p {
+    font-size: 1.2rem;
 }
 
 .leave-box.total {
@@ -169,7 +170,7 @@ vilot #4a2dcf
     /* overflow-y: scroll; */
 }
 
-.all-leaverequest table{
+.all-leaverequest table {
     width: 100%;
 }
 
@@ -179,7 +180,7 @@ vilot #4a2dcf
 th {
     padding: 0.5rem 0.3rem;
     margin: 0;
-  
+
 }
 
 .all-leaverequest table tr:nth-child(odd) {

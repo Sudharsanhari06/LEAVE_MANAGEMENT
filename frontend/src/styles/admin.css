@@ -11,36 +11,68 @@
 }
 
 .admin-leftside {
-    width: 25%;
+    width: 30%;
     /* background-color: #cd6268; */
     background-color: #1d1b27;
     color: #ffffff;
-    padding: 1rem 0;
 }
-.admin-leftside button{
+
+.admin-leftside img {
+    margin: 1rem auto;
+    width: 95%;
+    height: 80px;
+}
+
+.admin-leftside ul li {
     width: 100%;
-    border: none;
-    padding: 0.7rem 0;
-    font-size: 1.2rem;
-    cursor: pointer;
+    list-style: none;
+    margin: 0.5rem;
+    padding: 1rem;
+  
 }
+.admin-leftside .sidebar-btn{
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 550;
+    transition: 0.8s;
+}
+.admin-leftside .sidebar-btn:hover{
+    background-color: #ffffff;
+    color: #1d1b27;
+}
+
 
 .admin-rightside {
     width: 70%;
     background-color: #ffffff;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 1rem 1.5rem 1rem;
+    /* justify-content: center; */
+    /* align-items: center; */
     flex-direction: column;
 
+}           
+.admin-rightside .employee-form{
+    width: 97%;
+    margin: auto;
+    border: 2px solid;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+.admin-rightside h2{
+    margin-bottom: 1.3rem;
+}
+.admin-rightside .employee-form .form-column{
+    width: 45%;
 }
 
-.admin-rightside form {
+.admin-rightside .holidays-container{
     width: 300px;
-    border: 2px solid;
-    padding: 2rem;
-    border-radius: 0.5rem;
 }
+
 
 .admin-rightside form input,
 select {
@@ -51,7 +83,7 @@ select {
     outline: none;
 }
 
-.admin-rightside form button{
+.admin-rightside form button {
     padding: 0.5rem 1.6rem;
     font-size: 1rem;
     margin: 0.5rem auto;
@@ -62,7 +94,8 @@ select {
     cursor: pointer;
     transition: 0.9s all ease-in-out;
 }
-.admin-rightside form button:hover{
+
+.admin-rightside form button:hover {
     background-color: transparent;
     border: 1px solid;
 }

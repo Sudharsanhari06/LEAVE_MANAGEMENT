@@ -2,7 +2,7 @@ const database = require('../config/db');
 const bcrypt = require('bcrypt');
 
 exports.getAllEmployees = async () => {
-    const [rows] = await database.query('SELECT * FROM employees WHERE flag=true');
+    const [rows] = await database.query('SELECT * FROM employees WHERE flag=true ORDER BY employee_id DESC');
     return rows;
 }
 
@@ -33,7 +33,7 @@ exports.updateEmployee = async (name, role, manager_id, hr_id, director_id, join
 }
 
 exports.deleteEmployee = async (id) => {
-    const [result, fields] = await database.query('DELETE FROM employees WHERE employee_id=?', [id]);
+    const [result, fields] = await database.query('UPDATE employees SET flag=false WHERE employee_id=?', [id]);
     console.log("fields:", fields);
     return result;
 }

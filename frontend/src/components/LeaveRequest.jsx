@@ -16,10 +16,11 @@ const LeaveRequest = ({ employee_id }) => {
     });
 
     useEffect(() => {
+
         const fetchLeaveTypes = async () => {
             try {
                 const response = await fetch('http://localhost:3003/leavetypes');
-                const b = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`,{
+                const b = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -39,6 +40,10 @@ const LeaveRequest = ({ employee_id }) => {
         fetchLeaveTypes();
     }, []);
 
+    const todayDate = new Date().toISOString().split('T')[0];
+    console.log("todayDate", todayDate)
+
+
 
     const userCancel = async (req_id) => {
         try {
@@ -49,20 +54,17 @@ const LeaveRequest = ({ employee_id }) => {
                     'Content-Type': 'application/json'
                 }
             })
-            if(response.ok){
+            if (response.ok) {
                 const data = response.json();
                 console.log("update status", data);
-            }else{
+            } else {
                 console.log("update status else part")
             }
-        
+
         } catch (error) {
             console.error('Cancel failed:', error);
         }
     }
-
-
-
 
 
 
@@ -75,6 +77,7 @@ const LeaveRequest = ({ employee_id }) => {
 
     const submitLeave = async (e) => {
         e.preventDefault();
+
         const token = localStorage.getItem("token");
         const leaveRequestData = {
             employee_id: employee_id,
@@ -138,12 +141,9 @@ const LeaveRequest = ({ employee_id }) => {
     const closePopup = () => {
         setshowPopup(false);
     }
-
-
-
     return (
         <section className='leave-request__section'>
-            <h2>All Leaves Requests</h2>
+            <h2>Latest Leaves</h2>
             <button onClick={openPopup} className='btn open-btn'>+ Apply Leave</button>
             <div className='leaverequest-popup'>
                 {showPopup && (
@@ -151,10 +151,10 @@ const LeaveRequest = ({ employee_id }) => {
                         <button onClick={closePopup} className='btn close-btn'>X</button>
                         <form onSubmit={submitLeave}>
                             <div className='form-date'>
-                                <input type="date" name='start_date' value={formData.start_date} onChange={handleChange} required />
+                                <input type="date" name='start_date' value={formData.start_date} onChange={handleChange} min={todayDate} required />
                                 <p>{formData.days} days</p>
 
-                                <input type="date" name='end_date' value={formData.end_date} onChange={handleChange} required />
+                                <input type="date" name='end_date' value={formData.end_date} onChange={handleChange} min={todayDate} required />
                             </div>
 
                             <select name="leavetype_id" value={formData.leavetype_id} onChange={handleChange} required >
@@ -165,7 +165,7 @@ const LeaveRequest = ({ employee_id }) => {
                                     ))
                                 }
                             </select>
-                            <textarea name="reason" value={formData.reason} onChange={handleChange} required>
+                            <textarea name="reason" value={formData.reason} onChange={handleChange} placeholder='Reason' required>
                             </textarea>
                             <button type='submit'>Submit</button>
                         </form>
@@ -184,7 +184,7 @@ const LeaveRequest = ({ employee_id }) => {
                             <th>Days</th>
                             <th>Reason</th>
                             <th>Status</th>
-                            <th>User Cancel</th>
+                            <th colSpan={2}>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -198,18 +198,16 @@ const LeaveRequest = ({ employee_id }) => {
                                     <td>{request.end_date.split('T')[0]}</td>
                                     <td>{request.days}</td>
                                     <td>{request.reason}</td>
-                                    <td>{request.status}</td>
-                                    <td><button onClick={()=>userCancel(request.request_id)}>Cancel</button></td>
+                                    <td className={`leavestatus ${request.status}`}>{request.status}</td>
+                                    <td><button onClick={() => userCancel(request.request_id)} className='action-btn'><i class="fa-regular fa-circle-xmark"></i></button></td>
+                                    <td><button  className='action-btn' ><i class="fa-solid fa-trash"></i>
+                                    </button></td>
                                 </tr>
                             ))
                         }
                     </tbody>
-
                 </table>
-
             </section>
-
-
         </section>
     )
 }

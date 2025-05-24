@@ -21,7 +21,6 @@ async function initial() {
                 }
             }
         });
-        
     server.route(employeeRoutes);
     server.route(leaveTypesRoute);
     server.route(leavebalanceRoutes);

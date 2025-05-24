@@ -15,7 +15,6 @@ exports.getLeaverequestById = async (req_id) => {
     return result;
 }
 
-
 exports.getAllLeaverequestById = async (employee_id) => {
     const [result] = await database.query(`SELECT lr.*, lt.type_name 
 FROM leaverequests AS lr
@@ -71,3 +70,19 @@ exports.usedLeavedaysEmployee=async(employee_id)=>{
         return used;
 
 }
+
+
+
+
+
+
+
+
+// update
+exports.updateLeaveRequestStatus = async (request_id, status) => {
+    return await database.query(
+      `UPDATE leaverequests SET status = ? WHERE request_id = ?`,
+      [status, request_id]
+    );
+  };
+  

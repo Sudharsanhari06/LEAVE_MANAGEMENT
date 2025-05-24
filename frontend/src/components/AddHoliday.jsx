@@ -1,16 +1,17 @@
 import React from 'react'
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
+import '../styles/admin.css';
 
- const AddHoliday = () => {
+const AddHoliday = () => {
 
     const [holidayData, setHolidayData] = useState({
         holiday_name: '',
         holiday_date: ''
     });
 
-    
+
     const handleChange = (e) => {
         setHolidayData(pre => ({
             ...pre,
@@ -45,7 +46,7 @@ import 'notyf/notyf.min.css';
                     holiday_name: '',
                     holiday_date: ''
                 })
-            }else{
+            } else {
                 notyf.error('Fail to add Holiday')
 
             }
@@ -56,17 +57,15 @@ import 'notyf/notyf.min.css';
     }
 
 
-  return (
-   <section>
-    <div className="holidays-container">
-                        <form onSubmit={holidaySubmit}>
-                            <input type="text" placeholder='Holiday Name.' name='holiday_name' value={holidayData.holiday_name} onChange={handleChange} required />
-                            <input type="date" name='holiday_date' value={holidayData.holiday_date} onChange={handleChange} required />
-                            <button type='submit'>Submit</button>
-                        </form>
-                    </div>
-   </section>
-  )
+    return (
+        <section className="holidays-container">
+            <form onSubmit={holidaySubmit}>
+                <input type="text" placeholder='Holiday Name.' name='holiday_name' value={holidayData.holiday_name} onChange={handleChange} required />
+                <input type="date" name='holiday_date' value={holidayData.holiday_date} onChange={handleChange} required />
+                <button type='submit'>Submit</button>
+            </form>
+        </section>
+    )
 }
 
 export default AddHoliday;

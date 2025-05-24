@@ -1,11 +1,11 @@
 const database = require('../config/db');
 exports.getAllLeaveTypes = async () => {
-    const [result] = await database.query('SELECT leavetype_id,type_name,max_days FROM leavetypes');
+    const [result] = await database.query('SELECT leavetype_id,type_name,max_days FROM leavetypes WHERE isactive=true');
     return result;
 }
 
 exports.getLeaveTypeById = async (leavetype_id) => {
-    const [result] = await database.query('SELECT * FROM leavetypes WHERE leavetype_id=?',[leavetype_id]);
+    const [result] = await database.query('SELECT * FROM leavetypes WHERE leavetype_id=? AND isactive=true', [leavetype_id]);
     return result;
 }
 

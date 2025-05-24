@@ -2,7 +2,8 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import '../styles/admin.css'
+import '../styles/admin.css';
+
 
 const AddEmployee = () => {
     const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const AddEmployee = () => {
     const [managers, setManagers] = useState([]);
     const [hr, setHr] = useState([]);
     const [directors, setDirectors] = useState([]);
-    const [message, setMessage] = useState(false);
+    const [employeeData, setEmployeeData] = useState([]);
 
     useEffect(() => {
         const fetchRoles = async () => {
@@ -50,6 +51,7 @@ const AddEmployee = () => {
                 const employee = await response2.json()
                 console.log("employee roles", data);
                 console.log("Employee data", employee)
+                setEmployeeData(employee);
 
                 const hrEmployees = data.users.filter((emp) => emp.role == 'Hr');
                 const managerEmployees = data.users.filter((emp) => emp.role == 'manager');
@@ -70,15 +72,6 @@ const AddEmployee = () => {
         }
         fetchRoles();
     }, []);
-
-    const showAlert = (message) => {
-        if (message) {
-            notyf.success('Successfully Added');
-        } else {
-            notyf.error('Failed to Add')
-        }
-    }
-
 
     //------
     const handleChange = (e) => {
@@ -130,8 +123,10 @@ const AddEmployee = () => {
     }
 
     return (
-        <section>
+        <section className='add-employee-container'>
+
             {/* <p>{message}</p> */}
+            <h2>Add Employee</h2>
 
             <form onSubmit={submitForm} className='employee-form'>
                 <div className='form-column'>
@@ -176,7 +171,23 @@ const AddEmployee = () => {
 
                     <button type='submit'>Add</button>
                 </div>
+
             </form>
+
+            <div className="employees-container">
+                <h2>All Employees</h2>
+                {
+                    employeeData && employeeData.map((emp) => (
+                        <div className='employee'>
+                            <p>LMT{emp.employee_id}</p>
+                            <p>Name: {emp.name}</p>
+                            <p>Role: {emp.role}</p>
+                            <p>Email: {emp.email}</p>
+                        </div>
+                    ))}
+
+            </div>
+
         </section>
 
     )

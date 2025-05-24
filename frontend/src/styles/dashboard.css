@@ -3,6 +3,7 @@
     margin: 0%;
     box-sizing: border-box;
     overflow-x: hidden;
+    font-family: "Nunito", sans-serif;
 }
 
 /* #1d1b27
@@ -19,27 +20,43 @@ vilot #4a2dcf
 
 .left-side {
     width: 23%;
-    background-color: #1d1b27;
+    background-color: #1E2D4E;
     color: #efeef3;
-    padding: 1rem 0;
+    padding: 1rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.left-side button {
-    width: 100%;
-    font-weight: 600;
-    font-size: 1.4rem;
-    text-align: center;
-    transition: 0.9s all ease-in-out;
+.left-side img {
+    margin: 0 0 1.2rem;
+    width: 150px;
     cursor: pointer;
-    padding: 0.6rem 0;
-    border: none;
-    background-color: transparent;
-    color: #efeef3;
 }
 
-.left-side button:hover {
-    background-color: #efeef3;
-    color: #1d1b27;
+.left-side ul li {
+    list-style: none;
+}
+
+.left-side .sidebar-btn {
+    padding: 0.5rem 1.3rem;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0.6rem 0;
+    display: block;
+    border-radius: 0.5rem;
+    /* transition: 0.7s ease-in-out; */
+}
+
+.left-side .sidebar-btn.active {
+    background-color: #D0E1E9;
+    color: #050407;
+}
+
+.left-side .sidebar-btn span {
+    margin-right: 1rem;
 }
 
 .right-side {
@@ -47,11 +64,9 @@ vilot #4a2dcf
 }
 
 .right-side__header {
-    padding: 0.4rem 0;
-    padding: 0.6rem;
+    padding: 0.4rem 0.6rem;
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-
 }
 
 .right-side__header p {
@@ -59,23 +74,28 @@ vilot #4a2dcf
     font-size: 1.3rem;
 }
 
+.right-side__header p span {
+    font-weight: 650;
+}
 
 .line {
     height: 1px;
-    width: 97%;
+    width: 98%;
     margin: 0.8rem auto;
     background-color: #3333336c;
 }
 
 .leave-boxes__container {
-    width: 95%;
+    width: 97%;
     background-color: #ffffff;
     padding: 1.3rem 0.7rem 0.9rem;
     margin: 1rem auto;
+    border-radius: 0.4rem;
 }
 
 .leave-boxes__container h2 {
     margin-bottom: 0.5rem;
+    font-size: 1.5rem;
 }
 
 .leave-boxes {
@@ -86,23 +106,27 @@ vilot #4a2dcf
 }
 
 .leave-box {
-    width: 250px;
-    height: 120px;
-    padding: 0.5rem;
-    font-size: 1.3rem;
+    width: 210px;
+    min-height: 100px;
+    padding: 1rem 0.7rem;
     border-radius: 0.5rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-
+    justify-content: space-between;
 }
 
-.leave-box h1 {
-    font-size: 0.9rem;
+
+.leave-box h2 {
+    font-size: 2.3rem;
+    font-weight: 750;
+    width: 30%;
 }
 
 .leave-box p {
+    width: 70%;
     font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 .leave-box.total {
@@ -117,7 +141,11 @@ vilot #4a2dcf
     background-color: #f6ecfd;
 }
 
-.leave-boxes__container button {
+.leave-box.earned {
+    background-color: hsl(13, 100%, 94%);
+}
+
+/* .leave-boxes__container button{
     padding: 0.5rem 1rem;
     border: 0;
     font-size: 1.2rem;
@@ -126,14 +154,16 @@ vilot #4a2dcf
     margin: 0.5rem 0;
     border-radius: 0.4rem;
     cursor: pointer;
+} */
 
-}
+
 
 /* leave request table */
 .leave-request__section {
-    width: 95%;
+    width: 97%;
     margin: auto;
-    padding: 1.2rem 0.5rem;
+    padding: 1.2rem 0.6rem;
+    border-radius: 0.5rem;
     background-color: #fff;
 }
 
@@ -148,6 +178,7 @@ vilot #4a2dcf
 
 .leave-request__section h2 {
     display: inline;
+    font-weight: 700;
 }
 
 .leave-request__section .open-btn {
@@ -163,26 +194,70 @@ vilot #4a2dcf
 
 }
 
+
+
+
 .all-leaverequest {
     width: 100%;
     margin: 1.5rem 0;
-    border: 1px solid;
-    /* overflow-y: scroll; */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .all-leaverequest table {
     width: 100%;
+    border-radius: 0.5rem;
+    border-collapse: collapse;
 }
 
-
-
-.all-leaverequest table tr td,
-th {
-    padding: 0.5rem 0.3rem;
-    margin: 0;
-
+.all-leaverequest th,
+.all-leaverequest td {
+    padding: 12px 1rem;
+    font-size: 1rem;
+    text-transform: capitalize;
+    text-align: left;
 }
 
-.all-leaverequest table tr:nth-child(odd) {
+.all-leaverequest table thead tr th {
     background-color: #f6f6f6;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.all-leaverequest table tr:nth-child(even) {
+    background-color: #f8fafb;
+}
+
+.all-leaverequest .action-btn {
+    border: 0;
+    background: transparent;
+    color: red;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.all-leaverequest .leavestatus {
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-align: center;
+    /* display: inline-block; */
+    display: block;
+    margin-top: 0.7rem;
+}
+
+.leavestatus.pending {
+    background-color: #fff5d6;
+    color: #f39c12;
+}
+
+.leavestatus.approved {
+    background-color: #edfeeb;
+    color: #0f6a05;
+}
+
+.leavestatus.rejected,
+.cancelled {
+    background-color: #ffecec;
+    color: #850505;
 }

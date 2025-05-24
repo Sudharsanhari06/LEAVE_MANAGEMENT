@@ -1,4 +1,6 @@
 const leaveapprovalController = require('../controllers/leaveapprovalsController');
+// const leaveapprovalModel=require('../models/leaveapprovalsModel');
+const { verifyToken, allowRoles } = require('../middleware/authMiddleware');
 
 const leaveapprovalRoutes = [
     {
@@ -6,20 +8,37 @@ const leaveapprovalRoutes = [
         path: '/leaverequest/{req_id}/leaveapproval',
         handler: leaveapprovalController.approveLeave
     }
-    // {
-    //     method: 'POST',
-    //     path: '/leaverequest/approvelevel',
-    //     handler: leaveapprovalController
-    // }
     ,{
         method: 'GET',
         path: '/leaveapprovals/request/{req_id}',
         handler: leaveapprovalController.getAllapprovalById
-    },{
+    }, {
         method: 'GET',
         path: '/leaveapprovals/request/employee/{emp_id}',
         handler: leaveapprovalController.getAllapprovalByEmployeeId
     }
+
+    , {
+        method: 'GET',
+        path: '/leaveapproval/mapped',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
+        handler: leaveapprovalController.getMappedLeaveRequests
+    },
+    {
+        method: 'GET',
+        path: '/leaveapproval/decision',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
+        handler: leaveapprovalController.updateApprovalStatus
+    }
+
 ];
 module.exports = leaveapprovalRoutes;
 

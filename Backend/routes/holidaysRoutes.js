@@ -1,6 +1,5 @@
 const holidaysController=require('../controllers/holidaysController');
 
-
 const holidaysRoutes=[
     {
         method:'POST',

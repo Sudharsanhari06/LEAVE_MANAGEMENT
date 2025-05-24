@@ -35,5 +35,3 @@ exports.allowRoles = (...allowRoles) => {
         return h.continue;
     }
 }
-
-

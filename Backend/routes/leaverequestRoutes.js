@@ -11,8 +11,18 @@ const leaverequestRoutes = [
             ]
         },
         handler: leaverequestController.addLeaverequest
-    },
-    {
+    }
+    // {
+    //     method: 'PUT',
+    //     path: '/leaverequest/{id}/approve',
+    //     options: {
+    //         pre: [
+    //             { method: verifyToken }
+    //         ]
+    //     },
+    //     handler: leaverequestController.approveLeave
+    //   }
+      ,{
         method: 'GET',
         path: '/leaverequest',
         handler: leaverequestController.getAllLeaverequest
@@ -21,9 +31,8 @@ const leaverequestRoutes = [
         method: 'GET',
         path: '/leaverequest/{req_id}',
         handler: leaverequestController.getLeaverequestById
-    }
-    ,
-    {
+    },
+    {  
         method: 'GET',
         path: '/leaverequest/employee/{employee_id}',
         options: {
@@ -32,7 +41,6 @@ const leaverequestRoutes = [
             ]
         },
         handler: leaverequestController.getAllLeaverequestById
-
     }, {
         method: 'PUT',
         path: '/employee/leaverequest/{req_id}',

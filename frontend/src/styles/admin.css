@@ -11,7 +11,7 @@
 }
 
 .admin-leftside {
-    width: 30%;
+    width: 25%;
     /* background-color: #cd6268; */
     background-color: #1d1b27;
     color: #ffffff;
@@ -27,9 +27,9 @@
     width: 100%;
     list-style: none;
     margin: 0.5rem;
-    padding: 1rem;
-  
+    padding: 1rem;  
 }
+
 .admin-leftside .sidebar-btn{
     text-decoration: none;
     color: #ffffff;
@@ -37,44 +37,44 @@
     font-weight: 550;
     transition: 0.8s;
 }
+
 .admin-leftside .sidebar-btn:hover{
     background-color: #ffffff;
     color: #1d1b27;
 }
 
-
 .admin-rightside {
-    width: 70%;
-    background-color: #ffffff;
+    width: 75%;
+    background-color: #f9fbfa;
     display: flex;
-    margin: 1rem 1.5rem 1rem;
+    /* margin: 1rem 1.5rem 1rem; */
     /* justify-content: center; */
     /* align-items: center; */
     flex-direction: column;
-
 }           
-.admin-rightside .employee-form{
+
+.add-employee-container .employee-form{
     width: 97%;
-    margin: auto;
+    margin: 3rem auto;
     border: 2px solid;
     padding: 1rem;
     border-radius: 0.5rem;
     display: flex;
     justify-content: space-between;
 }
-.admin-rightside h2{
+.add-employee-container h2{
     margin-bottom: 1.3rem;
 }
-.admin-rightside .employee-form .form-column{
+.add-employee-container .employee-form .form-column{
     width: 45%;
 }
 
-.admin-rightside .holidays-container{
+.add-employee-container .holidays-container{
     width: 300px;
 }
 
 
-.admin-rightside form input,
+.add-employee-container form input,
 select {
     width: 100%;
     margin: 0.5rem 0;
@@ -83,7 +83,7 @@ select {
     outline: none;
 }
 
-.admin-rightside form button {
+.add-employee-container form button{
     padding: 0.5rem 1.6rem;
     font-size: 1rem;
     margin: 0.5rem auto;
@@ -95,7 +95,21 @@ select {
     transition: 0.9s all ease-in-out;
 }
 
-.admin-rightside form button:hover {
+.add-employee-container form button:hover {
     background-color: transparent;
     border: 1px solid;
+}
+
+/* employees shows */
+.employees-container{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.employees-container .employee{
+    width: 300px;
+    padding: 1rem;
+    border: 1px solid;
+    margin: 1rem 0;
+    border-radius: 0.5rem;
 }

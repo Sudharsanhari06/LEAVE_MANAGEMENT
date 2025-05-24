@@ -24,8 +24,6 @@ const LeaveBalance = ({ employee_id }) => {
                     console.log("total leavebalance", leavebBalance);
 
                 }
-
-
             } catch (error) {
                 console.error('Failed to fetch leave balane', error)
             }
@@ -45,13 +43,10 @@ const LeaveBalance = ({ employee_id }) => {
                 }
                 {leavebBalance.leave_types && leavebBalance.leave_types.map((leave, index) => (
                     <div className={`leave-box ${leave.type_name}`} key={index}>
-                        <h2>{leave.remaining_days}  </h2>
+                        <h2>  {leave.remaining_days}  </h2>
                         <p>Total {leave.type_name} Leaves</p>
                     </div>
-                ))
-                }
-
-
+                ))}
             </div>
         </section>
     )

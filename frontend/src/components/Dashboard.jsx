@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState,useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import UserSidebar from './UserSidebar';
+import Sidebar from './Sidebar';
 import '../styles/dashboard.css';
-import LeaveRequest from './LeaveRequest';
-import LeaveBalance from './LeaveBalance';
+import '../styles/admin.css';
+
+
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
@@ -15,6 +18,7 @@ function Dashboard() {
         navigate('/');
         return;
       }
+
       try {
         const response = await fetch('http://localhost:3003/api/dashboard', {
           method: 'GET',
@@ -22,6 +26,7 @@ function Dashboard() {
             'Authorization': `Bearer ${token}`
           }
         });
+
         if (response.ok) {
           const data = await response.json();
           setUserData(data);
@@ -38,41 +43,14 @@ function Dashboard() {
     fetchDashboard();
   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    navigate('/');
-  };
-
   return (
     <div className='dashboard-container'>
-      <div className="left-side">
-        <button>Dashboard</button>
-        <button>Leave Approvals</button>
-        <button onClick={logout}>Logout</button>
+     {userData &&
+      userData.role==='Hr'?<Sidebar/>:<UserSidebar />
+     }
+      <div className='right-side'>
+        <Outlet/>
       </div>
-
-      <div className="right-side">
-        <div className="right-side__header">
-          <h2>Welcome To Lumel</h2>
-          <p> Hey, {userData ? userData.name : 'username'} </p>
-          <p>Role:{userData ? userData.role : 'user role'}</p>
-        </div>
-
-        <div className="line"></div>
-        <div className="leave-boxes__container">
-          <h2 >Leaves</h2>
-          {userData &&
-            <LeaveBalance employee_id={userData.employee_id} />
-          }
-
-        </div>
-
-        <div className="leave-request__container">
-          {userData &&
-            <LeaveRequest employee_id={userData.employee_id} />
-          }
-        </div>
-      </div>      
     </div>
   );
 }

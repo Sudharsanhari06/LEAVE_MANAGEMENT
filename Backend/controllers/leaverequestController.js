@@ -1,14 +1,87 @@
 const leaverequestModel = require('../models/leaverequestModel');
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
 const leavetypesModel = require('../models/leavetypesModel');
-const database = require('../config/db');
-// const leavebalanceModel = require('../models/leavebalanceModel');
+const employeeModel=require('../models/employeesModel')
+
 
 exports.addLeaverequest = async (request, h) => {
-    const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days } = request.payload;
+    const { employee_id, leavetype_id, start_date, end_date, reason, status, is_lop } = request.payload;
+
     try {
+        const start = new Date(start_date);
+        const end = new Date(end_date);
+        const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
         const result = await leaverequestModel.addLeaverequest(employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days);
-        return h.response(result).code(200);
+        const request_id = result.insertId;
+
+
+
+        const [type] = await leavetypesModel.getLeaveTypeById(leavetype_id);
+
+
+        const[employee]=await employeeModel.getEmployeesById(employee_id)
+        console.log(employee.id)
+        if (type.type_name.toLowerCase() === 'sick' && days === 1) {
+            await leaveapprovalModel.autoApprove({
+                request_id,
+                role: 'system',
+                approver_id: null,
+                status: 'approved'
+            });
+            await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
+
+
+            return h.response({ message: 'Sick leave auto-approved' });
+        }
+        else if (days <= 2) {
+            await leaveapprovalModel.insertApproval({
+                request_id,
+                role: 'manager',
+                approved_by: employee.manager_id,
+                status: 'pending'
+            });
+
+        } else if (days <= 4) {
+            await leaveapprovalModel.insertApproval({
+                request_id,
+                role: 'manager',
+                approved_by: employee.manager_id,
+                status: 'pending'
+            });
+
+            await leaveapprovalModel.insertApproval({
+                request_id,
+                role: 'hr',
+                approved_by: employee.hr_id,
+                status: 'inactive' // will activate after manager approves
+            });
+
+        } else {
+            await leaveapprovalModel.insertApproval({
+                request_id,
+                role: 'manager',
+                approved_by: employee.manager_id,
+                status: 'pending'
+            });
+
+            await leaveapprovalModel.insertApproval({
+                request_id,
+                role: 'hr',
+                approved_by: employee.hr_id,
+                status: 'inactive'
+            });
+
+            await leaveapprovalModel.insertApproval({
+                request_id,
+                role: 'director',
+                approved_by: employee.director_id,
+                status: 'inactive'
+            });
+        }
+
+        return h.response({ message: 'Leave request submitted successfully' }).code(201);
+
     } catch (error) {
         console.error('Fail to add leave request', error);
         return h.response({ error: 'Fail to add leaverequest' }).code(500);
@@ -39,6 +112,7 @@ exports.getLeaverequestById = async (request, h) => {
     }
 }
 
+
 exports.getAllLeaverequestById = async (request, h) => {
     const { employee_id } = request.params;
     try {
@@ -52,7 +126,6 @@ exports.getAllLeaverequestById = async (request, h) => {
         return h.response({ error: "Fail to get leaverequest" }).code(500)
     }
 }
-
 
 
 exports.cancelLeaverequest = async (request, h) => {
@@ -70,7 +143,7 @@ exports.cancelLeaverequest = async (request, h) => {
         if ((leave.status == 'approved' || leave.status == 'rejected' || leave.status == 'pending') && startDate > today) {
             await leaverequestModel.cancelLeaverequest(req_id);
             return h.response({ message: 'Leave cancelled and balance updated' }).code(200);
-            
+
         } else {
             return h.response({ error: 'Leave cannot be cancelled after the start date' }).code(400);
         }
@@ -80,7 +153,6 @@ exports.cancelLeaverequest = async (request, h) => {
     }
 
 }
-
 
 exports.getLeaverequestIdDelete = async (request, h) => {
     const { req_id } = request.params;
@@ -95,22 +167,22 @@ exports.getLeaverequestIdDelete = async (request, h) => {
 
 exports.autoApproveLeave = async (request, h) => {
     const { employee_id, leavetype_id, start_date, end_date, reason, is_lop } = request.payload;
-
     try {
         const leaveType = await leavetypesModel.getLeaveTypeById(leavetype_id);
         if (!leaveType) {
             return h.response({ error: "Invalid leave type ID" }).code(400);
         }
+
         const leaveTypeName = leaveType[0].type_name?.toLowerCase();
         console.log("leaveTypeName", leaveTypeName)
         const start = new Date(start_date);
         const end = new Date(end_date);
-        const diffDays = (end - start) / (1000 * 60 * 60 * 24) + 1;
+        const days = (end - start) / (1000 * 60 * 60 * 24) + 1;
 
-        console.log('for console:', { leaveTypeName, diffDays });
+        console.log('for console:', { leaveTypeName, days });
 
-        if ((leaveTypeName == 'sick' || leaveTypeName == 'emergency') && diffDays == 1) {
-            console.log("Leave type:", leaveTypeName, "Days:", diffDays);
+        if ((leaveTypeName == 'sick') && days == 1) {
+            console.log("Leave type:", leaveTypeName, "Days:", days);
 
             const insertResult = await leaverequestModel.
                 addLeaverequest({
@@ -120,7 +192,8 @@ exports.autoApproveLeave = async (request, h) => {
                     end_date,
                     reason,
                     status: 'approved',
-                    is_lop
+                    is_lop,
+                    days
                 });
 
             console.log("insertResult", insertResult);
@@ -135,18 +208,14 @@ exports.autoApproveLeave = async (request, h) => {
             return h.response({
                 message: "Leave auto approved",
                 request_id: request_id
-            }).code(200)
-        } else {
-            return h.response({ message: "This leave must go through approval process" }).code(202);
+            }).code(200);
         }
+
     } catch (error) {
         console.error("Auto-approve failed", error);
         return h.response({ error: "Internal Server Error" }).code(500);
     }
 }
-
-
-
 
 
 exports.usedLeavedaysEmployee = async (request, h) => {
@@ -160,3 +229,45 @@ exports.usedLeavedaysEmployee = async (request, h) => {
 }
 
 
+
+// exports.approveLeave = async (request, h) => {
+//     const { id } = request.params;
+//     const { decision, role, approver_id } = request.payload;
+
+//     await leaveapprovalModel.updateApprovalStatus({ request_id: id, role, decision, approver_id });
+
+//     if (decision === 'rejected') {
+//         await leaveapprovalModel.updateLeaveRequestStatus(id, 'rejected');
+//         return h.response({ message: 'Leave request rejected' });
+//     }
+
+//     const [reqRow] = await leaverequestModel.getLeaverequestById(id);
+
+//     if (role === 'manager') {
+//         if (reqRow.days <= 2) {
+//             console.log("Manger approval..");
+//             await leaverequestModel.updateLeaveRequestStatus(id, 'approved');
+//         } else {
+//             await leaveapprovalModel.activateNextRole(id, 'hr');
+//         }
+//     } else if (role === 'hr') {
+//         if (reqRow.num_days <= 4) {
+//             await leaverequestModel.updateLeaveRequestStatus(id, 'approved');
+//         } else {
+//             await leaveapprovalModel.activateNextRole(id, 'director');
+//         }
+//     } else if (role === 'director') {
+//         await leaverequestModel.updateLeaveRequestStatus(id, 'approved');
+//     }
+
+//     return h.response({ message: 'Leave processed' });
+// };
+
+
+
+
+exports.getMappedLeaveRequests = async (request, h) => {
+    const { role, id } = request.query;
+    const rows = await leaveapprovalModel.getRequestsForRoleMapped(role, id);
+    return h.response(rows).code(200);
+};

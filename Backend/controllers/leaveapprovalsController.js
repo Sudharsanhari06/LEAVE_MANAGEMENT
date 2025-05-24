@@ -7,6 +7,7 @@ exports.approveLeave = async (request, h) => {
     try {
         const result = await leaveapprovalModel.updateLeaveapproval(req_id, approved_by, role, status)
         return h.response({ message: `Leave request ${status} by ${role}` }).code(200);
+
     } catch (error) {
         console.error('Fail to approve the leave', error);
         return h.response({ error: 'Failed to approve ' }).code(500);
@@ -82,3 +83,33 @@ exports.getAllapprovalByEmployeeId = async (request, h) => {
         return h.response({ error: "Failed to get employee Id" }).code(500);
     }
 }
+
+
+exports.getMappedLeaveRequests = async (request, h) => {
+    const { role, approved_by } = request.query;
+    console.log("con role",role,"con approved",approved_by)
+    const rows = await leaveapprovalModel.getMappedRequests({role, approved_by});
+    return h.response(rows).code(200);
+};
+
+exports.updateApprovalStatus = async (request, h) => {
+    const { request_id, role, decision, approved_by } = request.payload;
+
+    try {
+        await leaveapprovalModel.updateApprovalStatus({ request_id, role, decision, approved_by });
+
+        // if decision is approved, activate next level if it exists
+        if (decision === 'approved') {
+            if (role === 'manager') {
+                await leaveapprovalModel.activateNextRole(request_id, 'hr');
+            } else if (role === 'hr') {
+                await leaveapprovalModel.activateNextRole(request_id, 'director');
+            }
+        }
+
+        return h.response({ message: `Leave ${decision} successfully` });
+    } catch (error) {
+        console.error(error);
+        return h.response({ error: 'Failed to update approval status' }).code(500);
+    }
+};

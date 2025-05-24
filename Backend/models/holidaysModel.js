@@ -14,4 +14,3 @@ exports.updateHolidays=async(holiday_id,holiday_name, holiday_date )=>{
     const[holidays]=await database.query('UPDATE holidays SET holiday_name=?,holiday_date=? WHERE holiday_id=?',[holiday_name, holiday_date ,holiday_id]);
     return holidays;
 }
-

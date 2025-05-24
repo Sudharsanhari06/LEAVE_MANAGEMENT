@@ -1,5 +1,6 @@
 
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
+const leaverequestModel=require('../models/leaverequestModel')
 
 exports.approveLeave = async (request, h) => {
     const { req_id } = request.params;
@@ -92,19 +93,64 @@ exports.getMappedLeaveRequests = async (request, h) => {
     return h.response(rows).code(200);
 };
 
+// exports.updateApprovalStatus = async (request, h) => {
+//     const { request_id, role, decision, approved_by } = request.payload;
+
+//     try {
+//         await leaveapprovalModel.updateApprovalStatus({ request_id, role, decision, approved_by });
+
+//         // if decision is approved, activate next level if it exists
+//         if (decision === 'approved') {
+//             if (role === 'manager') {
+//                 await leaveapprovalModel.activateNextRole(request_id, 'hr');
+//             } else if (role === 'hr') {
+//                 await leaveapprovalModel.activateNextRole(request_id, 'director');
+//             }
+//         }
+
+//         return h.response({ message: `Leave ${decision} successfully` });
+
+
+
+//     } catch (error) {
+//         console.error(error);
+//         return h.response({ error: 'Failed to update approval status' }).code(500);
+//     }
+// };
+
 exports.updateApprovalStatus = async (request, h) => {
     const { request_id, role, decision, approved_by } = request.payload;
 
     try {
         await leaveapprovalModel.updateApprovalStatus({ request_id, role, decision, approved_by });
 
-        // if decision is approved, activate next level if it exists
         if (decision === 'approved') {
             if (role === 'manager') {
-                await leaveapprovalModel.activateNextRole(request_id, 'hr');
+
+                const approvals = await leaveapprovalModel.getAllapprovalById(request_id);
+                const hrApproval = approvals.find(a => a.role === 'hr');
+                const directorApproval = approvals.find(a => a.role === 'director');
+
+                if (!hrApproval && !directorApproval) {
+                    await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
+                } else {
+                    await leaveapprovalModel.activateNextRole(request_id, 'hr');
+                }
             } else if (role === 'hr') {
-                await leaveapprovalModel.activateNextRole(request_id, 'director');
+                const approvals = await leaveapprovalModel.getAllapprovalById(request_id);
+                const directorApproval = approvals.find(a => a.role === 'director');
+
+                if (!directorApproval) {
+                    await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
+                } else {
+                    await leaveapprovalModel.activateNextRole(request_id, 'director');
+                }
+            } else if (role === 'director') {
+                await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
             }
+        } else if (decision === 'rejected') {
+            
+            await leaverequestModel.updateLeaveRequestStatus(request_id, 'rejected');
         }
 
         return h.response({ message: `Leave ${decision} successfully` });

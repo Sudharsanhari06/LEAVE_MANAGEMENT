@@ -6,6 +6,7 @@ exports.getAllLeavebalance = async (request, h) => {
     try {
         const result = await leavebalanceModel.getAllLeavebalance();
         return h.response(result).code(200);
+        
     } catch (error) {
         console.error("Fail to get all leavebalance", error);
         return h.response(
@@ -13,6 +14,9 @@ exports.getAllLeavebalance = async (request, h) => {
         ).code(500)
     }
 }
+
+
+
 exports.getByIdLeavebalance = async (request, h) => {
     const { id } = request.params;
     try {

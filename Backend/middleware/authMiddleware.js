@@ -4,14 +4,11 @@ const Boom = require('@hapi/boom');
 
 exports.verifyToken = async (request, h) => {
     const authHeader = request.headers.authorization;
-
     if (!authHeader) {
         throw Boom.unauthorized('No token provided');
     }
-
     const token = authHeader.split(' ')[1];
     console.log("Tokens.", token);
-
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
         console.log("Decode token", decoded);

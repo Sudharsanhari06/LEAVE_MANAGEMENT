@@ -1,30 +1,42 @@
-import React, { useEffect, useState } from 'react'
-
-const MangerRequest = ({ role, approverId }) => {
+import React, { useEffect, useState } from 'react';
+const ManagerRequest = ({role, approverId}) => {
     const [leaveRequests, setLeaveRequests] = useState([]);
-    
     useEffect(() => {
+      
+ 
         const fetchLeaveRequests = async () => {
+            const token=localStorage.getItem('token');
+
+            console.log("role approver",role, approverId);
             try {
-                const response = await fetch(`/api/leave/mapped?role=${role}&approver_id=${approverId}`);
+                const response = await fetch(`http://localhost:3003/leaveapproval/mapped?role=${role}&approved_by=${approverId}`,{
+                   
+                    method:'GET',
+                     headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            
                 const data = await response.json();
                 setLeaveRequests(data);
-                console.log("leave requests data", data)
+                console.log("leave requests data", data);
 
             } catch (error) {
                 console.error("Failed to fetch leave requests:", error);
             }
         };
+
         fetchLeaveRequests();
-    }, [role, approverId])
+    }, [role, approverId]);
 
 
     async function handleDecision(requestId, decision) {
         try {
-            const response = await fetch(`/api/leave/approve/${requestId}`, {
+            const response = await fetch(`http://localhost:3003/leaveapproval/decision`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ decision, role, approver_id: approverId })
+                'Authorization': `Bearer ${token}`,
+                body: JSON.stringify({ requestId,decision, role, approved_by: approverId })
             });
 
             const result = await response.json();
@@ -52,4 +64,4 @@ const MangerRequest = ({ role, approverId }) => {
         </section>
     )
 }
-export default MangerRequest;
+export default ManagerRequest;

@@ -13,7 +13,7 @@ const database = require('../config/db');
 
 exports.getAllapprovalById = async (req_id) => {
     const [rows] = await database.query(
-        'SELECT * FROM leaveapprovals WHERE req_id = ?', [req_id]
+        'SELECT * FROM leaveapprovals WHERE request_id = ?', [req_id]
     );
     return rows;
 };

@@ -47,13 +47,14 @@ const UserSidebar = () => {
         };
         fetchDashboard();
     }, []);
+
     return (
         <section className="left-side">
             <img src={lumel_logo} alt="lumel Logo" loading='lazy' />
             <ul>
                 <li><NavLink to='/dashboard/userdashboard' className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'} ><span><i class="fa-solid fa-arrow-up-right-dots"></i></span>Dashboard</NavLink></li>
                 <li><NavLink className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'} to='/dashboard/leaveapproval'>Leave Approvals</NavLink></li>
-                {userData && ['manager', 'Hr', 'Director'].includes(userData.role) && (
+                {/* {userData && ['manager', 'Hr', 'Director'].includes(userData.role) && (
                     <li>
                         <NavLink
                             className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
@@ -62,7 +63,7 @@ const UserSidebar = () => {
                             Leave Requests
                         </NavLink>
                     </li>
-                )}
+                )} */}
                 <li onClick={logout} ><NavLink className='sidebar-btn' to='/'>Logout</NavLink></li>
             </ul>
         </section>

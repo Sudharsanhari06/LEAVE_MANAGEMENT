@@ -5,7 +5,7 @@ import AddEmployee from './components/AddEmployee';
 import AddHoliday from "./components/AddHoliday";
 import DashBoardRight from './components/DashBoardRight';
 import LeaveApproval from './components/LeaveApproval';
-import MangerRequest from './components/MangerRequest';
+import ManagerRequest from './components/ManagerRequest';
 import './index.css';
 
 
@@ -18,7 +18,7 @@ function App() {
         
         <Route path="/dashboard" element={<Dashboard/>} >
           <Route path="userdashboard" element={<DashBoardRight/>} />
-          <Route path="leaverequest" element={<MangerRequest/>} />
+          <Route path="leaverequest'" element={<ManagerRequest/>} />
           <Route path="leaveapproval" element={<LeaveApproval/>} />
           <Route path="add-employee" element={<AddEmployee />} />
           <Route path="add-holiday" element={<AddHoliday />} />

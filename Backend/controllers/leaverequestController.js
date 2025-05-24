@@ -21,7 +21,8 @@ exports.addLeaverequest = async (request, h) => {
 
 
         const[employee]=await employeeModel.getEmployeesById(employee_id)
-        console.log(employee.id)
+        console.log(employee.id);
+
         if (type.type_name.toLowerCase() === 'sick' && days === 1) {
             await leaveapprovalModel.autoApprove({
                 request_id,
@@ -56,7 +57,6 @@ exports.addLeaverequest = async (request, h) => {
                 approved_by: employee.hr_id,
                 status: 'inactive' // will activate after manager approves
             });
-
         } else {
             await leaveapprovalModel.insertApproval({
                 request_id,
@@ -153,6 +153,7 @@ exports.cancelLeaverequest = async (request, h) => {
     }
 
 }
+
 
 exports.getLeaverequestIdDelete = async (request, h) => {
     const { req_id } = request.params;

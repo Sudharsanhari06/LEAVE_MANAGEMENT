@@ -29,7 +29,7 @@ const leaveapprovalRoutes = [
         handler: leaveapprovalController.getMappedLeaveRequests
     },
     {
-        method: 'GET',
+        method: 'PUT',
         path: '/leaveapproval/decision',
         options: {
             pre: [

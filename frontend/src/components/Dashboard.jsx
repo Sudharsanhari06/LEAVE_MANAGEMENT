@@ -1,4 +1,4 @@
-import React, {useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import UserSidebar from './UserSidebar';
 import Sidebar from './Sidebar';
@@ -45,14 +45,13 @@ function Dashboard() {
 
   return (
     <div className='dashboard-container'>
-     {userData &&
-      userData.role==='Hr'?<Sidebar/>:<UserSidebar />
-     }
+      {userData &&
+        userData.role === 'Hr' ? <Sidebar /> : <UserSidebar />
+      }
       <div className='right-side'>
-        <Outlet/>
+        <Outlet />
       </div>
     </div>
   );
 }
 export default Dashboard;
-

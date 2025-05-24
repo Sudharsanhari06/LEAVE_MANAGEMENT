@@ -41,7 +41,8 @@ const leaverequestRoutes = [
             ]
         },
         handler: leaverequestController.getAllLeaverequestById
-    }, {
+    },
+    {
         method: 'PUT',
         path: '/employee/leaverequest/{req_id}',
         options: {

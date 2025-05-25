@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import '../styles/dashboard.css';
+import CountUp from 'react-countup';
 
 const LeaveBalance = ({ employee_id }) => {
     const [leavebBalance, setLeaveBalance] = useState({});
@@ -37,13 +38,13 @@ const LeaveBalance = ({ employee_id }) => {
             <div className="leave-boxes">
                 {leavebBalance &&
                     <div className="leave-box total">
-                        <h2>{leavebBalance.total_available_days} </h2>
+                        <h2><CountUp end = {leavebBalance.total_available_days} duration={3}/></h2>
                         <p>Total Available Leaves </p>
                     </div>
                 }
                 {leavebBalance.leave_types && leavebBalance.leave_types.map((leave, index) => (
                     <div className={`leave-box ${leave.type_name}`} key={index}>
-                        <h2>  {leave.remaining_days}  </h2>
+                        <h2>  <CountUp end={leave.remaining_days} duration={3}/>  </h2>
                         <p>Total {leave.type_name} Leaves</p>
                     </div>
                 ))}

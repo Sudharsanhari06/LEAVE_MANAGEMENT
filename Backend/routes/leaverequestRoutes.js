@@ -60,6 +60,10 @@ const leaverequestRoutes = [
         method: 'POST',
         path: '/leaverequest/auto-approve',
         handler: leaverequestController.autoApproveLeave
+    },{
+        method: 'GET',
+        path: '/leaverequest/status',
+        handler: leaverequestController.getApprovedStatus
     }
 ]
 module.exports = leaverequestRoutes;

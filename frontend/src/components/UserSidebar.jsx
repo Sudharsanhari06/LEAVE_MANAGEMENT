@@ -82,7 +82,7 @@ const UserSidebar = () => {
                     <li>
                         <NavLink
                             className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
-                            to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`} 
+                            to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`} // pass first request_id
                         >
                             Leave Approvals
                         </NavLink>

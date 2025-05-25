@@ -52,13 +52,16 @@ const DashBoardRight = () => {
     return (
         <section className="right-side">
             <div className="right-side__header">
+                <div className='header-firstside'>
                 <p> Hey, <span>{userData ? userData.name : 'username'} </span> Welcome To Lumel </p>
-                <p>Role: <span>{userData ? userData.role : 'user role'}</span></p>
-
-                <p onClick={() => setShowRequest(prev => !prev)} style={{ cursor: 'pointer' }}>
-
-                    <FaBell />
-                </p>
+                <div className='employee_role'>-{userData ? userData.role : 'userrole'}</div>
+                </div>
+                {['manager','hr','director'].includes(userData?.role) && (
+                      <p onClick={() => setShowRequest(prev => !prev)} style={{ cursor: 'pointer' }}>
+                      <FaBell  className='bell-icon'/>
+                    </p>
+                ) }
+              
             </div>
 
             {showRequest && userData ? (

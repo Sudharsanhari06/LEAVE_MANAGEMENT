@@ -85,3 +85,20 @@ exports.updateLeaveRequestStatus = async (request_id, status) => {
       [status, request_id]
     );
   };
+
+
+exports.getApprovedStatus=async()=>{
+    const [rows]=await database.query( `
+        SELECT 
+          l.start_date, 
+          l.end_date, 
+          e.name AS title
+        FROM 
+          leaverequests AS l
+        JOIN 
+          employees AS e ON l.employee_id = e.employee_id
+        WHERE 
+          l.status = 'approved'
+      `)
+      return rows;
+}

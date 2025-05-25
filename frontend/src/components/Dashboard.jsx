@@ -46,7 +46,7 @@ function Dashboard() {
   return (
     <div className='dashboard-container'>
       {userData &&
-        userData.role === 'Hr' ? <Sidebar /> : <UserSidebar />
+        userData.role === 'hr' ? <Sidebar /> : <UserSidebar />
       }
       <div className='right-side'>
         <Outlet />

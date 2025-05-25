@@ -57,16 +57,38 @@ vilot #4a2dcf
 
 .left-side .sidebar-btn span {
     margin-right: 1rem;
+    vertical-align: middle;
+
 }
+.fa-solid{
+    vertical-align: middle;
+
+}
+
+
+
 
 .right-side {
     width: 100%;
 }
 
 .right-side__header {
-    padding: 0.4rem 0.6rem;
+    padding: 0.4rem 1.5rem;
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.right-side__header .employee_role{
+    font-size: 1rem;
+    text-transform: capitalize;
+    margin-left: 2rem;
+}
+
+.right-side__header .bell-icon{
+    color: red;
 }
 
 .right-side__header p {
@@ -227,11 +249,19 @@ vilot #4a2dcf
     background-color: #f8fafb;
 }
 
+.all-leaverequest table tr .leaverequest-reason{
+    width: 200px;
+}
+
+
+
+
 .all-leaverequest .action-btn {
     border: 0;
     background: transparent;
     color: red;
     font-size: 1.3rem;
+    overflow-y: hidden;
     cursor: pointer;
 }
 
@@ -261,3 +291,47 @@ vilot #4a2dcf
     background-color: #ffecec;
     color: #850505;
 }
+
+
+
+/* Add this to your CSS file */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .popup {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .popup button {
+    margin: 10px;
+    padding: 8px 15px;
+    cursor: pointer;
+  }
+  
+  .yes-btn {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .no-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+  }
+  

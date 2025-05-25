@@ -2,7 +2,8 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import '../styles/admin.css';
+// import '../styles/admin.css';
+import '../styles/employee.css'
 
 
 const AddEmployee = () => {
@@ -46,16 +47,15 @@ const AddEmployee = () => {
                     }
                 })
 
-
                 const data = await response.json();
                 const employee = await response2.json()
                 console.log("employee roles", data);
                 console.log("Employee data", employee)
                 setEmployeeData(employee);
 
-                const hrEmployees = data.users.filter((emp) => emp.role == 'Hr');
+                const hrEmployees = data.users.filter((emp) => emp.role == 'hr');
                 const managerEmployees = data.users.filter((emp) => emp.role == 'manager');
-                const directorEmployees = data.users.filter((emp) => emp.role == 'Director');
+                const directorEmployees = data.users.filter((emp) => emp.role == 'director');
 
                 setHr(hrEmployees);
                 setManagers(managerEmployees);
@@ -178,7 +178,7 @@ const AddEmployee = () => {
                 <h2>All Employees</h2>
                 {
                     employeeData && employeeData.map((emp) => (
-                        <div className='employee'>
+                        <div className='employee' key={emp.employee_id}>
                             <p>LMT{emp.employee_id}</p>
                             <p>Name: {emp.name}</p>
                             <p>Role: {emp.role}</p>

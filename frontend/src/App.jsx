@@ -5,8 +5,10 @@ import AddEmployee from './components/AddEmployee';
 import AddHoliday from "./components/AddHoliday";
 import DashBoardRight from './components/DashBoardRight';
 import LeaveApproval from './components/LeaveApproval';
+import LeaveCalendar from './components/LeaveCalender';
 import ManagerRequest from './components/ManagerRequest';
 import './index.css';
+
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
           <Route path="leaveapproval/:requestId" element={<LeaveApproval/>} />
           <Route path="add-employee" element={<AddEmployee />} />
           <Route path="add-holiday" element={<AddHoliday />} />
+          <Route path='calender' element={<LeaveCalendar/>}></Route>
         </Route>
 
         {/* <Route path="/employees" element={<Admin />}>

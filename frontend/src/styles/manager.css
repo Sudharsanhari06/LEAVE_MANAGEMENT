@@ -1,20 +1,96 @@
-.leave-request-container{
-    width: 76%;
+.leave-request-container {
     display: flex;
-    justify-content: space-between;
-    margin: 1.5rem auto;
     flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    background-color: #EFEEF3; 
+  }
+  .leave-request-card {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF; 
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-left: 4px solid #1E2D4E; 
+  }
+  
+  .leave-request-card h2 {
+    margin: 0 0 10px 0;
+    color: #1E2D4E; 
+    font-size: 1.5rem;
+    text-transform: capitalize;
+  }
+  
+  .date-range {
+    display: flex;
     align-items: center;
-}
-.leave-request-card{
-    width: 250px;
-    border: 2px solid;
-    background-color: #FFFFFF;
-    border-radius: 1rem;
-    text-align: center;
-}
-.leave-request-card h2{
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    
-}
+    gap: 10px;
+    margin: 8px 0;
+    padding: 8px 12px;
+    background-color: #EAF6FD; 
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  
+  .date-range span {
+    color: #1E2D4E;
+  }
+  
+  .leave-type {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #1E2D4E;
+    color: white;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    text-transform: capitalize;
+  }
+  
+  .days-count {
+    font-weight: bold;
+    color: #1E2D4E;
+    margin: 5px 0;
+  }
+  
+  .reason {
+    margin: 12px 0;
+    padding: 10px 0;
+    border-top: 1px dashed #EFEEF3;
+    color: #555;
+  }
+  
+
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; 
+  }
+  
+  .action-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  
+  .approve-btn {
+    background-color: #4CAF50; 
+    color: white;
+  }
+  
+  .reject-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .action-buttons button:hover {
+    opacity: 0.9;
+  }
+  

@@ -272,3 +272,16 @@ exports.getMappedLeaveRequests = async (request, h) => {
     const rows = await leaveapprovalModel.getRequestsForRoleMapped(role, id);
     return h.response(rows).code(200);
 };
+
+
+exports.getApprovedStatus=async(request,h)=>{
+
+    try{
+    const rows=leaverequestModel.getApprovedStatus();
+    return h.response({message:'Successfully get',content:rows}).code(200);
+
+    }catch(error){
+        console.error('Error fetching leaves:', error);
+        return h.response({error:'InternaL Server errpr'},error).code(500)
+    }
+}

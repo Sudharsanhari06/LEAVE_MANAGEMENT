@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { FaCheckCircle, FaHourglassHalf } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import '../styles/approve.css';
+import Stepper from './Stepper';
 
 const LeaveApproval = () => {
-  const [statuses, setStatuses] = useState({ manager: 'pending', hr: 'pending' }); // ✅ moved here
-  const steps = ['Leave Requested', 'Manager Approval', 'HR Approval'];
+  const [currentStep, setCurrentStep] = useState(1);
+  const [approvals, setApprovals] = useState([]);
   const { requestId } = useParams();
 
   useEffect(() => {
@@ -14,14 +14,19 @@ const LeaveApproval = () => {
         console.log("requestId", requestId);
         const res = await fetch(`http://localhost:3003/leaveapproval/status/${requestId}`);
         const data = await res.json();
+        console.log("leave approval",data);
+        setApprovals(data);
 
-        const newStatuses = { manager: 'pending', hr: 'pending' };
-        data.forEach(item => {
-          if (item.role === 'manager') newStatuses.manager = item.status;
-          if (item.role === 'hr') newStatuses.hr = item.status;
-        });
+        let step = 1;
+      data.forEach(item => {
+        if (item.role === 'manager' && item.status === 'approved') step = 2;
+        if (item.role === 'hr' && item.status === 'approved') step = 3;
+        if (item.role === 'director' && item.status === 'approved') step = 4;
+      });
 
-        setStatuses(newStatuses);
+      // if (step === 3) step = 4; // final completed
+      setCurrentStep(step);
+
       } catch (err) {
         console.error('Failed to fetch approval status', err);
       }
@@ -30,36 +35,12 @@ const LeaveApproval = () => {
     fetchApprovalStatus();
   }, [requestId]);
 
-  const getStepClass = (stepIndex) => {
-    if (stepIndex === 0) return 'step completed'; // Leave Requested is always done
-    if (stepIndex === 1 && statuses.manager === 'approved') return 'step completed';
-    if (stepIndex === 2 && statuses.hr === 'approved') return 'step completed';
-    return 'step';
-  };
-
-  const getIcon = (stepIndex) => {
-    if (
-      stepIndex === 0 ||
-      (stepIndex === 1 && statuses.manager === 'approved') ||
-      (stepIndex === 2 && statuses.hr === 'approved')
-    ) {
-      return <FaCheckCircle className="step-icon done" />;
-    }
-    return <FaHourglassHalf className="step-icon pending" />;
-  };
-
+  
   return (
-    <div className="progress-container">
-      <h2>Leave Request Progress</h2>
-      <div className="progress-bar">
-        {steps.map((label, index) => (
-          <div key={index} className={getStepClass(index)}>
-            {getIcon(index)}
-            <span>{label}</span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <div>
+    <h2 style={{ textAlign: 'center' }}>Leave Request Progress</h2>
+    <Stepper currentStep={currentStep} approvals={approvals}/>
+  </div>
   );
 };
 

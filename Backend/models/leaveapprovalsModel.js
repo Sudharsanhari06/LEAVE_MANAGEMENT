@@ -140,11 +140,18 @@ exports.insertApproval = async ({ request_id, role, approved_by, status }) => {
 
 
 exports.getLeaveApprovalStatusByRequestId=async(requestId)=>{
-    const[rows]=await database.query(`
-        SELECT role, status
-     FROM leaveapprovals
-     WHERE request_id = ?
-     ORDER BY FIELD(role, 'manager', 'hr', 'director')
-        `,[requestId]);
+    const[rows]=await database.query(`SELECT 
+    la.role, 
+    la.status, 
+    emp.name AS approver_name
+FROM 
+    leaveapprovals AS la
+JOIN 
+    employees AS emp ON la.approved_by = emp.employee_id
+WHERE 
+    la.request_id = ?
+ORDER BY 
+    FIELD(la.role, 'manager', 'hr', 'director');
+`,[requestId]);
         return rows;
 }

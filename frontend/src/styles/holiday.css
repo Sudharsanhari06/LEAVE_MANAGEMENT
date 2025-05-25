@@ -1,0 +1,55 @@
+.holidays-container {
+    margin: 2rem 0 0;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-color: #EFEEF3;
+  }
+  
+  .holidays-container form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+    background: #FFFFFF;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .holidays-container input {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background-color: #FFFFFF;
+    transition: all 0.3s ease;
+  }
+  
+  .holidays-container input:focus {
+    outline: none;
+    border-color: #1E2D4E;
+    box-shadow: 0 0 0 2px rgba(30, 45, 78, 0.2);
+  }
+  
+
+  
+  .holidays-container button {
+    background-color: #1E2D4E;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .holidays-container button:hover {
+    background-color: #2a3d66;
+  }
+  

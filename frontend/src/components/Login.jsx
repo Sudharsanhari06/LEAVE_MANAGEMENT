@@ -1,30 +1,28 @@
 import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import '../styles/login.css';
+import { Notyf } from 'notyf';
+import 'notyf/notyf.min.css';
+
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 2000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    }
-  });
-
-
-
-
   const checkLogin = async () => {
+    const notyf = new Notyf({
+      duration: 1000,
+      position: {
+        x: 'right',
+        y: 'top',
+      },
+    });
+
+
+
     try {
       const response = await fetch('http://localhost:3003/api/login',
         {
@@ -45,23 +43,25 @@ const Login = () => {
 
         console.log("Role", role);
         if (role == 'Hr') {
-          alert('Hr is login');
-          navigate('/dashboard');
+          // alert('Hr is login');
+          notyf.success('Login in successfully!')
+          setTimeout(()=>{
+            navigate('/dashboard');
+          },1000);
         } else {
           // alert('Login successful!');
-          Toast.fire({
-            icon: "success",
-            title: "Signed in successfully"
-          });
-          navigate('/dashboard/userdashboard');
+          notyf.success('Login in successfully!');
+          setTimeout(()=>{
+            navigate('/dashboard/userdashboard');
 
+          },1000);
         }
       } else {
-        alert(data.message || 'Login failed');
+        notyf.error(data.message || 'Login failed');
       }
     } catch (error) {
       console.error('Error during login:', error);
-      alert('Something went wrong');
+      notyf.error('Something went wrong.');
     }
   };
 

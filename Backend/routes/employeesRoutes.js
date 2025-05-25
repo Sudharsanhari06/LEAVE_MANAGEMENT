@@ -42,7 +42,7 @@ const employeeRoutes = [
         options: {
             pre: [
               { method: verifyToken },
-              { method: allowRoles('Hr','manager','Director') }
+              { method: allowRoles('hr','manager','director') }
             ]
           },
           handler:employeesController.getUsersRoles,

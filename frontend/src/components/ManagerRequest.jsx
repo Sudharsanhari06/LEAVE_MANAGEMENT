@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/manager.css';
+
 const ManagerRequest = ({role, approverId}) => {
     const [leaveRequests, setLeaveRequests] = useState([]);
+
+
     useEffect(() => {
-      
- 
         const fetchLeaveRequests = async () => {
+
+
             const token=localStorage.getItem('token');
 
             console.log("role approver",role, approverId);
@@ -16,7 +20,6 @@ const ManagerRequest = ({role, approverId}) => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-            
                 const data = await response.json();
                 setLeaveRequests(data);
                 console.log("leave requests data", data);
@@ -31,12 +34,21 @@ const ManagerRequest = ({role, approverId}) => {
 
 
     async function handleDecision(requestId, decision) {
+        const token=localStorage.getItem('token');
+        console.log("manager token",token)
+
         try {
             const response = await fetch(`http://localhost:3003/leaveapproval/decision`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
-                body: JSON.stringify({ requestId,decision, role, approved_by: approverId })
+                 },
+                body: JSON.stringify({ 
+                    request_id:requestId,
+                    role,
+                    decision, 
+                    approved_by: approverId })
             });
 
             const result = await response.json();
@@ -47,13 +59,13 @@ const ManagerRequest = ({role, approverId}) => {
         }
     }
     return (
-        <section>
+        <section className='leave-request-container'>
             {
                 leaveRequests.map(request => (
-                    <div>
-                        <p>{request.employee_name}</p>
+                    <div className="leave-request-card" key={request.request_id}>
+                        <h2>{request.employee_name}</h2>
                         <p>{request.leave_type}</p>
-                        <p>{request.start_date} to {request.end_date}</p>
+                        <p>{request.start_date.split('T')[0]} to {request.end_date.split('T')[0]}</p>
                         <p>{request.days}</p>
                         <p>{request.reason}</p>
                         <button onClick={() => handleDecision(request.request_id, 'approved')}>Approve</button>

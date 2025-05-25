@@ -14,7 +14,8 @@ const DashBoardRight = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("dashboard right side")
+        console.log("dashboard right side");
+
         const fetchDashboard = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -22,6 +23,7 @@ const DashBoardRight = () => {
                 navigate('/');
                 return;
             }
+
             try {
                 const response = await fetch('http://localhost:3003/api/dashboard', {
                     method: 'GET',
@@ -29,10 +31,11 @@ const DashBoardRight = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
                 if (response.ok) {
                     const data = await response.json();
                     setUserData(data);
-                    console.log("DATA", data);
+                    console.log("USER DATA", data);
                 } else {
                     alert('Unauthorized or token expired');
                     navigate('/');
@@ -51,28 +54,34 @@ const DashBoardRight = () => {
             <div className="right-side__header">
                 <p> Hey, <span>{userData ? userData.name : 'username'} </span> Welcome To Lumel </p>
                 <p>Role: <span>{userData ? userData.role : 'user role'}</span></p>
-                {/* <p  onClick={() => setShowRequest(true)}><NavLink to='/dashboard/leaverequest'>Leave Request</NavLink></p> */}
 
-                <p>Leave Request</p>
-                <FaBell />
-                {showRequest && userData && (
-                    <ManagerRequest role={userData.role} approverId={userData.employee_id} />
-                )}
-            </div>
-            <div className="line"></div>
-            <div className="leave-boxes__container">
-                <h2>Leaves</h2>
-                {userData &&
-                    <LeaveBalance employee_id={userData.employee_id} />
-                }
+                <p onClick={() => setShowRequest(prev => !prev)} style={{ cursor: 'pointer' }}>
 
+                    <FaBell />
+                </p>
             </div>
 
-            <div className="leave-request__container">
-                {userData &&
-                    <LeaveRequest employee_id={userData.employee_id} />
-                }
-            </div>
+            {showRequest && userData ? (
+                <ManagerRequest role={userData.role} approverId={userData.employee_id} />
+            ) : (
+                <div>
+
+                    <div className="line"></div>
+                    <div className="leave-boxes__container">
+                        <h2>Leaves</h2>
+                        {userData &&
+                            <LeaveBalance employee_id={userData.employee_id} />
+                        }
+
+                    </div>
+
+                    <div className="leave-request__container">
+                        {userData &&
+                            <LeaveRequest employee_id={userData.employee_id} />
+                        }
+                    </div>
+                </div>
+            )}
         </section>
     )
 }

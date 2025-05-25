@@ -19,7 +19,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard/>} >
           <Route path="userdashboard" element={<DashBoardRight/>} />
           <Route path="leaverequest'" element={<ManagerRequest/>} />
-          <Route path="leaveapproval" element={<LeaveApproval/>} />
+          <Route path="leaveapproval/:requestId" element={<LeaveApproval/>} />
           <Route path="add-employee" element={<AddEmployee />} />
           <Route path="add-holiday" element={<AddHoliday />} />
         </Route>

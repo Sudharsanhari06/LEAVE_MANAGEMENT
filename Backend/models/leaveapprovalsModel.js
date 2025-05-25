@@ -136,3 +136,15 @@ exports.insertApproval = async ({ request_id, role, approved_by, status }) => {
     );
     return result;
 };
+
+
+
+exports.getLeaveApprovalStatusByRequestId=async(requestId)=>{
+    const[rows]=await database.query(`
+        SELECT role, status
+     FROM leaveapprovals
+     WHERE request_id = ?
+     ORDER BY FIELD(role, 'manager', 'hr', 'director')
+        `,[requestId]);
+        return rows;
+}

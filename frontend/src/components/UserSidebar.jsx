@@ -1,23 +1,17 @@
-import React from 'react';
-import { useState,useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import lumel_logo from '../assets/lumel_logo.png';
-import '../styles/dashboard.css'
-
 
 const UserSidebar = () => {
     const [userData, setUserData] = useState(null);
-
+    const [leaveRequests, setLeaveRequests] = useState([]);
     const navigate = useNavigate();
 
     const logout = () => {
         localStorage.removeItem('token');
         navigate('/');
     };
-
-
     useEffect(() => {
-        console.log("dashboard right side")
         const fetchDashboard = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -32,10 +26,11 @@ const UserSidebar = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
                 if (response.ok) {
                     const data = await response.json();
                     setUserData(data);
-                    console.log("DATA", data);
+                    console.log("Sidebar User Data:", data);
                 } else {
                     alert('Unauthorized or token expired');
                     navigate('/');
@@ -48,26 +43,58 @@ const UserSidebar = () => {
         fetchDashboard();
     }, []);
 
+    // Fetch leave requests only after userData is loaded
+    useEffect(() => {
+        if (userData?.employee_id) {
+            const fetchLeaveRequests = async () => {
+                try {
+                    const res = await fetch(`http://localhost:3003/leaverequest/employee/${userData.employee_id}`, {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`
+                        }
+                    });
+                    const data = await res.json();
+                    setLeaveRequests(data);
+                    console.log("Leave Requests:", data);
+                } catch (error) {
+                    console.error("Fetching leave request error:", error);
+                }
+            };
+            fetchLeaveRequests();
+        }
+    }, [userData]);
+
     return (
         <section className="left-side">
-            <img src={lumel_logo} alt="lumel Logo" loading='lazy' />
+            <img src={lumel_logo} alt="Lumel Logo" loading='lazy' />
             <ul>
-                <li><NavLink to='/dashboard/userdashboard' className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'} ><span><i class="fa-solid fa-arrow-up-right-dots"></i></span>Dashboard</NavLink></li>
-                <li><NavLink className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'} to='/dashboard/leaveapproval'>Leave Approvals</NavLink></li>
-                {/* {userData && ['manager', 'Hr', 'Director'].includes(userData.role) && (
+                <li>
+                    <NavLink
+                        to='/dashboard/userdashboard'
+                        className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
+                    >
+                        <span><i className="fa-solid fa-arrow-up-right-dots"></i></span>Dashboard
+                    </NavLink>
+                </li>
+
+                {leaveRequests.length > 0 && (
                     <li>
                         <NavLink
                             className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
-                            to='/dashboard/leaverequest'
+                            to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`} 
                         >
-                            Leave Requests
+                            Leave Approvals
                         </NavLink>
                     </li>
-                )} */}
-                <li onClick={logout} ><NavLink className='sidebar-btn' to='/'>Logout</NavLink></li>
+                )}
+
+                <li onClick={logout}>
+                    <NavLink className='sidebar-btn' to='/'>Logout</NavLink>
+                </li>
             </ul>
         </section>
-    )
-}
+    );
+};
 
 export default UserSidebar;

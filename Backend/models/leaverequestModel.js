@@ -85,4 +85,3 @@ exports.updateLeaveRequestStatus = async (request_id, status) => {
       [status, request_id]
     );
   };
-  

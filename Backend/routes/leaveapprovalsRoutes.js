@@ -29,7 +29,7 @@ const leaveapprovalRoutes = [
         handler: leaveapprovalController.getMappedLeaveRequests
     },
     {
-        method: 'PUT',
+        method: 'POST',
         path: '/leaveapproval/decision',
         options: {
             pre: [
@@ -37,8 +37,11 @@ const leaveapprovalRoutes = [
             ]
         },
         handler: leaveapprovalController.updateApprovalStatus
+    },{
+        method:'GET',
+        path: '/leaveapproval/status/{requestId}',
+        handler: leaveapprovalController.getLeaveApprovalStatusByRequestId
     }
-
 ];
 module.exports = leaveapprovalRoutes;
 

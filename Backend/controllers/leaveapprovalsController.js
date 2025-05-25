@@ -15,46 +15,6 @@ exports.approveLeave = async (request, h) => {
     }
 }
 
-// exports.applyLeave = async (request, h) => {
-//     const { employee_id, leavetype_id, start_date, end_date, reason } = request.payload;
-//     const leaveType = await leavetypesModel.getLeaveTypeById(leavetype_id);
-//     const totalDays = leaveUtil.getLeaveDays(start_date, end_date);
-
-//     const balance = await getLeaveBalance(employee_id, leavetype_id, new Date().getFullYear());
-//     const availableLeave = (balance.allocated_days + balance.carry_forwarded) - balance.used_days;
-
-//     let isLOP = false;
-//     let status = 'pending';
-//     let autoApprove = false;
-
-//     if (leaveType.type_name.toLowerCase() === 'sick' || leaveType.type_name.toLowerCase() === 'emergency') {
-//         if (availableLeave >= totalDays) {
-//             status = 'approved';
-//             autoApprove = true;
-//         } else {
-//             isLOP = true;
-//             if (leaveType.type_name.toLowerCase() === 'emergency') {
-//                 if (totalDays <= 1) status = 'approved';
-//             } else if (leaveType.type_name.toLowerCase() === 'sick') {
-//                 if (totalDays == 1) status = 'approved';
-//                 else if (totalDays == 2) status = 'pending'; // HR approval needed
-//                 else status = 'pending'; // Normal flow
-//             }
-//         }
-//     }
-
-//     const leaveResult = await leaverequestModel.addLeaverequest({ employee_id,leavetype_id,start_date,end_date,reason, status,isLOP});
-//     if (autoApprove) {
-//         // Insert leaveapproval rows for auto-approvers
-//         await insertLeaveApproval({
-//             request_id: leaveResult.insertId,
-//             approved_by: 0, // system or auto
-//             role: 'system',
-//             status: 'approved'
-//         });
-//     }
-//     return h.response({ message: `Leave ${status} successfull y`, request_id: leaveResult.insertId }).code(201);
-// }
 
 exports.getAllapprovalById = async (request, h) => {
     const { req_id } = request.params;
@@ -131,6 +91,7 @@ exports.updateApprovalStatus = async (request, h) => {
                 const hrApproval = approvals.find(a => a.role === 'hr');
                 const directorApproval = approvals.find(a => a.role === 'director');
 
+
                 if (!hrApproval && !directorApproval) {
                     await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
                 } else {
@@ -141,7 +102,10 @@ exports.updateApprovalStatus = async (request, h) => {
                 const directorApproval = approvals.find(a => a.role === 'director');
 
                 if (!directorApproval) {
+                    console.log("not directorApproval");
+
                     await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
+
                 } else {
                     await leaveapprovalModel.activateNextRole(request_id, 'director');
                 }
@@ -159,3 +123,16 @@ exports.updateApprovalStatus = async (request, h) => {
         return h.response({ error: 'Failed to update approval status' }).code(500);
     }
 };
+
+
+
+exports.getLeaveApprovalStatusByRequestId=async(request,h)=>{
+    try{
+        const{requestId }=request.params;
+        const result= await leaveapprovalModel.getLeaveApprovalStatusByRequestId(requestId);
+        return h.response(result).code(200);
+    }catch(error){
+        console.error("Error fetching approval status:", error);
+        return h.response({ error: 'Failed to fetch approval status' }).code(500);
+    }
+}

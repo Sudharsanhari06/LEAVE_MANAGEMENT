@@ -32,6 +32,7 @@ const LeaveRequest = ({ employee_id }) => {
                 console.log('leave types ID:', data.leavetype_id)
                 setLeaveTypes(data);
                 console.log("leave request", d);
+                
                 setLeaveRequeastData(d);
             } catch (error) {
                 console.error('Error fetching leave', error);

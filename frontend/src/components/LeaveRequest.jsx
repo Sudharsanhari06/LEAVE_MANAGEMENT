@@ -4,14 +4,14 @@ import '../styles/leaverequest.css';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css'; 
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 
 const LeaveRequest = ({ employee_id }) => {
     const [leaveTypes, setLeaveTypes] = useState([]);
     const [leaveRequestData, setLeaveRequeastData] = useState([]);
     const [showPopup, setshowPopup] = useState(false);
-   
+
 
     const [formData, setFormData] = useState({
         leavetype_id: '',
@@ -23,10 +23,10 @@ const LeaveRequest = ({ employee_id }) => {
     const notyf = new Notyf({
         duration: 3000,
         position: {
-          x: 'right',
-          y: 'top',
+            x: 'right',
+            y: 'top',
         }
-      });
+    });
 
     useEffect(() => {
 
@@ -82,20 +82,21 @@ const LeaveRequest = ({ employee_id }) => {
 
 
     const handleCancelClick = async (request_id) => {
+
         const result = await Swal.fire({
-          title: 'Are you sure?',
-          text: 'Do you want to cancel the leave request?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, Cancel',
-          cancelButtonText: 'No',
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
+            title: 'Are you sure?',
+            text: 'Do you want to cancel the leave request?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Cancel',
+            cancelButtonText: 'No',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
         });
-    
+
         if (result.isConfirmed) {
-          userCancel(request_id); // Trigger cancel function
-          await Swal.fire('Cancelled!', 'The leave request has been cancelled.', 'success');
+            userCancel(request_id);
+            await Swal.fire('Cancelled!', 'The leave request has been cancelled.', 'success');
         }
     }
 
@@ -175,8 +176,8 @@ const LeaveRequest = ({ employee_id }) => {
         setshowPopup(false);
     }
 
-    const dateReverse=(date)=>{
-        const da = date.split('T')[0];       
+    const dateReverse = (date) => {
+        const da = date.split('T')[0];
         const reversed = da.split('-').reverse().join('-');
         return reversed;
     }
@@ -190,7 +191,7 @@ const LeaveRequest = ({ employee_id }) => {
                 {showPopup && (
                     <div className='leaverequest-form'>
                         <button onClick={closePopup} className='btn close-btn'><i class="fa-regular fa-circle-xmark"></i></button>
-                      
+
                         <form onSubmit={submitLeave}>
                             <div className='form-date'>
                                 <input type="date" name='start_date' value={formData.start_date} onChange={handleChange} min={todayDate} required />
@@ -240,7 +241,7 @@ const LeaveRequest = ({ employee_id }) => {
                                     <td>{request.days}</td>
                                     <td className='leaverequest-reason'>{request.reason}</td>
                                     <td className={`leavestatus ${request.status}`}>{request.status}</td>
-                                    <td><button onClick={()=>handleCancelClick(request.request_id)} className='action-btn'><i className="fa-regular fa-circle-xmark"></i></button></td>
+                                    <td><button onClick={() => handleCancelClick(request.request_id)} className='action-btn'><i className="fa-regular fa-circle-xmark"></i></button></td>
                                 </tr>
                             ))
                         }

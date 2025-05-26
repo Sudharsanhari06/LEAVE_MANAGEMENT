@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import lumel_logo from '../assets/lumel_logo.png';
+import { LuLayoutDashboard } from "react-icons/lu";
+import { SiPivotaltracker } from "react-icons/si";
+import { BiLogOut } from "react-icons/bi";
 
 const UserSidebar = () => {
     const [userData, setUserData] = useState(null);
@@ -19,6 +22,7 @@ const UserSidebar = () => {
                 navigate('/');
                 return;
             }
+
             try {
                 const response = await fetch('http://localhost:3003/api/dashboard', {
                     method: 'GET',
@@ -43,7 +47,7 @@ const UserSidebar = () => {
         fetchDashboard();
     }, []);
 
-    // Fetch leave requests only after userData is loaded
+   
     useEffect(() => {
         if (userData?.employee_id) {
             const fetchLeaveRequests = async () => {
@@ -74,7 +78,7 @@ const UserSidebar = () => {
                         to='/dashboard/userdashboard'
                         className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
                     >
-                        <span><i className="fa-solid fa-arrow-up-right-dots"></i></span>Dashboard
+                        <span><LuLayoutDashboard /></span>Dashboard
                     </NavLink>
                 </li>
 
@@ -82,15 +86,16 @@ const UserSidebar = () => {
                     <li>
                         <NavLink
                             className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
-                            to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`} // pass first request_id
-                        >
+                            to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`}
+                        ><span><SiPivotaltracker />
+</span>
                             Leave Approvals
                         </NavLink>
                     </li>
                 )}
 
                 <li onClick={logout}>
-                    <NavLink className='sidebar-btn' to='/'>Logout</NavLink>
+                    <NavLink className='sidebar-btn' to='/'><span><BiLogOut /></span>Logout</NavLink>
                 </li>
             </ul>
         </section>

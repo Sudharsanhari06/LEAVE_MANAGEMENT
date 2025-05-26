@@ -5,11 +5,10 @@ import '../styles/login.css';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
-
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const checkLogin = async () => {
@@ -20,7 +19,6 @@ const Login = () => {
         y: 'top',
       },
     });
-
 
 
     try {
@@ -43,18 +41,15 @@ const Login = () => {
 
         console.log("Role", role);
         if (role == 'Hr') {
-          // alert('Hr is login');
           notyf.success('Login in successfully!')
-          setTimeout(()=>{
+          setTimeout(() => {
             navigate('/dashboard');
-          },1000);
+          }, 1000);
         } else {
-          // alert('Login successful!');
           notyf.success('Login in successfully!');
-          setTimeout(()=>{
+          setTimeout(() => {
             navigate('/dashboard/userdashboard');
-
-          },1000);
+          }, 1000);
         }
       } else {
         notyf.error(data.message || 'Login failed');
@@ -70,19 +65,31 @@ const Login = () => {
 
       <div className="login-form">
         <h2>Login</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div className="email-input">
+
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
         <br /><br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        /><br /><br />
+        <div className="password-input">
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <span
+            className="password-toggle-icon"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <i className="fa-regular fa-eye-slash"></i> : <i className="fa-regular fa-eye"></i>}
+          </span>
+        </div>
+        <br /><br />
         <button onClick={checkLogin}>Login</button>
       </div>
     </section>

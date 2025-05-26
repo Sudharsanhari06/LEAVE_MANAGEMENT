@@ -1,4 +1,4 @@
-.login-container{
+.login-container {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -6,28 +6,44 @@
     align-items: center;
     background-color: #efeef3;
 }
-.login-form{
+
+.login-form {
     border: 2px solid;
-    padding: 2rem;
-    background-color:#1d1b27;
+    padding: 1rem 2.5rem 2rem;
+    background-color: #1d1b27;
     color: #efeef3;
-    border-radius:0.5rem ;
-}
-.login-form h2{
-    margin: 0.8rem 0;
-    text-align: center;
+    border-radius: 0.5rem;
 }
 
-.login-form input{
+.login-form h2 {
+    margin: 0.8rem 0;
+    text-align: center;
+    font-size:1.8rem;
+}
+
+.login-form input {
     padding: 0.4rem 0.7rem;
     font-size: 1.1rem;
     border: 2px solid;
     border-radius: 0.4rem;
+    border: none;
 }
-.login-form input:focus{
-    outline: none;
+
+.login-form input:focus {
+    outline: none;                      
 }
-.login-form button{
+.login-form .password-input,.email-input{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #FFFFFF;
+        color: #1d1b27;   
+        padding: 0 0.3rem; 
+        border-radius: 0.5rem;
+}
+
+
+.login-form button {
     padding: 0.5rem 1.3rem;
     font-size: 1.1rem;
     display: block;

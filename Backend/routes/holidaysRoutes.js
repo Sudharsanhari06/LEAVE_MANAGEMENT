@@ -1,4 +1,6 @@
 const holidaysController=require('../controllers/holidaysController');
+const {verifyToken,allowRoles}=require('../middleware/authMiddleware');
+
 
 const holidaysRoutes=[
     {
@@ -8,6 +10,11 @@ const holidaysRoutes=[
     },{
         method:'GET',
         path:'/holidays',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
         handler:holidaysController.getAllHolidays
     },{
         method:'PUT',

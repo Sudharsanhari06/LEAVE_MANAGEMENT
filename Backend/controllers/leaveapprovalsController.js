@@ -53,6 +53,9 @@ exports.getMappedLeaveRequests = async (request, h) => {
     return h.response(rows).code(200);
 };
 
+
+
+
 // exports.updateApprovalStatus = async (request, h) => {
 //     const { request_id, role, decision, approved_by } = request.payload;
 
@@ -77,6 +80,8 @@ exports.getMappedLeaveRequests = async (request, h) => {
 //         return h.response({ error: 'Failed to update approval status' }).code(500);
 //     }
 // };
+
+
 
 exports.updateApprovalStatus = async (request, h) => {
     const { request_id, role, decision, approved_by } = request.payload;

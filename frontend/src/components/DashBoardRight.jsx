@@ -3,7 +3,6 @@ import LeaveBalance from './LeaveBalance';
 import LeaveRequest from './LeaveRequest';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { NavLink } from "react-router-dom";
 import { FaBell } from 'react-icons/fa';
 
 import ManagerRequest from './ManagerRequest';
@@ -54,7 +53,7 @@ const DashBoardRight = () => {
             <div className="right-side__header">
                 <div className='header-firstside'>
                 <p> Hey, <span>{userData ? userData.name : 'username'} </span> Welcome To Lumel </p>
-                <div className='employee_role'>-{userData ? userData.role : 'userrole'}</div>
+                <div className='employee_role'>-  {userData ? userData.role : 'userrole'}</div>
                 </div>
                 {['manager','hr','director'].includes(userData?.role) && (
                       <p onClick={() => setShowRequest(prev => !prev)} style={{ cursor: 'pointer' }}>

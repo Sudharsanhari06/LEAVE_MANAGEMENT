@@ -18,7 +18,7 @@
 .login-form h2 {
     margin: 0.8rem 0;
     text-align: center;
-    font-size:1.8rem;
+    font-size: 1.8rem;
 }
 
 .login-form input {
@@ -30,16 +30,18 @@
 }
 
 .login-form input:focus {
-    outline: none;                      
+    outline: none;
 }
-.login-form .password-input,.email-input{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #FFFFFF;
-        color: #1d1b27;   
-        padding: 0 0.3rem; 
-        border-radius: 0.5rem;
+
+.login-form .password-input,
+.email-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFFFF;
+    color: #1d1b27;
+    padding: 0 0.3rem;
+    border-radius: 0.5rem;
 }
 
 
@@ -53,3 +55,91 @@
     background-color: transparent;
     border-radius: 0.4rem;
 }
+/* ----- */
+.password-container{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1e2d4e97;
+
+}
+.change-password {
+    max-width: 450px;
+    /* margin: 0 auto; */
+    padding: 1.8rem;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .change-password h2 {
+    color: #1E2D4E;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+  }
+
+  .change-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .password {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .password input {
+    width: 100%;
+    padding: 14px 45px 14px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #EFEEF3;
+    transition: all 0.3s ease;
+  }
+  
+  .password input:focus {
+    outline: none;
+    border-color: #1E2D4E;
+    box-shadow: 0 0 0 2px rgba(30, 45, 78, 0.2);
+    background-color: #FFFFFF;
+  }
+  
+  .password-toggle-icon {
+    position: absolute;
+    right: 15px;
+    color: #1E2D4E;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .password-toggle-icon:hover {
+    color: #2a3d66;
+  }
+  
+  .password-toggle-icon i {
+    font-size: 1.2rem;
+  }
+  
+  .change-password-form button {
+    background-color: #1E2D4E;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+  }
+  
+  .change-password-form button:hover {
+    background-color: #2a3d66;
+  }
+  

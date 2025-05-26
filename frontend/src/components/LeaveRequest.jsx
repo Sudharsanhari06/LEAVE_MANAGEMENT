@@ -11,7 +11,7 @@ const LeaveRequest = ({ employee_id }) => {
     const [leaveTypes, setLeaveTypes] = useState([]);
     const [leaveRequestData, setLeaveRequeastData] = useState([]);
     const [showPopup, setshowPopup] = useState(false);
-
+    const [canceledRequests, setCanceledRequests] = useState([]);
 
     const [formData, setFormData] = useState({
         leavetype_id: '',
@@ -28,8 +28,8 @@ const LeaveRequest = ({ employee_id }) => {
         }
     });
 
-    useEffect(() => {
 
+    useEffect(() => {
         const fetchLeaveTypes = async () => {
             try {
                 const response = await fetch('http://localhost:3003/leavetypes');
@@ -54,35 +54,46 @@ const LeaveRequest = ({ employee_id }) => {
         fetchLeaveTypes();
     }, []);
 
+
     const todayDate = new Date().toISOString().split('T')[0];
-    console.log("todayDate", todayDate)
+    console.log("todayDate", todayDate);
 
-
-
-    const userCancel = async (req_id) => {
+    const userCancel = async (request_id) => {
         try {
-            const response = await fetch(`http://localhost:3003/employee/leaverequest/${req_id}`, {
+            const response = await fetch(`http://localhost:3003/employee/leaverequest/${request_id}`, {
                 method: 'PUT',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
             if (response.ok) {
                 const data = response.json();
                 console.log("update status", data);
-            } else {
-                console.log("update status else part")
-            }
+                setCanceledRequests(prev => {
+                    const updated = [...prev, request_id];
+                    localStorage.setItem('canceledRequests', JSON.stringify(updated));
+                    return updated;
+                });
 
+            } else {
+                console.log("update status else part");
+            }
         } catch (error) {
             console.error('Cancel failed:', error);
         }
     }
 
+    
+useEffect(() => {
+    const stored = localStorage.getItem('canceledRequests');
+    if (stored) {
+      setCanceledRequests(JSON.parse(stored));
+    }
+  }, []);
+  
 
     const handleCancelClick = async (request_id) => {
-
         const result = await Swal.fire({
             title: 'Are you sure?',
             text: 'Do you want to cancel the leave request?',
@@ -131,7 +142,6 @@ const LeaveRequest = ({ employee_id }) => {
             })
             const result = await response.json();
             if (response.ok) {
-                // alert('Leave request is added')
                 notyf.success('Leave request is added')
                 closePopup();
             } else {
@@ -182,6 +192,7 @@ const LeaveRequest = ({ employee_id }) => {
         return reversed;
     }
 
+  
 
     return (
         <section className='leave-request__section'>
@@ -241,7 +252,7 @@ const LeaveRequest = ({ employee_id }) => {
                                     <td>{request.days}</td>
                                     <td className='leaverequest-reason'>{request.reason}</td>
                                     <td className={`leavestatus ${request.status}`}>{request.status}</td>
-                                    <td><button onClick={() => handleCancelClick(request.request_id)} className='action-btn'><i className="fa-regular fa-circle-xmark"></i></button></td>
+                                    <td><button onClick={() => handleCancelClick(request.request_id)} className='action-btn' disabled={canceledRequests.includes(request.request_id)}><i className="fa-regular fa-circle-xmark"></i></button></td>
                                 </tr>
                             ))
                         }
@@ -249,6 +260,7 @@ const LeaveRequest = ({ employee_id }) => {
                 </table>
             </section>
         </section>
+
     )
 }
 

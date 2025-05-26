@@ -18,13 +18,9 @@ const employeeRoutes = [
         options:{
             pre:[
                 {method:verifyToken},
-                {method:allowRoles('Hr')}
+                {method:allowRoles('hr')}
             ],
             handler: employeesController.addEmployee,
-            payload: {
-                parse: true,
-                allow: 'application/json'
-            }
         }
     },
     {

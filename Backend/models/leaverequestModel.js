@@ -73,6 +73,20 @@ exports.usedLeavedaysEmployee=async(employee_id)=>{
 
 
 
+exports.getApprovedLeavesByEmployee=async(employeeId)=>{
+    const [rows] = await database.query(
+        `SELECT 
+           lr.request_id, lr.start_date, lr.end_date, 
+           lt.type_name 
+         FROM leaverequests lr
+         JOIN leavetypes lt ON lr.leavetype_id = lt.leavetype_id
+         WHERE lr.employee_id = ?`,
+        [employeeId]
+      );
+      return rows;
+}
+
+
 
 
 
@@ -93,6 +107,7 @@ exports.getApprovedStatus=async()=>{
           l.start_date, 
           l.end_date, 
           e.name AS title
+
         FROM 
           leaverequests AS l
         JOIN 

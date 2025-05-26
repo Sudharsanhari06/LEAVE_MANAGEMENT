@@ -90,13 +90,9 @@ exports.getRequestsForRoleMapped = async (role, approver_id) => {
 };
 
 
-
-
-
 exports.getMappedRequests = async ({ role, approved_by }) => {
   console.log("role",role,"approved_by",approved_by);
-    const [rows] = await database.query(
-        `
+    const [rows] = await database.query(`
       SELECT
         lr.request_id AS request_id,
         e.name AS employee_name,
@@ -112,8 +108,7 @@ exports.getMappedRequests = async ({ role, approved_by }) => {
       JOIN leavetypes AS lt ON lr.leavetype_id = lt.leavetype_id
       WHERE la.role = ? AND la.approved_by = ? AND la.status = 'pending'
       ORDER BY lr.start_date DESC
-      `, [role, approved_by]
-    );
+      `, [role, approved_by]);
     return rows;
 };
 

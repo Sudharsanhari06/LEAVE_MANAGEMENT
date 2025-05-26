@@ -12,16 +12,6 @@ const leaverequestRoutes = [
         },
         handler: leaverequestController.addLeaverequest
     }
-    // {
-    //     method: 'PUT',
-    //     path: '/leaverequest/{id}/approve',
-    //     options: {
-    //         pre: [
-    //             { method: verifyToken }
-    //         ]
-    //     },
-    //     handler: leaverequestController.approveLeave
-    //   }
       ,{
         method: 'GET',
         path: '/leaverequest',
@@ -64,6 +54,16 @@ const leaverequestRoutes = [
         method: 'GET',
         path: '/leaverequest/status',
         handler: leaverequestController.getApprovedStatus
+    },{
+        
+        method: 'GET',
+        path: '/leaverequest/statusapproved',
+        options:{
+            pre:[
+                {method:verifyToken}
+            ]
+        },
+        handler:leaverequestController.approvedStatus
     }
 ]
 module.exports = leaverequestRoutes;

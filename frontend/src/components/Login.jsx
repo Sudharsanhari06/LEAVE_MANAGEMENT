@@ -33,13 +33,23 @@ const Login = () => {
 
       const data = await response.json();
       console.log("data", data);
+
       if (response.ok) {
-        const { token } = data;
+        const { token,is_first_login  } = data;
         localStorage.setItem('token', token);
         const decodeToken = JSON.parse(atob(token.split('.')[1]));
         const role = decodeToken.role;
 
         console.log("Role", role);
+
+        if (is_first_login) {
+          notyf.success('Please change your password.');
+          setTimeout(() => {
+            navigate('employee/change-password'); 
+          }, 1000);
+          return; 
+        }
+
         if (role == 'Hr') {
           notyf.success('Login in successfully!')
           setTimeout(() => {
@@ -62,7 +72,6 @@ const Login = () => {
 
   return (
     <section className='login-container'>
-
       <div className="login-form">
         <h2>Login</h2>
         <div className="email-input">
@@ -83,7 +92,7 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <span
-            className="password-toggle-icon"
+            className="password-toggle"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <i className="fa-regular fa-eye-slash"></i> : <i className="fa-regular fa-eye"></i>}

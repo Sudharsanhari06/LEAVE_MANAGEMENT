@@ -1,7 +1,8 @@
 .holidays-container {
     margin: 2rem 0 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     padding: 20px;
     background-color: #EFEEF3;
   }
@@ -30,14 +31,11 @@
     transition: all 0.3s ease;
   }
   
-  .holidays-container input:focus {
+  .holidays-container input:focus{
     outline: none;
     border-color: #1E2D4E;
     box-shadow: 0 0 0 2px rgba(30, 45, 78, 0.2);
-  }
-  
-
-  
+  }  
   .holidays-container button {
     background-color: #1E2D4E;
     color: white;
@@ -53,3 +51,68 @@
     background-color: #2a3d66;
   }
   
+
+
+  
+/* ---------- */
+.holidays-show {
+  width: 80%;
+  margin:2.5rem auto 0;
+  padding: 20px;
+  background-color: #EFEEF3;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.holidays-show h2 {
+  color: #1E2D4E;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.holidays-show table{
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.holidays-show thead {
+  background-color: #1E2D4E;
+  color: white;
+  width: 100%;
+}
+
+.holidays-show thead tr{
+  display: flex;
+  width: 100%;
+}
+
+.holidays-show th{
+  padding: 15px;
+  text-align: left;
+  flex: 1;
+  font-weight: 600;
+}
+
+.holidays-show tbody{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.holidays-show tbody tr {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #EFEEF3;
+}
+
+
+.holidays-show td {
+  padding: 15px;
+  flex: 1;
+  color: #333;
+  display: flex;
+  align-items: center;
+}

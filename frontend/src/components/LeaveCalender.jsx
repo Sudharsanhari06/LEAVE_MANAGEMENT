@@ -1,90 +1,87 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
 
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import startOfWeek from 'date-fns/startOfWeek';
-import getDay from 'date-fns/getDay';
-import addDays from 'date-fns/addDays';
-import isWeekend from 'date-fns/isWeekend';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import enUS from 'date-fns/locale/en-US';
-
-const locales = {
-  'en-US': enUS,
-};
-
-
-const LeaveCalendar = () => {
+const MyCalendar = () => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
-    const fetchLeaves = async () => {
-      const res = await fetch('http://localhost:3003/leaves'); // Update with your actual API
-      const data = await res.json();
-
-      const leaveEvents = data.map(leave => ({
-        title: `${leave.name} (${leave.status})`,
-        start: new Date(leave.start_date),
-        end: addDays(new Date(leave.end_date), 1),
-        allDay: true,
-        status: leave.status,
-      }));
-
-      const weekends = generateWeekendsForYear(2025);
-      const weekendEvents = weekends.map(date => ({
-        title: 'Week Off',
-        start: date,
-        end: date,
-        allDay: true,
-        status: 'weekend',
-      }));
-
-      setEvents([...leaveEvents, ...weekendEvents]);
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+  
+      try {
+        const leavesResponse = await fetch('http://localhost:3003/leaverequest/statusapproved', {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        const leavesData = await leavesResponse.json();
+  
+        const holidaysResponse = await fetch('http://localhost:3003/holidays', {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        const holidaysData = await holidaysResponse.json();
+  
+        const leaveEvents = leavesData.result.map(leave => ({
+          title: `${leave.type_name}`,
+          start: new Date(leave.start_date),
+          end: new Date(leave.end_date),
+          type: 'leave'
+        }));
+  
+        const holidayEvents = holidaysData.result.map(holi => ({
+          title: holi.holiday_name,
+          start: new Date(holi.holiday_date),
+          end: new Date(holi.holiday_date),
+          type: 'holiday'
+        }));
+  
+        setEvents([...leaveEvents, ...holidayEvents]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
-
-    fetchLeaves();
+  
+    fetchData();
   }, []);
+  
 
-  const generateWeekendsForYear = (year) => {
-    const weekends = [];
-    let date = new Date(`${year}-01-01`);
-    while (date.getFullYear() === year) {
-      if (isWeekend(date)) weekends.push(new Date(date));
-      date = addDays(date, 1);
+  const eventStyleGetter = (event) => {
+    let backgroundColor = '#3174ad';
+    if (event.type === 'holiday') backgroundColor = '#f44336'; // red for holiday
+    if (event.type === 'leave') backgroundColor = '#4caf50';   // green for leave
+
+    return { style: { backgroundColor, color: 'white' } };
+  };
+
+  const isWeekend = date => {
+    const day = moment(date).day();
+    return day === 0 || day === 6; 
+  };
+
+  const dayPropGetter = date => {
+    if (isWeekend(date)) {
+      return { style: { backgroundColor: '#e0e0e0' } }; // gray for weekends
     }
-    return weekends;
   };
 
   return (
-    <div style={{ height: '80vh', margin: '20px' }}>
+    <div style={{ height: '80vh', padding: '20px' }}>
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        eventPropGetter={(event) => {
-          let bg = '#3174ad';
-          if (event.status === 'approved') bg = 'green';
-          else if (event.status === 'pending') bg = 'orange';
-          else if (event.status === 'rejected') bg = 'red';
-          else if (event.status === 'weekend') bg = '#e0e0e0';
-
-          return {
-            style: {
-              backgroundColor: bg,
-              color: event.status === 'weekend' ? 'black' : 'white',
-              borderRadius: '4px',
-              border: 'none',
-            }
-          };
-        }}
+        eventPropGetter={eventStyleGetter}
+        dayPropGetter={dayPropGetter}
       />
     </div>
   );
 };
 
-export default LeaveCalendar;
+export default MyCalendar;

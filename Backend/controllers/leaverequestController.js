@@ -151,9 +151,7 @@ exports.cancelLeaverequest = async (request, h) => {
         console.error('Cancel leave error:', error);
         return h.response({ error: 'Failed to cancel leave' }).code(500);
     }
-
 }
-
 
 exports.getLeaverequestIdDelete = async (request, h) => {
     const { req_id } = request.params;
@@ -283,5 +281,18 @@ exports.getApprovedStatus=async(request,h)=>{
     }catch(error){
         console.error('Error fetching leaves:', error);
         return h.response({error:'InternaL Server errpr'},error).code(500)
+    }
+}
+
+
+exports.approvedStatus=async(request,h)=>{
+    const employeeId = request.auth.employee_id;
+    try{
+        const rows=await leaverequestModel.getApprovedLeavesByEmployee(employeeId);
+     
+    return h.response({ message: "Leave requests fetched", result: rows });
+    }catch(error){
+        console.error("Error fetching leave data:", error);
+    return h.response({ message: "Server error" }).code(500);
     }
 }

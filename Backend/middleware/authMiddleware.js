@@ -2,6 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const Boom = require('@hapi/boom');
 
+
 exports.verifyToken = async (request, h) => {
     const authHeader = request.headers.authorization;
     if (!authHeader) {

@@ -10,7 +10,7 @@ const AddHoliday = () => {
         holiday_name: '',
         holiday_date: ''
     });
-
+    const [holiday, setHoliday] = useState([]);
 
     const handleChange = (e) => {
         setHolidayData(pre => ({
@@ -26,6 +26,29 @@ const AddHoliday = () => {
             y: 'top',
         },
     });
+
+    useEffect(() => {
+
+        const fetchHoliday = async () => {
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch('http://localhost:3003/holidays', {
+                    method: 'GET',
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                    }
+                });
+                const data = await response.json();
+                setHoliday(data.result);
+                console.log("holiday data", data);
+            } catch (error) {
+                console.log("Error to fetch the holiday", error);
+            }
+        }
+
+        fetchHoliday()
+    }, [])
+
 
     const holidaySubmit = async (e) => {
         try {
@@ -64,6 +87,32 @@ const AddHoliday = () => {
                 <input type="date" name='holiday_date' value={holidayData.holiday_date} onChange={handleChange} required />
                 <button type='submit'>Submit</button>
             </form>
+
+            <div className="holidays-show">
+                <h2>Holidays</h2>
+                <table >
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Holiday Name</th>
+                            <th>Holiday Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {holiday && holiday.map((holi) => (
+                            <tr key={holi.holiday_id}>
+                                <td>{holi.holiday_id}</td>
+                                <td>{holi.holiday_name}</td>
+                                <td>{holi.holiday_date.split('T')[0]}</td>
+                            </tr>
+                        ))
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+
         </section>
     )
 }

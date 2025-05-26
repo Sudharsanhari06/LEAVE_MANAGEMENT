@@ -7,6 +7,7 @@ import DashBoardRight from './components/DashBoardRight';
 import LeaveApproval from './components/LeaveApproval';
 import LeaveCalendar from './components/LeaveCalender';
 import ManagerRequest from './components/ManagerRequest';
+import ChangePassword from './components/ChangePassword';
 import './index.css';
 
 
@@ -17,6 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+      <Route path='/employee/change-password' element={<ChangePassword/>}/>
         
         <Route path="/dashboard" element={<Dashboard/>} >
           <Route path="userdashboard" element={<DashBoardRight/>} />

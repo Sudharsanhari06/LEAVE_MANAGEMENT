@@ -47,7 +47,7 @@ const UserSidebar = () => {
         fetchDashboard();
     }, []);
 
-   
+
     useEffect(() => {
         if (userData?.employee_id) {
             const fetchLeaveRequests = async () => {
@@ -88,11 +88,13 @@ const UserSidebar = () => {
                             className={({ isActive }) => isActive ? 'sidebar-btn active' : 'sidebar-btn'}
                             to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`}
                         ><span><SiPivotaltracker />
-</span>
+                            </span>
                             Leave Approvals
                         </NavLink>
                     </li>
                 )}
+
+                <li><NavLink className='sidebar-btn' to='/dashboard/calender'>  Calender</NavLink></li>
 
                 <li onClick={logout}>
                     <NavLink className='sidebar-btn' to='/'><span><BiLogOut /></span>Logout</NavLink>

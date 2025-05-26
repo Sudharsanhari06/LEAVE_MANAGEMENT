@@ -3,8 +3,7 @@ import { useState, useEffect } from "react";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 // import '../styles/admin.css';
-import '../styles/employee.css'
-
+import '../styles/employee.css';
 
 const AddEmployee = () => {
     const [formData, setFormData] = useState({
@@ -17,6 +16,7 @@ const AddEmployee = () => {
         email: '',
         password: ''
     });
+
     const notyf = new Notyf({
         duration: 3000,
         position: {
@@ -40,6 +40,7 @@ const AddEmployee = () => {
                         authorization: `Bearer ${token}`,
                     },
                 });
+                
                 const response2 = await fetch('http://localhost:3003/employees', {
                     method: 'GET',
                     headers: {
@@ -73,6 +74,13 @@ const AddEmployee = () => {
         fetchRoles();
     }, []);
 
+    useEffect(()=>{
+
+    })
+
+
+
+
     //------
     const handleChange = (e) => {
         setFormData(prev => ({
@@ -93,13 +101,9 @@ const AddEmployee = () => {
                 },
                 body: JSON.stringify(formData)
             })
-
-            const data = await response.json();
-
+            // const data = await response.json();
             if (response.ok) {
-                // setMessage(notyf.su);
                 notyf.success('Successfully add the Employee')
-
                 setFormData({
                     name: '',
                     manager_id: '',
@@ -112,32 +116,29 @@ const AddEmployee = () => {
                 })
 
             } else {
-                // setMessage('Failed to add employee');
+                const errorData = await response.json();
+                console.error('Error details:', errorData);
                 notyf.error('Fail to add Employee');
-
             }
         } catch (error) {
             console.error('Fail to error', error);
-            // setMessage('Internal server'
         }
     }
 
     return (
         <section className='add-employee-container'>
-
-            {/* <p>{message}</p> */}
             <h2>Add Employee</h2>
 
             <form onSubmit={submitForm} className='employee-form'>
                 <div className='form-column'>
                     <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder='Enter the Name..' required />
-
                     <select name="manager_id" value={formData.manager_id} onChange={handleChange} >
                         <option value="">Select Manager</option>
                         {managers.map(item => (
                             <option key={item.employee_id} value={item.employee_id}>{item.name}</option>
                         ))}
                     </select>
+
                     <select name="hr_id" value={formData.hr_id} onChange={handleChange}>
                         <option value="">Select Hr</option>
                         {hr.map(h => (

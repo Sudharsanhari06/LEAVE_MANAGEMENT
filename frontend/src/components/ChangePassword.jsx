@@ -39,10 +39,9 @@ const ChangePassword = () => {
                 notyf.success('Password changed successfully!');
                 setTimeout(() => {
                     navigate('/dashboard/userdashboard');
-                  }, 1000);
-            
+                }, 1000);
             } else {
-                notyf.error(data.message || 'Failed to change password');
+                notyf.error('Failed to change password');
             }
         } catch (error) {
             console.error('Error changing password:', error);

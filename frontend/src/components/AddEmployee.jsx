@@ -6,6 +6,7 @@ import 'notyf/notyf.min.css';
 import '../styles/employee.css';
 
 const AddEmployee = () => {
+
     const [formData, setFormData] = useState({
         name: '',
         manager_id: '' || null,
@@ -74,11 +75,7 @@ const AddEmployee = () => {
         fetchRoles();
     }, []);
 
-    useEffect(()=>{
-
-    })
-
-
+  
 
 
     //------
@@ -101,7 +98,7 @@ const AddEmployee = () => {
                 },
                 body: JSON.stringify(formData)
             })
-            // const data = await response.json();
+
             if (response.ok) {
                 notyf.success('Successfully add the Employee')
                 setFormData({

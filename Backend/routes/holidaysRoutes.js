@@ -1,29 +1,39 @@
-const holidaysController=require('../controllers/holidaysController');
-const {verifyToken,allowRoles}=require('../middleware/authMiddleware');
+const holidaysController = require('../controllers/holidaysController');
+const { verifyToken, allowRoles } = require('../middleware/authMiddleware');
 
 
-const holidaysRoutes=[
+const holidaysRoutes = [
     {
-        method:'POST',
-        path:'/holidays',
-        handler:holidaysController.addHolidays
-    },{
-        method:'GET',
-        path:'/holidays',
+        method: 'POST',
+        path: '/holidays',
+        handler: holidaysController.addHolidays
+    }, {
+        method: 'GET',
+        path: '/holidays',
         options: {
             pre: [
                 { method: verifyToken }
             ]
         },
-        handler:holidaysController.getAllHolidays
-    },{
-        method:'PUT',
-        path:'/holidays/{holiday_id}',
-        handler:holidaysController.updateHolidays 
+        handler: holidaysController.getAllHolidays
+    }, {
+        method: 'PUT',
+        path: '/holidays/{holiday_id}',
+        handler: holidaysController.updateHolidays
     }
+    , {
+        method: 'GET',
+        path: '/holidays/calender',
+        options: {
+            pre: [
+                { method: verifyToken }
 
+            ]
+        },
+        handler: holidaysController.getholidaysuserdate
+    }
 ]
-module.exports=holidaysRoutes;
+module.exports = holidaysRoutes;
 
 
 

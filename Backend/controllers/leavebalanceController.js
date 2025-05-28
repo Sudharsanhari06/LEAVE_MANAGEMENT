@@ -6,7 +6,7 @@ exports.getAllLeavebalance = async (request, h) => {
     try {
         const result = await leavebalanceModel.getAllLeavebalance();
         return h.response(result).code(200);
-        
+
     } catch (error) {
         console.error("Fail to get all leavebalance", error);
         return h.response(
@@ -14,8 +14,6 @@ exports.getAllLeavebalance = async (request, h) => {
         ).code(500)
     }
 }
-
-
 
 exports.getByIdLeavebalance = async (request, h) => {
     const { id } = request.params;
@@ -76,16 +74,15 @@ exports.deleteByIdLeavebalance = async (request, h) => {
     }
 }
 
-
 exports.getLeavebalanceByEmployee = async (request, h) => {
     const { employee_id } = request.params;
     const currentYear = new Date().getFullYear();
     try {
         const types = await leavetypesModel.getAllLeaveTypes();
-        console.log("types",types);
+        console.log("types", types);
 
         const used = await leaverequestModel.usedLeavedaysEmployee(employee_id);
-        console.log("used days",used);
+        console.log("used days", used);
 
         const usedMap = {};
         used.forEach((entry) => {
@@ -102,10 +99,9 @@ exports.getLeavebalanceByEmployee = async (request, h) => {
                 type_name: type.type_name,
                 max_days: type.max_days,
                 used_days,
-                remaining_days,
+                remaining_days
             };
         });
-
         return h.response({
             employee_id,
             total_available_days,
@@ -117,7 +113,6 @@ exports.getLeavebalanceByEmployee = async (request, h) => {
         return h.response({ error: 'Server error' }).code(500);
     }
 }
-
 
 exports.getLeaveBalanceByEmployee = async (request, h) => {
     const { employee_id } = request.params;

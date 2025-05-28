@@ -1,6 +1,6 @@
 
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
-const leaverequestModel=require('../models/leaverequestModel')
+const leaverequestModel = require('../models/leaverequestModel')
 
 exports.approveLeave = async (request, h) => {
     const { req_id } = request.params;
@@ -48,8 +48,8 @@ exports.getAllapprovalByEmployeeId = async (request, h) => {
 
 exports.getMappedLeaveRequests = async (request, h) => {
     const { role, approved_by } = request.query;
-    console.log("con role",role,"con approved",approved_by)
-    const rows = await leaveapprovalModel.getMappedRequests({role, approved_by});
+    console.log("con role", role, "con approved", approved_by)
+    const rows = await leaveapprovalModel.getMappedRequests({ role, approved_by });
     return h.response(rows).code(200);
 };
 
@@ -84,24 +84,25 @@ exports.getMappedLeaveRequests = async (request, h) => {
 
 
 exports.updateApprovalStatus = async (request, h) => {
-    const { request_id, role, decision, approved_by } = request.payload;
 
+    const { request_id, role, decision, approved_by,reason } = request.payload;
     try {
-        await leaveapprovalModel.updateApprovalStatus({ request_id, role, decision, approved_by });
+        await leaveapprovalModel.updateApprovalStatus({ request_id, role, decision, approved_by,reason });
 
         if (decision === 'approved') {
+           
             if (role === 'manager') {
 
                 const approvals = await leaveapprovalModel.getAllapprovalById(request_id);
                 const hrApproval = approvals.find(a => a.role === 'hr');
                 const directorApproval = approvals.find(a => a.role === 'director');
 
-
                 if (!hrApproval && !directorApproval) {
                     await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
                 } else {
                     await leaveapprovalModel.activateNextRole(request_id, 'hr');
                 }
+
             } else if (role === 'hr') {
                 const approvals = await leaveapprovalModel.getAllapprovalById(request_id);
                 const directorApproval = approvals.find(a => a.role === 'director');
@@ -118,7 +119,6 @@ exports.updateApprovalStatus = async (request, h) => {
                 await leaverequestModel.updateLeaveRequestStatus(request_id, 'approved');
             }
         } else if (decision === 'rejected') {
-            
             await leaverequestModel.updateLeaveRequestStatus(request_id, 'rejected');
         }
 
@@ -131,12 +131,12 @@ exports.updateApprovalStatus = async (request, h) => {
 
 
 
-exports.getLeaveApprovalStatusByRequestId=async(request,h)=>{
-    try{
-        const{requestId }=request.params;
-        const result= await leaveapprovalModel.getLeaveApprovalStatusByRequestId(requestId);
+exports.getLeaveApprovalStatusByRequestId = async (request, h) => {
+    try {
+        const { requestId } = request.params;
+        const result = await leaveapprovalModel.getLeaveApprovalStatusByRequestId(requestId);
         return h.response(result).code(200);
-    }catch(error){
+    } catch (error) {
         console.error("Error fetching approval status:", error);
         return h.response({ error: 'Failed to fetch approval status' }).code(500);
     }

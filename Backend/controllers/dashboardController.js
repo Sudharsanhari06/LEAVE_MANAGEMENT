@@ -1,7 +1,7 @@
 
 exports.getDashboard = async (request, h) => {
     try {
-        const user = request.auth; //credainteds
+        const user = request.auth;
         console.log("dashboard user",user);
         return h.response({ message: 'Welcome to dashboard!', ...user }).code(200);
     } catch (err) {

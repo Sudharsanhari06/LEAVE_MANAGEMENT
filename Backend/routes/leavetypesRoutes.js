@@ -1,10 +1,15 @@
 const leavetypeController = require('../controllers/leavetypesController');
-// const {verifyToken}=require('../middleware/authMiddleware')
+const {verifyToken}=require('../middleware/authMiddleware')
 
 const leavetypeRoutes =[
     {
         method: 'GET',
         path: '/leavetypes',
+        options:{
+            pre:[
+                {method:verifyToken}
+            ]
+        },
         handler: leavetypeController.getAllLeaveTypes
     },
     {

@@ -1,6 +1,7 @@
 const employeesController = require('../controllers/employeesController');
 const {verifyToken, allowRoles}=require('../middleware/authMiddleware');
 
+
 const employeeRoutes = [
     {
         method: 'GET',

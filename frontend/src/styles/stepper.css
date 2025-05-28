@@ -49,20 +49,3 @@
     background: #00aaff;
   }
   
-
-  .step-circle.approved {
-    background: #28a745; /* Green */
-    color: white;
-  }
-  
-  .step-circle.rejected {
-    background: #dc3545; /* Red */
-    color: white;
-  }
-  
-  .step-circle.pending {
-    background: white;
-    border: 3px solid #00aaff; /* Blue */
-    color: #00aaff;
-  }
-  

@@ -12,12 +12,12 @@ const leaveapprovalRoutes = [
         method: 'GET',
         path: '/leaveapprovals/request/{req_id}',
         handler: leaveapprovalController.getAllapprovalById
-    }, {
+    },
+    {
         method: 'GET',
         path: '/leaveapprovals/request/employee/{emp_id}',
         handler: leaveapprovalController.getAllapprovalByEmployeeId
     }
-
     , {
         method: 'GET',
         path: '/leaveapproval/mapped',

@@ -14,3 +14,9 @@ exports.updateHolidays=async(holiday_id,holiday_name, holiday_date )=>{
     const[holidays]=await database.query('UPDATE holidays SET holiday_name=?,holiday_date=? WHERE holiday_id=?',[holiday_name, holiday_date ,holiday_id]);
     return holidays;
 }
+
+exports.getholidaysuserdate=async(start,end)=>{
+    const[rows]=await database.query( `SELECT * FROM holidays WHERE holiday_date BETWEEN ? AND ?`,
+        [start, end]);
+        return rows;
+}

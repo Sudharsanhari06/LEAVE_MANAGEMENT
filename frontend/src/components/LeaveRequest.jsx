@@ -6,12 +6,15 @@ import 'notyf/notyf.min.css';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-
 const LeaveRequest = ({ employee_id }) => {
     const [leaveTypes, setLeaveTypes] = useState([]);
     const [leaveRequestData, setLeaveRequeastData] = useState([]);
     const [showPopup, setshowPopup] = useState(false);
     const [canceledRequests, setCanceledRequests] = useState([]);
+    const [holidayData, setHolidayData] = useState([]);
+    const [requestDate, setRequestDate] = useState([]);
+
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const [formData, setFormData] = useState({
         leavetype_id: '',
@@ -30,23 +33,41 @@ const LeaveRequest = ({ employee_id }) => {
 
 
     useEffect(() => {
+
         const fetchLeaveTypes = async () => {
+            const token = localStorage.getItem('token');
+
             try {
-                const response = await fetch('http://localhost:3003/leavetypes');
-                const b = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`, {
+                const response = await fetch('http://localhost:3003/leavetypes', {
                     method: 'GET',
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const response3 = await fetch('http://localhost:3003/holidays', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
                 })
+                const response4 = await fetch(`http://localhost:3003/leaverequest/date-overlap/${employee_id}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+
                 const data = await response.json();
-                const d = await b.json();
+                const holi = await response3.json();
+                const dbDate = await response4.json();
+                setRequestDate(dbDate.result);
+                console.log("request date", dbDate.result);
+                setHolidayData(holi);
+                console.log("holiday data", holi);
                 console.log("leave types:", data);
                 console.log('leave types ID:', data.leavetype_id)
                 setLeaveTypes(data);
-                console.log("leave request", d);
 
-                setLeaveRequeastData(d);
             } catch (error) {
                 console.error('Error fetching leave', error);
             }
@@ -70,6 +91,7 @@ const LeaveRequest = ({ employee_id }) => {
             if (response.ok) {
                 const data = response.json();
                 console.log("update status", data);
+
                 setCanceledRequests(prev => {
                     const updated = [...prev, request_id];
                     localStorage.setItem('canceledRequests', JSON.stringify(updated));
@@ -84,14 +106,38 @@ const LeaveRequest = ({ employee_id }) => {
         }
     }
 
-    
-useEffect(() => {
-    const stored = localStorage.getItem('canceledRequests');
-    if (stored) {
-      setCanceledRequests(JSON.parse(stored));
+
+    const fetchLeaveRequest = async (employee_id) => {
+        try {
+            const response2 = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            const d = await response2.json();
+            setLeaveRequeastData(d);
+          
+            console.log("leave request", d);
+        } catch (error) {
+            console.error('Error fetching leave', error);
+        }
     }
-  }, []);
-  
+
+
+    useEffect(() => {
+        fetchLeaveRequest(employee_id);
+    }, [refreshKey])
+
+
+
+
+
+    useEffect(() => {
+        const stored = localStorage.getItem('canceledRequests');
+        if (stored) {
+            setCanceledRequests(JSON.parse(stored));
+        }
+    }, []);
 
     const handleCancelClick = async (request_id) => {
         const result = await Swal.fire({
@@ -120,8 +166,8 @@ useEffect(() => {
 
     const submitLeave = async (e) => {
         e.preventDefault();
-
         const token = localStorage.getItem("token");
+
         const leaveRequestData = {
             employee_id: employee_id,
             leavetype_id: formData.leavetype_id,
@@ -131,6 +177,7 @@ useEffect(() => {
             reason: formData.reason,
             status: 'pending'
         };
+
         try {
             const response = await fetch('http://localhost:3003/leaverequest', {
                 method: 'POST',
@@ -140,10 +187,14 @@ useEffect(() => {
                 },
                 body: JSON.stringify(leaveRequestData)
             })
+
             const result = await response.json();
+
             if (response.ok) {
                 notyf.success('Leave request is added')
                 closePopup();
+                setRefreshKey((item) => item + 1);
+
             } else {
                 console.error('Error', result.message);
             }
@@ -152,13 +203,21 @@ useEffect(() => {
         }
     }
 
-    const calculateLeaveDays = (start, end) => {
+    const holidays = holidayData.result && holidayData.result.map(item =>
+        new Date(item.holiday_date).toISOString().split('T')[0]
+    );
+
+    const calculateLeaveDays = (start, end, holidays) => {
         const startDate = new Date(start);
         const endDate = new Date(end);
+        console.log("startDate", startDate);
+        console.log("Holidays", holidays);
+
         let count = 0;
         while (startDate <= endDate) {
             const day = startDate.getDay();
-            if (day != 0 && day != 6) {
+            const dateStr = startDate.toISOString().split('T')[0];
+            if (day != 0 && day != 6 && !holidays.includes(dateStr)) {
                 count++;
             }
             startDate.setDate(startDate.getDate() + 1);
@@ -169,19 +228,18 @@ useEffect(() => {
     useEffect(() => {
         const { start_date, end_date } = formData;
         if (start_date && end_date) {
-            const calculatedDays = calculateLeaveDays(start_date, end_date);
+            const calculatedDays = calculateLeaveDays(start_date, end_date, holidays);
             setFormData(pre => ({
                 ...pre,
                 days: calculatedDays
             }))
         }
-    }, [formData.start_date, formData.end_date]);
-
-
+    }, [formData.start_date, formData.end_date, holidays]);
 
     const openPopup = () => {
         setshowPopup(true);
     }
+
     const closePopup = () => {
         setshowPopup(false);
     }
@@ -192,7 +250,7 @@ useEffect(() => {
         return reversed;
     }
 
-  
+
 
     return (
         <section className='leave-request__section'>

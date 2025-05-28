@@ -5,7 +5,6 @@ import Sidebar from './Sidebar';
 import '../styles/dashboard.css';
 import '../styles/admin.css';
 
-
 function Dashboard() {
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();

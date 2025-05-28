@@ -1,7 +1,7 @@
 const leaverequestModel = require('../models/leaverequestModel');
 const leaveapprovalModel = require('../models/leaveapprovalsModel');
 const leavetypesModel = require('../models/leavetypesModel');
-const employeeModel=require('../models/employeesModel')
+const employeeModel = require('../models/employeesModel');
 
 
 exports.addLeaverequest = async (request, h) => {
@@ -15,12 +15,9 @@ exports.addLeaverequest = async (request, h) => {
         const result = await leaverequestModel.addLeaverequest(employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days);
         const request_id = result.insertId;
 
-
-
         const [type] = await leavetypesModel.getLeaveTypeById(leavetype_id);
 
-
-        const[employee]=await employeeModel.getEmployeesById(employee_id)
+        const [employee] = await employeeModel.getEmployeesById(employee_id)
         console.log(employee.id);
 
         if (type.type_name.toLowerCase() === 'sick' && days === 1) {
@@ -42,7 +39,6 @@ exports.addLeaverequest = async (request, h) => {
                 approved_by: employee.manager_id,
                 status: 'pending'
             });
-
         } else if (days <= 4) {
             await leaveapprovalModel.insertApproval({
                 request_id,
@@ -55,7 +51,7 @@ exports.addLeaverequest = async (request, h) => {
                 request_id,
                 role: 'hr',
                 approved_by: employee.hr_id,
-                status: 'inactive' // will activate after manager approves
+                status: 'inactive'
             });
         } else {
             await leaveapprovalModel.insertApproval({
@@ -272,27 +268,44 @@ exports.getMappedLeaveRequests = async (request, h) => {
 };
 
 
-exports.getApprovedStatus=async(request,h)=>{
+exports.getApprovedStatus = async (request, h) => {
 
-    try{
-    const rows=leaverequestModel.getApprovedStatus();
-    return h.response({message:'Successfully get',content:rows}).code(200);
+    try {
+        const rows = leaverequestModel.getApprovedStatus();
+        return h.response({ message: 'Successfully get', content: rows }).code(200);
 
-    }catch(error){
+    } catch (error) {
         console.error('Error fetching leaves:', error);
-        return h.response({error:'InternaL Server errpr'},error).code(500)
+        return h.response({ error: 'InternaL Server errpr' }, error).code(500)
     }
 }
 
 
-exports.approvedStatus=async(request,h)=>{
+exports.approvedStatus = async (request, h) => {
+
     const employeeId = request.auth.employee_id;
-    try{
-        const rows=await leaverequestModel.getApprovedLeavesByEmployee(employeeId);
-     
-    return h.response({ message: "Leave requests fetched", result: rows });
-    }catch(error){
+
+    console.log(employeeId);
+    const {start,end} = request.query;
+    try {
+        console.log("employeeId start,end approvedStatus : ",employeeId,start,end)
+        const rows = await leaverequestModel.getApprovedLeavesByEmployee(employeeId,start, end);
+
+        return h.response({ message: "Leave requests fetched", result: rows });
+    } catch (error) {
         console.error("Error fetching leave data:", error);
-    return h.response({ message: "Server error" }).code(500);
+        return h.response({ message: "Server error" }).code(500);
     }
 }
+
+exports.dateOverlap = async (request, h) => {
+    try {
+        const { employee_id } = request.params;
+        const result=await leaverequestModel.dateOverlap(employee_id);
+        return h.response({message:"successfully get",result}).code(200);
+    } catch (error) {
+        console.error("Fail to error",error);
+        return h.response({message:'Internal server error'}).code(500);
+    }
+}
+

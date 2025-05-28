@@ -55,7 +55,6 @@ const leaverequestRoutes = [
         path: '/leaverequest/status',
         handler: leaverequestController.getApprovedStatus
     },{
-        
         method: 'GET',
         path: '/leaverequest/statusapproved',
         options:{
@@ -64,6 +63,15 @@ const leaverequestRoutes = [
             ]
         },
         handler:leaverequestController.approvedStatus
+    },{
+        method:'GET',
+        path:'/leaverequest/date-overlap/{employee_id}',
+        options:{
+            pre:[
+                {method:verifyToken}
+            ]
+        },
+        handler:leaverequestController.dateOverlap
     }
 ]
 module.exports = leaverequestRoutes;

@@ -9,12 +9,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { BiLogOut } from "react-icons/bi";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
-
-
-
-
 const Sidebar = () => {
-
     const navigate = useNavigate();
     const logout = () => {
         localStorage.removeItem('token');

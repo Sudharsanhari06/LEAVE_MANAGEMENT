@@ -8,7 +8,6 @@ module.exports = [
       options: {
         pre: [
           { method: verifyToken }
-          // { method: allowRoles('Hr', 'manager', 'Director') }
         ]
       },
       handler: dashboardController.getDashboard

@@ -5,7 +5,7 @@ const employeeModel = require('../models/employeesModel');
 const { read } = require('fs');
 
 exports.getAllEmployees = async (request, h) => {
-   
+
     try {
         const data = await employeeModel.getAllEmployees();
         return h.response(data).code(200);
@@ -23,7 +23,7 @@ exports.getEmployeesById = async (request, h) => {
         if (result.length == 0) {
             return h.response({ error: "The employee ID is not found" }).code(404);
         }
-        return h.response({ message: "Successfully get " }).code(200);
+        return h.response({ message: "Successfully get"}).code(200);
     } catch (error) {
         console.error("Failed to get employee by ID", error);
         return h.response({ error: "Failed to fetch the employee details" }).code(500);
@@ -32,9 +32,7 @@ exports.getEmployeesById = async (request, h) => {
 
 
 exports.addEmployee = async (request, h) => {
-
     const { name, email, password, role, manager_id, hr_id, director_id, join_date } = request.payload;
-
     try {
         const result = await employeeModel.addEmployee({ name, email, password, role, manager_id, hr_id, director_id, join_date });
         return h.response({ message: "Employee is added ", employee_id: result.insertId }).code(200);
@@ -51,9 +49,9 @@ exports.addEmployee = async (request, h) => {
 
 exports.updateEmployee = async (request, h) => {
     const { id } = request.params;
-    const { name, role, manager_id, hr_id, director_id, join_date,email,password} = request.payload;
+    const { name, role, manager_id, hr_id, director_id, join_date, email, password } = request.payload;
     try {
-        const result = await employeeModel.updateEmployee(name, role, manager_id, hr_id, director_id, join_date,email,password, id);
+        const result = await employeeModel.updateEmployee(name, role, manager_id, hr_id, director_id, join_date, email, password, id);
         if (result.affectedRows == 0) {
             return h.response({
                 error: 'Employee is Not Found'

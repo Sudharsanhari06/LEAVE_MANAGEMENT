@@ -43,12 +43,22 @@ exports.addApprovalStep = async (request_id, role, status = 'pending') => {
     );
 };
 
-exports.updateApprovalStatus = async ({ request_id, role, decision, approved_by }) => {
-    return await database.query(
-        `UPDATE leaveapprovals SET status = ?, approved_by = ?
-       WHERE request_id = ? AND role = ? AND status = 'pending'`,
-        [decision, approved_by, request_id, role]
-    );
+exports.updateApprovalStatus = async ({ request_id, role, decision, approved_by, reason }) => {
+    if (decision === 'rejected') {
+        return await database.query(
+            `UPDATE leaveapprovals
+             SET status = ?, approved_by = ?, reason = ?
+             WHERE request_id = ? AND role = ? AND status = 'pending'`,
+            [decision, approved_by, reason, request_id, role]
+        );
+    } else {
+        return await database.query(
+            `UPDATE leaveapprovals
+             SET status = ?, approved_by = ?
+             WHERE request_id = ? AND role = ? AND status = 'pending'`,
+            [decision, approved_by, request_id, role]
+        );
+    }
 };
 
 
@@ -91,7 +101,7 @@ exports.getRequestsForRoleMapped = async (role, approver_id) => {
 
 
 exports.getMappedRequests = async ({ role, approved_by }) => {
-  console.log("role",role,"approved_by",approved_by);
+    console.log("role", role, "approved_by", approved_by);
     const [rows] = await database.query(`
       SELECT
         lr.request_id AS request_id,
@@ -126,16 +136,16 @@ exports.autoApprove = async ({ request_id, role, status }) => {
 
 exports.insertApproval = async ({ request_id, role, approved_by, status }) => {
     const [result] = await database.query(
-      `INSERT INTO leaveapprovals (request_id,role,approved_by,status) VALUES (?, ?, ?, ?)`,
-      [request_id, role, approved_by, status]
+        `INSERT INTO leaveapprovals (request_id,role,approved_by,status) VALUES (?, ?, ?, ?)`,
+        [request_id, role, approved_by, status]
     );
     return result;
 };
 
 
 
-exports.getLeaveApprovalStatusByRequestId=async(requestId)=>{
-    const[rows]=await database.query(`SELECT 
+exports.getLeaveApprovalStatusByRequestId = async (requestId) => {
+    const [rows] = await database.query(`SELECT 
     la.role, 
     la.status, 
     emp.name AS approver_name
@@ -147,6 +157,6 @@ WHERE
     la.request_id = ?
 ORDER BY 
     FIELD(la.role, 'manager', 'hr', 'director');
-`,[requestId]);
-        return rows;
+`, [requestId]);
+    return rows;
 }

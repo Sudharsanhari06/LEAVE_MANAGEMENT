@@ -59,50 +59,49 @@ exports.backUsedLeaveDays = async (employee_id, leavetype_id, days) => {
 
 
 
-exports.usedLeavedaysEmployee=async(employee_id)=>{
-        const[used]= await database.query(
-            `SELECT leavetype_id, SUM(days) as used_days 
+exports.usedLeavedaysEmployee = async (employee_id) => {
+    const [used] = await database.query(
+        `SELECT leavetype_id, SUM(days) as used_days 
             FROM leaverequests 
             WHERE employee_id = ? AND status NOT IN('cancelled','rejected')
             GROUP BY leavetype_id`,
-            [employee_id]
-        );
-        return used;
+        [employee_id]
+    );
+    return used;
 
 }
 
+exports.getApprovedLeavesByEmployee = async (employeeId, start, end) => {
 
-
-exports.getApprovedLeavesByEmployee=async(employeeId)=>{
     const [rows] = await database.query(
         `SELECT 
-           lr.request_id, lr.start_date, lr.end_date, 
-           lt.type_name 
-         FROM leaverequests lr
-         JOIN leavetypes lt ON lr.leavetype_id = lt.leavetype_id
-         WHERE lr.employee_id = ?`,
-        [employeeId]
-      );
-      return rows;
+         lr.request_id, lr.start_date, lr.end_date, 
+         lt.type_name
+       FROM leaverequests AS lr
+       JOIN leavetypes lt ON lr.leavetype_id = lt.leavetype_id
+       WHERE lr.employee_id = ? 
+         AND lr.status = 'approved'
+         AND (
+           lr.start_date BETWEEN ? AND ?
+           OR lr.end_date BETWEEN ? AND ?
+         )`,
+        [employeeId, start, end, start, end]
+    );
+    return rows;
 }
-
-
-
-
-
 
 
 // update
 exports.updateLeaveRequestStatus = async (request_id, status) => {
     return await database.query(
-      `UPDATE leaverequests SET status = ? WHERE request_id = ?`,
-      [status, request_id]
+        `UPDATE leaverequests SET status = ? WHERE request_id = ?`,
+        [status, request_id]
     );
-  };
+};
 
 
-exports.getApprovedStatus=async()=>{
-    const [rows]=await database.query( `
+exports.getApprovedStatus = async () => {
+    const [rows] = await database.query(`
         SELECT 
           l.start_date, 
           l.end_date, 
@@ -115,5 +114,20 @@ exports.getApprovedStatus=async()=>{
         WHERE 
           l.status = 'approved'
       `)
-      return rows;
+    return rows;
 }
+
+
+exports.dateOverlap = async (employeeId) => {
+
+    const [rows] = await database.query
+        (
+            `SELECT start_date, end_date FROM leaverequests
+         WHERE employee_id = ? AND status IN ('pending', 'approved')`,
+            [employeeId]
+        );
+    return rows;
+}
+
+
+

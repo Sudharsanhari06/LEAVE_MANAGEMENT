@@ -5,6 +5,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { SiPivotaltracker } from "react-icons/si";
 import { BiLogOut } from "react-icons/bi";
 
+
 const UserSidebar = () => {
     const [userData, setUserData] = useState(null);
     const [leaveRequests, setLeaveRequests] = useState([]);
@@ -94,7 +95,7 @@ const UserSidebar = () => {
                     </li>
                 )}
 
-                <li><NavLink className='sidebar-btn' to='/dashboard/calender'>  Calender</NavLink></li>
+                <li><NavLink className='sidebar-btn' to='/dashboard/calender'>Calender</NavLink></li>
 
                 <li onClick={logout}>
                     <NavLink className='sidebar-btn' to='/'><span><BiLogOut /></span>Logout</NavLink>
@@ -103,5 +104,4 @@ const UserSidebar = () => {
         </section>
     );
 };
-
 export default UserSidebar;

@@ -2,9 +2,10 @@ const bcrypt=require('bcrypt');
 const  jwt = require('jsonwebtoken');
 const  database=require('../config/db');
 require('dotenv').config();
-exports.login=async(request,h)=>{
 
+exports.login=async(request,h)=>{
     const{email,password}=request.payload;
+    
     try{
         const[rows]= await database.query('SELECT * FROM employees WHERE email=?',[email]);
         if(rows.length==0){

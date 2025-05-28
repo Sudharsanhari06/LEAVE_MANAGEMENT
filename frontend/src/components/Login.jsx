@@ -70,12 +70,12 @@ const Login = () => {
     }
   };
 
+
   return (
     <section className='login-container'>
       <div className="login-form">
         <h2>Login</h2>
         <div className="email-input">
-
           <input
             type="email"
             placeholder="Email"
@@ -105,4 +105,3 @@ const Login = () => {
   )
 }
 export default Login;
-

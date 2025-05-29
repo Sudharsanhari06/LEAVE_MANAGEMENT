@@ -1,16 +1,19 @@
 const database = require('../config/db');
 const bcrypt = require('bcrypt');
 
+// wo
 exports.getAllEmployees = async () => {
     const [rows] = await database.query('SELECT * FROM employees WHERE flag=true ORDER BY employee_id DESC');
     return rows;
 }
 
+// wo
 exports.getEmployeesById = async (id) => {
     const [result] = await database.query('SELECT * FROM employees WHERE employee_id=?', [id]);
     return result;
 }
 
+// wo
 exports.addEmployee = async ({ name, email, password, role, manager_id, hr_id, director_id, join_date }) => {
 
     const [exist] = await database.query('SELECT * FROM employees WHERE email=?', [email]);
@@ -38,9 +41,8 @@ exports.deleteEmployee = async (id) => {
     return result;
 }
 
-
+// wo
 exports.getUsersRoles=async()=>{
-    
     const[result]=await database.query('SELECT employee_id,name,role FROM employees WHERE role IN (?,?,?)',['Hr', 'manager', 'Director']);
     return result;
 }

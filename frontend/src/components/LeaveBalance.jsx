@@ -1,11 +1,14 @@
-import React from 'react'
+import React from 'react';
 import { useState, useEffect } from 'react';
 import '../styles/dashboard.css';
 import CountUp from 'react-countup';
 
 const LeaveBalance = ({ employee_id }) => {
-    const [leavebBalance, setLeaveBalance] = useState({});
+
+    const [leaveBalance, setLeaveBalance] = useState({});
+
     useEffect(() => {
+
         const fetchLeaveBalance = async () => {
             const token = localStorage.getItem('token');
             try {
@@ -22,7 +25,7 @@ const LeaveBalance = ({ employee_id }) => {
 
                     setLeaveBalance(data);
                     console.log("total remailnkg", data.total_available_days);
-                    console.log("total leavebalance", leavebBalance);
+                    console.log("total leavebalance", leaveBalance);
 
                 }
             } catch (error) {
@@ -36,13 +39,13 @@ const LeaveBalance = ({ employee_id }) => {
     return (
         <section>
             <div className="leave-boxes">
-                {leavebBalance &&
+                {leaveBalance &&
                     <div className="leave-box total">
-                        <h2><CountUp end={leavebBalance.total_available_days} duration={3} /></h2>
+                        <h2><CountUp end={leaveBalance.total_available_days} duration={3} /></h2>
                         <p>Total Available Leaves </p>
                     </div>
                 }
-                {leavebBalance.leave_types && leavebBalance.leave_types.map((leave, index) => (
+                {leaveBalance.leave_types && leaveBalance.leave_types.map((leave, index) => (
                     <div className={`leave-box ${leave.type_name}`} key={index}>
                         <h2>  <CountUp end={leave.remaining_days} duration={3} />  </h2>
                         <p>Total {leave.type_name} Leaves</p>

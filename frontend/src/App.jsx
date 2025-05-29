@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
@@ -28,11 +29,6 @@ function App() {
           <Route path="add-holiday" element={<AddHoliday />} />
           <Route path='calender' element={<LeaveCalendar/>}></Route>
         </Route>
-
-        {/* <Route path="/employees" element={<Admin />}>
-          <Route path="admindashboard" element={<AdminDashboard />} />
-        
-        </Route> */}
 
       </Routes>
     </BrowserRouter>

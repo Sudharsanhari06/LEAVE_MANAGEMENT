@@ -6,12 +6,14 @@ import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
 const Login = () => {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const checkLogin = async () => {
+
     const notyf = new Notyf({
       duration: 1000,
       position: {
@@ -32,11 +34,13 @@ const Login = () => {
         });
 
       const data = await response.json();
-      console.log("data", data);
+      console.log("login data", data);
 
       if (response.ok) {
-        const { token,is_first_login  } = data;
+        const { token ,is_first_login } = data;
         localStorage.setItem('token', token);
+
+        
         const decodeToken = JSON.parse(atob(token.split('.')[1]));
         const role = decodeToken.role;
 
@@ -53,7 +57,7 @@ const Login = () => {
         if (role == 'Hr') {
           notyf.success('Login in successfully!')
           setTimeout(() => {
-            navigate('/dashboard');
+            navigate('/dashboard/userdashboard');
           }, 1000);
         } else {
           notyf.success('Login in successfully!');

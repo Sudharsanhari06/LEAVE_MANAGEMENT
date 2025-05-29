@@ -4,6 +4,7 @@ const { console } = require('inspector');
 const employeeModel = require('../models/employeesModel');
 const { read } = require('fs');
 
+// wo
 exports.getAllEmployees = async (request, h) => {
 
     try {
@@ -30,7 +31,7 @@ exports.getEmployeesById = async (request, h) => {
     }
 };
 
-
+// wo
 exports.addEmployee = async (request, h) => {
     const { name, email, password, role, manager_id, hr_id, director_id, join_date } = request.payload;
     try {
@@ -76,6 +77,7 @@ exports.deleteEmployee = async (request, h) => {
 }
 
 // get the role for admin
+// wo
 exports.getUsersRoles = async (request, h) => {
     try {
         const users = await employeeModel.getUsersRoles();

@@ -1,5 +1,6 @@
 const database = require('../config/db');
 
+//wo
 exports.addLeaverequest = async (employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days) => {
     const [result] = await database.query('INSERT INTO leaverequests (employee_id,leavetype_id,start_date,end_date,reason,status,is_lop,days) VALUES(?,?,?,?,?,?,?,?)', [employee_id, leavetype_id, start_date, end_date, reason, status, is_lop, days]);
     return result;
@@ -10,11 +11,13 @@ exports.getAllLeaverequest = async () => {
     return result;
 }
 
+// wo
 exports.getLeaverequestById = async (req_id) => {
     const [result] = await database.query('SELECT * FROM leaverequests WHERE request_id=?', [req_id]);
     return result;
 }
 
+// wo
 exports.getAllLeaverequestById = async (employee_id) => {
     const [result] = await database.query(`SELECT lr.*, lt.type_name 
 FROM leaverequests AS lr
@@ -23,6 +26,8 @@ WHERE lr.employee_id = ? AND lr.flag=true ORDER BY lr.request_id DESC`, [employe
     return result;
 }
 
+
+// wo
 exports.cancelLeaverequest = async (req_id) => {
     const [result] = await database.query(`UPDATE leaverequests SET status = 'cancelled' WHERE request_id = ?`,
         [req_id]
@@ -58,7 +63,7 @@ exports.backUsedLeaveDays = async (employee_id, leavetype_id, days) => {
 
 
 
-
+//work
 exports.usedLeavedaysEmployee = async (employee_id) => {
     const [used] = await database.query(
         `SELECT leavetype_id, SUM(days) as used_days 
@@ -92,6 +97,7 @@ exports.getApprovedLeavesByEmployee = async (employeeId, start, end) => {
 
 
 // update
+// wo
 exports.updateLeaveRequestStatus = async (request_id, status) => {
     return await database.query(
         `UPDATE leaverequests SET status = ? WHERE request_id = ?`,

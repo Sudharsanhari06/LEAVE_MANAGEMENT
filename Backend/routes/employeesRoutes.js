@@ -3,6 +3,7 @@ const {verifyToken, allowRoles}=require('../middleware/authMiddleware');
 
 
 const employeeRoutes = [
+    // wo
     {
         method: 'GET',
         path: '/employees',
@@ -13,6 +14,7 @@ const employeeRoutes = [
         path: '/employees/{id}',
         handler: employeesController.getEmployeesById
     },
+    // wo
     {
         method: 'POST',
         path: '/employees',
@@ -21,7 +23,7 @@ const employeeRoutes = [
                 {method:verifyToken},
                 {method:allowRoles('hr')}
             ],
-            handler: employeesController.addEmployee,
+            handler: employeesController.addEmployee
         }
     },
     {
@@ -33,7 +35,9 @@ const employeeRoutes = [
         method: 'DELETE',
         path: '/employees/{id}/delete',
         handler: employeesController.deleteEmployee
-    },{
+    },
+    // wo
+    {
         method:'GET',
         path:'/employees/roles',
         options: {
@@ -42,7 +46,7 @@ const employeeRoutes = [
               { method: allowRoles('hr','manager','director') }
             ]
           },
-          handler:employeesController.getUsersRoles,
+          handler:employeesController.getUsersRoles
     }
 ]
 module.exports = employeeRoutes;

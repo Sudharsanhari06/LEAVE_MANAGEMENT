@@ -91,14 +91,16 @@
   .employees-container {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 20px;
   }
   
   .employee {
+    width: 280px;
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem;
-    width: 250px;
+  
     background-color: #EAF6FD;
     padding: 20px;
     border-radius: 8px;

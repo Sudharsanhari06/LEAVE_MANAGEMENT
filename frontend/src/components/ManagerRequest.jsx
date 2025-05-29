@@ -9,7 +9,6 @@ const ManagerRequest = ({ role, approverId }) => {
   const [rejectionReason, setRejectionReason] = useState('');
   const [currentRequestId, setCurrentRequestId] = useState(null);
 
-
   const notyf = new Notyf({
     duration: 1000,
     position: {
@@ -18,10 +17,10 @@ const ManagerRequest = ({ role, approverId }) => {
     },
   });
 
-
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       const token = localStorage.getItem('token');
+
       console.log("role approver", role, approverId);
       try {
         const response = await fetch(`http://localhost:3003/leaveapproval/mapped?role=${role}&approved_by=${approverId}`, {
@@ -42,8 +41,7 @@ const ManagerRequest = ({ role, approverId }) => {
   }, [role, approverId]);
 
 
-
-  async function handleDecision(requestId, decision, reason = '') {
+  async function handleDecision(requestId, decision, reason) {
     const token = localStorage.getItem('token');
     console.log("manager token", token);
 
@@ -92,62 +90,67 @@ const ManagerRequest = ({ role, approverId }) => {
         }
 
         return (
-          <div className="leave-request-card" key={request.request_id}>
+          <div className='leave-request-card-container'>
+            <div className="leave-request-card" key={request.request_id}>
 
-            <h2>{request.employee_name}</h2>
-            <p className="leave-type">{request.leave_type}</p>
+              <h2>{request.employee_name}</h2>
+              <p className="leave-type">{request.leave_type}</p>
 
+              <div className="date-range">
+                <span>📅 {request.start_date.split('T')[0]}</span>
+                <span>→</span>
+                <span>{request.end_date.split('T')[0]}</span>
+              </div>
 
-            <div className="date-range">
-              <span>📅 {request.start_date.split('T')[0]}</span>
-              <span>→</span>
-              <span>{request.end_date.split('T')[0]}</span>
+              <p className="days-count">{request.days} day(s)</p>
+              <p className="reason">{request.reason}</p>
+
+              <div className="action-buttons">
+                <button
+                  className="approve-btn"
+                  onClick={() => handleDecision(request.request_id, 'approved')}
+                >
+                  Approve
+                </button>
+                <button
+                  className="reject-btn"
+                  onClick={() => {
+                    setCurrentRequestId(request.request_id);
+                    setShowRejectModal(true);
+                  }}
+                >
+                  Reject
+                </button>
+              </div>
             </div>
 
-            <p className="days-count">{request.days} day(s)</p>
-            <p className="reason">{request.reason}</p>
-
-            <div className="action-buttons">
-              <button
-                className="approve-btn"
-                onClick={() => handleDecision(request.request_id, 'approved')}
-              >
-                Approve
-              </button>
-              <button
-                className="reject-btn"
-                onClick={() => {
-                  setCurrentRequestId(request.request_id);
-                  setShowRejectModal(true);
-                }}
-              >
-                Reject
-              </button>
-            </div>
+            { currentRequestId== request.request_id && showRejectModal && (
+              <div className="modal-overlay">
+                <div className="modal">
+                  <h3>Enter Rejection Reason</h3>
+                  <textarea
+                    value={rejectionReason}
+                    onChange={(e) => setRejectionReason(e.target.value)}
+                    placeholder="Reason for rejection"
+                    rows="4"
+                    cols="40"
+                    required
+                  />
+                  <div className="modal-buttons">
+                    <button onClick={() => handleDecision(currentRequestId, 'rejected', rejectionReason)}>
+                      Submit
+                    </button>
+                    <button onClick={() => setShowRejectModal(false)}>Cancel</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
+
         );
       })}
 
-      {showRejectModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Enter Rejection Reason</h3>
-            <textarea
-              value={rejectionReason}
-              onChange={(e) => setRejectionReason(e.target.value)}
-              placeholder="Reason for rejection"
-              rows="4"
-              cols="40"
-            />
-            <div className="modal-buttons">
-              <button onClick={() => handleDecision(currentRequestId, 'rejected', rejectionReason)}>
-                Submit
-              </button>
-              <button onClick={() => setShowRejectModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
+
 
 
     </section>

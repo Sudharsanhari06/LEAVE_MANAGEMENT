@@ -2,6 +2,7 @@ const leaverequestController = require('../controllers/leaverequestController');
 const { verifyToken } = require('../middleware/authMiddleware');
 
 const leaverequestRoutes = [
+    // wo
     {
         method: 'POST',
         path: '/leaverequest',
@@ -22,6 +23,7 @@ const leaverequestRoutes = [
         path: '/leaverequest/{req_id}',
         handler: leaverequestController.getLeaverequestById
     },
+    // wo
     {  
         method: 'GET',
         path: '/leaverequest/employee/{employee_id}',
@@ -32,6 +34,7 @@ const leaverequestRoutes = [
         },
         handler: leaverequestController.getAllLeaverequestById
     },
+    // wo
     {
         method: 'PUT',
         path: '/employee/leaverequest/{req_id}',

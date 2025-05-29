@@ -3,7 +3,7 @@ import '../styles/stepper.css';
 
 
 const Stepper = ({ currentStep, approvals }) => {
-
+  
   const steps = [{ label: 'Leave Requested', name: 'Employee' }, ...approvals.map(a => ({
     label: `${a.role.charAt(0).toUpperCase() + a.role.slice(1)} Approval`,
     name: a.approver_name

@@ -74,13 +74,15 @@ exports.deleteByIdLeavebalance = async (request, h) => {
     }
 }
 
+
+// wo
 exports.getLeavebalanceByEmployee = async (request, h) => {
     const { employee_id } = request.params;
-    const currentYear = new Date().getFullYear();
+
     try {
         const types = await leavetypesModel.getAllLeaveTypes();
         console.log("types", types);
-
+        
         const used = await leaverequestModel.usedLeavedaysEmployee(employee_id);
         console.log("used days", used);
 
@@ -88,8 +90,8 @@ exports.getLeavebalanceByEmployee = async (request, h) => {
         used.forEach((entry) => {
             usedMap[entry.leavetype_id] = entry.used_days;
         });
+       
         let total_available_days = 0;
-
         const leave_types = types.map((type) => {
             const used_days = usedMap[type.leavetype_id] || 0;
             const remaining_days = type.max_days - used_days;
@@ -113,6 +115,8 @@ exports.getLeavebalanceByEmployee = async (request, h) => {
         return h.response({ error: 'Server error' }).code(500);
     }
 }
+
+
 
 exports.getLeaveBalanceByEmployee = async (request, h) => {
     const { employee_id } = request.params;

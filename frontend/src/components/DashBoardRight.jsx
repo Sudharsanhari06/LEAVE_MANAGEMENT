@@ -36,7 +36,7 @@ const DashBoardRight = () => {
                     setUserData(data);
                     console.log("USER DATA", data);
                 } else {
-                    alert('Unauthorized or token expired');
+                    alert('Unauthorized token');
                     navigate('/');
                 }
             } catch (error) {
@@ -56,7 +56,7 @@ const DashBoardRight = () => {
                 <div className='employee_role'>-  {userData ? userData.role : 'userrole'}</div>
                 </div>
                 {['manager','hr','director'].includes(userData?.role) && (
-                      <p onClick={() => setShowRequest(prev => !prev)} style={{ cursor: 'pointer' }}>
+                      <p onClick={() => setShowRequest(prev => !prev)} >
                       <FaBell  className='bell-icon'/>
                     </p>
                 ) }

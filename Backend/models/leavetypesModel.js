@@ -4,6 +4,7 @@ exports.getAllLeaveTypes = async () => {
     return result;
 }
 
+// wo
 exports.getLeaveTypeById = async (leavetype_id) => {
     const [result] = await database.query('SELECT * FROM leavetypes WHERE leavetype_id=? AND isactive=true', [leavetype_id]);
     return result;

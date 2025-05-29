@@ -39,7 +39,7 @@ exports.changePassword=async(request,h)=>{
 
     try {
         const employeeId = request.auth.employee_id;
-
+        
         const [rows] = await database.query(`SELECT password FROM employees WHERE employee_id = ?`, [employeeId]);
         if (rows.length === 0) {
             return h.response({ message: 'User not found' }).code(404);

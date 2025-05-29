@@ -5,6 +5,7 @@ exports.addHolidays=async(holiday_name,holiday_date)=>{
     return holidays;
 }
 
+// wo
 exports.getAllHolidays=async()=>{
     const [holidays]=await database.query('SELECT * FROM holidays ORDER BY holiday_id');
     return holidays;
@@ -15,6 +16,7 @@ exports.updateHolidays=async(holiday_id,holiday_name, holiday_date )=>{
     return holidays;
 }
 
+//  for calender
 exports.getholidaysuserdate=async(start,end)=>{
     const[rows]=await database.query( `SELECT * FROM holidays WHERE holiday_date BETWEEN ? AND ?`,
         [start, end]);

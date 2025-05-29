@@ -4,11 +4,6 @@ const { verifyToken, allowRoles } = require('../middleware/authMiddleware');
 
 const leaveapprovalRoutes = [
     {
-        method: 'PUT',
-        path: '/leaverequest/{req_id}/leaveapproval',
-        handler: leaveapprovalController.approveLeave
-    }
-    ,{
         method: 'GET',
         path: '/leaveapprovals/request/{req_id}',
         handler: leaveapprovalController.getAllapprovalById
@@ -28,6 +23,7 @@ const leaveapprovalRoutes = [
         },
         handler: leaveapprovalController.getMappedLeaveRequests
     },
+    // wo
     {
         method: 'POST',
         path: '/leaveapproval/decision',
@@ -37,7 +33,9 @@ const leaveapprovalRoutes = [
             ]
         },
         handler: leaveapprovalController.updateApprovalStatus
-    },{
+    },
+    // wo
+    {
         method:'GET',
         path: '/leaveapproval/status/{requestId}',
         handler: leaveapprovalController.getLeaveApprovalStatusByRequestId

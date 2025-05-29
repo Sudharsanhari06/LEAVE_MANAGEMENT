@@ -108,7 +108,7 @@ exports.getLeaverequestById = async (request, h) => {
     }
 }
 
-
+// wo
 exports.getAllLeaverequestById = async (request, h) => {
     const { employee_id } = request.params;
     try {
@@ -123,7 +123,7 @@ exports.getAllLeaverequestById = async (request, h) => {
     }
 }
 
-
+// wo
 exports.cancelLeaverequest = async (request, h) => {
     const { req_id } = request.params;
     console.log("req_id", req_id);
@@ -136,7 +136,7 @@ exports.cancelLeaverequest = async (request, h) => {
         }
         const today = new Date();
         const startDate = new Date(leave.start_date);
-        if ((leave.status == 'approved' || leave.status == 'rejected' || leave.status == 'pending') && startDate > today) {
+        if (startDate > today) {
             await leaverequestModel.cancelLeaverequest(req_id);
             return h.response({ message: 'Leave cancelled and balance updated' }).code(200);
 
@@ -223,44 +223,6 @@ exports.usedLeavedaysEmployee = async (request, h) => {
     }
 }
 
-
-
-// exports.approveLeave = async (request, h) => {
-//     const { id } = request.params;
-//     const { decision, role, approver_id } = request.payload;
-
-//     await leaveapprovalModel.updateApprovalStatus({ request_id: id, role, decision, approver_id });
-
-//     if (decision === 'rejected') {
-//         await leaveapprovalModel.updateLeaveRequestStatus(id, 'rejected');
-//         return h.response({ message: 'Leave request rejected' });
-//     }
-
-//     const [reqRow] = await leaverequestModel.getLeaverequestById(id);
-
-//     if (role === 'manager') {
-//         if (reqRow.days <= 2) {
-//             console.log("Manger approval..");
-//             await leaverequestModel.updateLeaveRequestStatus(id, 'approved');
-//         } else {
-//             await leaveapprovalModel.activateNextRole(id, 'hr');
-//         }
-//     } else if (role === 'hr') {
-//         if (reqRow.num_days <= 4) {
-//             await leaverequestModel.updateLeaveRequestStatus(id, 'approved');
-//         } else {
-//             await leaveapprovalModel.activateNextRole(id, 'director');
-//         }
-//     } else if (role === 'director') {
-//         await leaverequestModel.updateLeaveRequestStatus(id, 'approved');
-//     }
-
-//     return h.response({ message: 'Leave processed' });
-// };
-
-
-
-
 exports.getMappedLeaveRequests = async (request, h) => {
     const { role, id } = request.query;
     const rows = await leaveapprovalModel.getRequestsForRoleMapped(role, id);
@@ -286,10 +248,10 @@ exports.approvedStatus = async (request, h) => {
     const employeeId = request.auth.employee_id;
 
     console.log(employeeId);
-    const {start,end} = request.query;
+    const { start, end } = request.query;
     try {
-        console.log("employeeId start,end approvedStatus : ",employeeId,start,end)
-        const rows = await leaverequestModel.getApprovedLeavesByEmployee(employeeId,start, end);
+        console.log("employeeId start,end approvedStatus : ", employeeId, start, end)
+        const rows = await leaverequestModel.getApprovedLeavesByEmployee(employeeId, start, end);
 
         return h.response({ message: "Leave requests fetched", result: rows });
     } catch (error) {
@@ -301,11 +263,11 @@ exports.approvedStatus = async (request, h) => {
 exports.dateOverlap = async (request, h) => {
     try {
         const { employee_id } = request.params;
-        const result=await leaverequestModel.dateOverlap(employee_id);
-        return h.response({message:"successfully get",result}).code(200);
+        const result = await leaverequestModel.dateOverlap(employee_id);
+        return h.response({ message: "successfully get", result }).code(200);
     } catch (error) {
-        console.error("Fail to error",error);
-        return h.response({message:'Internal server error'}).code(500);
+        console.error("Fail to error", error);
+        return h.response({ message: 'Internal server error' }).code(500);
     }
 }
 

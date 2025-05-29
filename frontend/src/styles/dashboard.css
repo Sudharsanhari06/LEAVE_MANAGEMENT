@@ -11,14 +11,15 @@ white #ffffff\
 vilot #4a2dcf
 */
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 15px;
     height: 30px;
 }
+
 ::-webkit-scrollbar-thumb {
-    background-color: #1E2D4E; 
+    background-color: #1E2D4E;
     border-radius: 10px;
-  }
+}
 
 .dashboard-container {
     width: 100vw;
@@ -52,9 +53,9 @@ vilot #4a2dcf
     padding: 0.5rem 1.3rem;
     color: #fff;
     text-decoration: none;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    margin: 0.6rem 0;
+    margin: 0.9rem 0;
     display: block;
     border-radius: 0.5rem;
     /* transition: 0.7s ease-in-out; */
@@ -64,8 +65,13 @@ vilot #4a2dcf
     background-color: #D0E1E9;
     color: #050407;
 }
+
 .left-side .sidebar-btn span {
-    margin-right: 1rem;
+    margin-right: 0.3rem;
+}
+
+.left-side .sidebar-btn .sidebar-icon {
+    font-size: 1.2rem;
 }
 
 .right-side {
@@ -81,14 +87,15 @@ vilot #4a2dcf
     align-items: center;
 
 }
-.right-side__header .employee_role{
+
+.right-side__header .employee_role {
     font-size: 1rem;
     text-transform: uppercase;
     margin-left: 2rem;
     font-weight: 650;
 }
 
-.right-side__header .bell-icon{
+.right-side__header .bell-icon {
     color: red;
 }
 
@@ -250,7 +257,7 @@ vilot #4a2dcf
     background-color: #f8fafb;
 }
 
-.all-leaverequest table tr .leaverequest-reason{
+.all-leaverequest table tr .leaverequest-reason {
     width: 200px;
 }
 
@@ -272,7 +279,7 @@ vilot #4a2dcf
     color: #949090;
     cursor: not-allowed;
     opacity: 0.6;
-  }
+}
 
 
 .all-leaverequest .leavestatus {
@@ -316,32 +323,31 @@ vilot #4a2dcf
     align-items: center;
     justify-content: center;
     z-index: 1000;
-  }
-  
-  .popup {
+}
+
+.popup {
     background: white;
     padding: 20px 30px;
     border-radius: 8px;
     text-align: center;
-  }
-  
-  .popup button {
+}
+
+.popup button {
     margin: 10px;
     padding: 8px 15px;
     cursor: pointer;
-  }
-  
-  .yes-btn {
+}
+
+.yes-btn {
     background-color: #d9534f;
     color: white;
     border: none;
     border-radius: 4px;
-  }
-  
-  .no-btn {
+}
+
+.no-btn {
     background-color: #6c757d;
     color: white;
     border: none;
     border-radius: 4px;
-  }
-  
+}

@@ -1,16 +1,8 @@
 const database = require('../config/db');
 
-// exports.updateLeaveapproval = async (req_id, approved_by, role, status) => {
-//     const [exist] = await database.query('SELECT * FROM leaveapprovals WHERE request_id=? AND role=?', [req_id, role]);
-//     if (exist.length > 0) {
-//         return await database.query(
-//             'UPDATE leaveapprovals SET status=?, approved_by=? WHERE request_id=? AND role=?', [status, approved_by, req_id, role]
-//         )
-//     } else {
-//         return await database.query('INSERT INTO leaveapprovals (requset_id,approved_by,role,status) VALUES (?,?,?,?)', [req_id, approved_by, role, status]);
-//     }
-// }
 
+
+// wo
 exports.getAllapprovalById = async (req_id) => {
     const [rows] = await database.query(
         'SELECT * FROM leaveapprovals WHERE request_id = ?', [req_id]
@@ -43,6 +35,7 @@ exports.addApprovalStep = async (request_id, role, status = 'pending') => {
     );
 };
 
+// wo
 exports.updateApprovalStatus = async ({ request_id, role, decision, approved_by, reason }) => {
     if (decision === 'rejected') {
         return await database.query(
@@ -62,6 +55,7 @@ exports.updateApprovalStatus = async ({ request_id, role, decision, approved_by,
 };
 
 
+// wo
 exports.activateNextRole = async (request_id, role) => {
     return await database.query(
         `UPDATE leaveapprovals SET status = 'pending'
@@ -123,7 +117,7 @@ exports.getMappedRequests = async ({ role, approved_by }) => {
 };
 
 
-
+// wo
 exports.autoApprove = async ({ request_id, role, status }) => {
     const [result] = await database.query(
         `INSERT INTO leaveapprovals (request_id, role, status) VALUES (?, ?, ?)`,
@@ -133,7 +127,7 @@ exports.autoApprove = async ({ request_id, role, status }) => {
 };
 
 
-
+// wo
 exports.insertApproval = async ({ request_id, role, approved_by, status }) => {
     const [result] = await database.query(
         `INSERT INTO leaveapprovals (request_id,role,approved_by,status) VALUES (?, ?, ?, ?)`,
@@ -143,7 +137,7 @@ exports.insertApproval = async ({ request_id, role, approved_by, status }) => {
 };
 
 
-
+// wo
 exports.getLeaveApprovalStatusByRequestId = async (requestId) => {
     const [rows] = await database.query(`SELECT 
     la.role, 

@@ -27,6 +27,7 @@ const leavebalanceRoutes = [
         path: '/leavebalance/{id}',
         handler: leavebalanceController.updateByIdLeavebalance
     },
+    // work
     {
         method: 'GET',
         path: '/leavebalance/employee/{employee_id}',

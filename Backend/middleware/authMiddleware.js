@@ -20,6 +20,8 @@ exports.verifyToken = async (request, h) => {
     }
 };
 
+
+
 exports.allowRoles = (...allowRoles) => {
     return async (request, h) => {
         const user = request.auth;

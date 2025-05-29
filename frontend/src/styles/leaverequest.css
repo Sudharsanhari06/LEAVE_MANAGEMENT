@@ -34,6 +34,8 @@
 .leaverequest-form select{
     width: 100%;
     margin-bottom: 1rem;
+    padding: 0.4rem 0;
+    border-radius: 0.5rem;
 }
 .leaverequest-form textarea{
     width: 100%;

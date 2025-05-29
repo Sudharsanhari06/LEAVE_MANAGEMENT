@@ -10,6 +10,7 @@ exports.getAllLeaveTypes = async (request, h) => {
     }
 }
 
+// wo
 exports.getLeaveTypeById = async (request, h) => {
     
     const { id } = request.params;

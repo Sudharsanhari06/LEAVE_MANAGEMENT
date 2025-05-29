@@ -1,5 +1,6 @@
 const holidaysModel = require('../models/holidaysModel');
 
+
 exports.addHolidays = async (request, h) => {
     const { holiday_name, holiday_date } = request.payload;
     try {
@@ -10,6 +11,7 @@ exports.addHolidays = async (request, h) => {
         return h.response({ message: 'Server error' }).code(500)
     }
 }
+
 
 exports.getAllHolidays = async (request, h) => {
     try {
@@ -38,6 +40,7 @@ exports.updateHolidays = async (request, h) => {
     }
 }
 
+// for calender
 exports.getholidaysuserdate = async (request, h) => {
     const { start, end } = request.query;
     try {

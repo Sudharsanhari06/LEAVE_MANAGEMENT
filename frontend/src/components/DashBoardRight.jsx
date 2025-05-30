@@ -4,8 +4,8 @@ import LeaveRequest from './LeaveRequest';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FaBell } from 'react-icons/fa';
-
 import ManagerRequest from './ManagerRequest';
+
 const DashBoardRight = () => {
 
     const [userData, setUserData] = useState(null);
@@ -13,8 +13,8 @@ const DashBoardRight = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        
         console.log("dashboard right side");
-
         const fetchDashboard = async () => {
             const token = localStorage.getItem('token');
             if (!token) {

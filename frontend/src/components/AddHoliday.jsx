@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from "react";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import '../styles/holiday.css'
+import '../styles/holiday.css';
 
 const AddHoliday = () => {
 

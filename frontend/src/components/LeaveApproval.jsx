@@ -9,6 +9,7 @@ const LeaveApproval = () => {
   const { requestId } = useParams();
 
   useEffect(() => {
+
     const fetchApprovalStatus = async () => {
       try {
         console.log("requestId", requestId);
@@ -23,22 +24,23 @@ const LeaveApproval = () => {
           if (item.role === 'hr' && item.status === 'approved') step = 3;
           if (item.role === 'director' && item.status === 'approved') step = 4;
         });
-        setCurrentStep(step);
 
+        setCurrentStep(step);
       } catch (err) {
         console.error('Failed to fetch approval status', err);
       }
     };
+
 
     fetchApprovalStatus();
   }, [requestId]);
 
 
   return (
-    <div>
+  <div>
       <h2 style={{ textAlign: 'center' }}>Leave Request Progress</h2>
       <Stepper currentStep={currentStep} approvals={approvals} />
-    </div>
+  </div>
   );
 };
 

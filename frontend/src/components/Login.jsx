@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
+import { AuthContext } from './AuthContext';  
+
 
 const Login = () => {
 
@@ -12,8 +14,10 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const checkLogin = async () => {
+  const{login}=useContext(AuthContext);
 
+
+  const checkLogin = async () => {
     const notyf = new Notyf({
       duration: 1000,
       position: {
@@ -21,7 +25,6 @@ const Login = () => {
         y: 'top',
       },
     });
-
 
     try {
       const response = await fetch('http://localhost:3003/api/login',
@@ -38,9 +41,8 @@ const Login = () => {
 
       if (response.ok) {
         const { token ,is_first_login } = data;
-        localStorage.setItem('token', token);
-
-        
+       login(token);
+               
         const decodeToken = JSON.parse(atob(token.split('.')[1]));
         const role = decodeToken.role;
 

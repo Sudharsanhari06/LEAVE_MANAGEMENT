@@ -13,7 +13,11 @@ const LeaveApproval = () => {
     const fetchApprovalStatus = async () => {
       try {
         console.log("requestId", requestId);
-        const res = await fetch(`http://localhost:3003/leaveapproval/status/${requestId}`);
+        const res = await fetch(`http://localhost:3006/leaveapproval/status/${requestId}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
         const data = await res.json();
         console.log("leave approval", data);
         setApprovals(data);
@@ -35,12 +39,11 @@ const LeaveApproval = () => {
     fetchApprovalStatus();
   }, [requestId]);
 
-
   return (
-  <div>
+    <div>
       <h2 style={{ textAlign: 'center' }}>Leave Request Progress</h2>
       <Stepper currentStep={currentStep} approvals={approvals} />
-  </div>
+    </div>
   );
 };
 

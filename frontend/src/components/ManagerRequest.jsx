@@ -3,7 +3,7 @@ import '../styles/manager.css';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 
-const ManagerRequest = ({ role, approverId }) => {
+const ManagerRequest = ({ role, approverId,setLeaveCount }) => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectionReason, setRejectionReason] = useState('');
@@ -23,7 +23,7 @@ const ManagerRequest = ({ role, approverId }) => {
 
       console.log("role approver", role, approverId);
       try {
-        const response = await fetch(`http://localhost:3003/leaveapproval/mapped?role=${role}&approved_by=${approverId}`, {
+        const response = await fetch(`http://localhost:3006/leaveapproval/mapped?role=${role}&approved_by=${approverId}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -31,6 +31,9 @@ const ManagerRequest = ({ role, approverId }) => {
         });
         const data = await response.json();
         setLeaveRequests(data);
+        if(setLeaveCount){
+          setLeaveCount(data.length);
+        }
         console.log("leave requests data", data);
       } catch (error) {
         console.error("Failed to fetch leave requests:", error);
@@ -46,7 +49,7 @@ const ManagerRequest = ({ role, approverId }) => {
     console.log("manager token", token);
 
     try {
-      const response = await fetch(`http://localhost:3003/leaveapproval/decision`, {
+      const response = await fetch(`http://localhost:3006/leaveapproval/decision`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -97,9 +100,9 @@ const ManagerRequest = ({ role, approverId }) => {
               <p className="leave-type">{request.leave_type}</p>
 
               <div className="date-range">
-                <span>📅 {request.start_date.split('T')[0]}</span>
+                <span>📅 {request.start_date}</span>
                 <span>→</span>
-                <span>{request.end_date.split('T')[0]}</span>
+                <span>{request.end_date}</span>
               </div>
 
               <p className="days-count">{request.days} day(s)</p>
@@ -124,7 +127,7 @@ const ManagerRequest = ({ role, approverId }) => {
               </div>
             </div>
 
-            { currentRequestId== request.request_id && showRejectModal && (
+            {currentRequestId == request.request_id && showRejectModal && (
               <div className="modal-overlay">
                 <div className="modal">
                   <h3>Enter Rejection Reason</h3>

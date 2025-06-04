@@ -11,15 +11,6 @@ white #ffffff\
 vilot #4a2dcf
 */
 
-::-webkit-scrollbar {
-    width: 15px;
-    height: 30px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #1E2D4E;
-    border-radius: 10px;
-}
 
 .dashboard-container {
     width: 100vw;
@@ -40,7 +31,7 @@ vilot #4a2dcf
 
 .left-side img {
     margin: 0 0 1.2rem;
-    width: 150px;
+    width: 135px;
     cursor: pointer;
 }
 
@@ -58,7 +49,6 @@ vilot #4a2dcf
     margin: 0.9rem 0;
     display: block;
     border-radius: 0.5rem;
-    /* transition: 0.7s ease-in-out; */
 }
 
 .left-side .sidebar-btn.active {
@@ -85,7 +75,7 @@ vilot #4a2dcf
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    position: relative;
 }
 
 .right-side__header .employee_role {
@@ -96,7 +86,27 @@ vilot #4a2dcf
 }
 
 .right-side__header .bell-icon {
-    color: red;
+    color:#44444487;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
+.right-side__header .bell-circle{
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    background-color: red;
+    display: block;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    border-radius: 50%;
+    position: absolute;
+    top: 11px;
+    right: 33px;
 }
 
 .right-side__header p {
@@ -125,7 +135,7 @@ vilot #4a2dcf
 
 .leave-boxes__container h2 {
     margin-bottom: 0.5rem;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .leave-boxes {
@@ -135,10 +145,10 @@ vilot #4a2dcf
     border-radius: 0.5rem;
 }
 
-.leave-box {
-    width: 210px;
+.leave-box{
+    width: 200px;
     min-height: 100px;
-    padding: 1rem 0.7rem;
+    padding: 1rem 0.4rem;
     border-radius: 0.5rem;
     display: flex;
     align-items: center;
@@ -147,14 +157,14 @@ vilot #4a2dcf
 
 
 .leave-box h2 {
-    font-size: 2.3rem;
+    font-size: 2.2rem;
     font-weight: 750;
     width: 30%;
 }
 
 .leave-box p {
     width: 70%;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     text-transform: capitalize;
 }
@@ -174,18 +184,6 @@ vilot #4a2dcf
 .leave-box.earned {
     background-color: hsl(13, 100%, 94%);
 }
-
-/* .leave-boxes__container button{
-    padding: 0.5rem 1rem;
-    border: 0;
-    font-size: 1.2rem;
-    color: #eaf6fd;
-    background-color: #1d1b27;
-    margin: 0.5rem 0;
-    border-radius: 0.4rem;
-    cursor: pointer;
-} */
-
 
 
 /* leave request table */
@@ -244,7 +242,7 @@ vilot #4a2dcf
     padding: 12px 1rem;
     font-size: 1rem;
     text-transform: capitalize;
-    text-align: left;
+    text-align:center;
 }
 
 .all-leaverequest table thead tr th {

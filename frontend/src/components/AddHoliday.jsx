@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState, useEffect } from "react";
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
 import '../styles/holiday.css';
+import { AuthContext } from './AuthContext';
 
 const AddHoliday = () => {
-
+    const { user } = useContext(AuthContext);
     const [holidayData, setHolidayData] = useState({
         holiday_name: '',
         holiday_date: ''
@@ -32,7 +33,7 @@ const AddHoliday = () => {
         const fetchHoliday = async () => {
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch('http://localhost:3003/holidays', {
+                const response = await fetch('http://localhost:3006/holidays', {
                     method: 'GET',
                     headers: {
                         authorization: `Bearer ${token}`,
@@ -54,7 +55,7 @@ const AddHoliday = () => {
         try {
             e.preventDefault();
             const token = localStorage.getItem('token');
-            const holidayResponse = await fetch('http://localhost:3003/holidays', {
+            const holidayResponse = await fetch('http://localhost:3006/holidays', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,13 +83,14 @@ const AddHoliday = () => {
 
     return (
         <section className="holidays-container">
-            <form onSubmit={holidaySubmit}>
-                <input type="text" placeholder='Holiday Name.' name='holiday_name' value={holidayData.holiday_name} onChange={handleChange} required />
-                <input type="date" name='holiday_date' value={holidayData.holiday_date} onChange={handleChange} required />
-                <button type='submit'>Submit</button>
-            </form>
 
-            <div className="holidays-show">
+            {user?.role == 'hr' ? (
+                <form onSubmit={holidaySubmit}>
+                    <input type="text" placeholder='Holiday Name.' name='holiday_name' value={holidayData.holiday_name} onChange={handleChange} required />
+                    <input type="date" name='holiday_date' value={holidayData.holiday_date} onChange={handleChange} required />
+                    <button type='submit'>Submit</button>
+                </form>
+            ) : (<div className="holidays-show">
                 <h2>Holidays</h2>
                 <table >
                     <thead>
@@ -112,7 +114,7 @@ const AddHoliday = () => {
 
             </div>
 
-
+            )}
         </section>
     )
 }

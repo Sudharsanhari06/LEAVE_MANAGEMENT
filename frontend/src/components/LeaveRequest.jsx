@@ -7,8 +7,11 @@ import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { IoClose } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 const LeaveRequest = ({ employee_id }) => {
+    const navigate = useNavigate();
 
     const [leaveTypes, setLeaveTypes] = useState([]);
     const [leaveRequestData, setLeaveRequeastData] = useState([]);
@@ -16,10 +19,13 @@ const LeaveRequest = ({ employee_id }) => {
     const [canceledRequests, setCanceledRequests] = useState([]);
     const [holidayData, setHolidayData] = useState([]);
     const [requestDate, setRequestDate] = useState([]);
+    const [selectedLeave, setSelectedLeave] = useState(null);
+
+
+
 
     // take request to show.
     const [refreshKey, setRefreshKey] = useState(0);
-
     const [formData, setFormData] = useState({
         leavetype_id: '',
         start_date: '',
@@ -41,19 +47,20 @@ const LeaveRequest = ({ employee_id }) => {
 
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch('http://localhost:3003/leavetypes', {
+                const response = await fetch('http://localhost:3006/leavetypes', {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                const response3 = await fetch('http://localhost:3003/holidays', {
+
+                const response3 = await fetch('http://localhost:3006/holidays', {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 })
-                const response4 = await fetch(`http://localhost:3003/leaverequest/date-overlap/${employee_id}`, {
+                const response4 = await fetch(`http://localhost:3006/leaverequest/date-overlap/${employee_id}`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -84,7 +91,7 @@ const LeaveRequest = ({ employee_id }) => {
 
     const userCancel = async (request_id) => {
         try {
-            const response = await fetch(`http://localhost:3003/employee/leaverequest/${request_id}`, {
+            const response = await fetch(`http://localhost:3006/employee/leaverequest/${request_id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,7 +108,6 @@ const LeaveRequest = ({ employee_id }) => {
                     return updated;
                 });
 
-
             } else {
                 console.log("update status else part");
             }
@@ -113,7 +119,7 @@ const LeaveRequest = ({ employee_id }) => {
 
     const fetchLeaveRequest = async (employee_id) => {
         try {
-            const response2 = await fetch(`http://localhost:3003/leaverequest/employee/${employee_id}`, {
+            const response2 = await fetch(`http://localhost:3006/leaverequest/employee/${employee_id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -180,7 +186,7 @@ const LeaveRequest = ({ employee_id }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:3003/leaverequest', {
+            const response = await fetch('http://localhost:3006/leaverequest', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -250,6 +256,11 @@ const LeaveRequest = ({ employee_id }) => {
         return reversed;
     }
 
+    const viewApprovals = (requestId) => {
+        navigate(`/dashboard/leaveapproval/${requestId}`)
+    }
+
+
     return (
         <section className='leave-request__section'>
             <h2>Latest Leaves</h2>
@@ -258,7 +269,6 @@ const LeaveRequest = ({ employee_id }) => {
                 {showPopup && (
                     <div className='leaverequest-form'>
                         <button onClick={closePopup} className='btn close-btn'><i class="fa-regular fa-circle-xmark"></i></button>
-
                         <form onSubmit={submitLeave}>
                             <div className='form-date'>
                                 <input type="date" name='start_date' value={formData.start_date} onChange={handleChange} min={todayDate} required />
@@ -300,8 +310,8 @@ const LeaveRequest = ({ employee_id }) => {
                     <tbody>
                         {leaveRequestData &&
                             leaveRequestData.map((request) => (
-                                <tr key={request.request_id}>
-                                    <td>{request.
+                                <tr key={request.request_id} onClick={() => viewApprovals(request.request_id)} title='View Approvals'>
+                                    <td>{request.leavetype_id.
                                         type_name}</td>
                                     <td>{dateReverse(request.start_date)}</td>
                                     <td>{dateReverse(request.end_date)}</td>
@@ -316,14 +326,40 @@ const LeaveRequest = ({ employee_id }) => {
                                             </span>
                                         </Tippy>
                                     </td>
-                                    <td className={`leavestatus ${request.status}`}>{request.status}</td>
+                                    <td className={`leavestatus ${request.status}`} onClick={() => {
+                                        if (request.status === 'rejected') {
+                                            setSelectedLeave(request);
+                                        }
+
+                                    }} style={{ cursor: request.status === 'rejected' ? 'pointer' : 'default' }} >{request.status}</td>
                                     <td><button onClick={() => handleCancelClick(request.request_id)} className='action-btn' disabled={canceledRequests.includes(request.request_id)}><i className="fa-regular fa-circle-xmark"></i></button></td>
                                 </tr>
                             ))
                         }
                     </tbody>
+                    
+                    {selectedLeave && (
+                        <div className="leave-modal-overlay">
+                            <div className="leave-modal-content">
+                                <button className="leave-modal-close-btn" onClick={() => setSelectedLeave(null)}><IoClose /></button>
+                                <h3>Leave Request Details</h3>
+                                <p><strong>Leave Type:</strong> {selectedLeave.leavetype_id.type_name}</p>
+                                <p><strong>From:</strong> {selectedLeave.start_date}</p>
+                                <p><strong>To:</strong> {selectedLeave.end_date}</p>
+                                <p><strong>Reason:</strong> {selectedLeave.reason}</p>
+                                <p><strong>Comments:</strong>  {
+                                    selectedLeave.approvals.map((approve) => {
+                                        if (approve.status == 'rejected') {
+                                            return approve.reason
+                                        }
+                                    })
+                                }</p>
+                            </div>
+                        </div>
+                    )}
                 </table>
             </section>
+
         </section>
 
     )

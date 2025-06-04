@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import { Notyf } from 'notyf';
 import 'notyf/notyf.min.css';
-import { AuthContext } from './AuthContext';  
+import { AuthContext } from './AuthContext';
 
 
 const Login = () => {
@@ -14,8 +14,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const{login}=useContext(AuthContext);
-
+  const { login } = useContext(AuthContext);
 
   const checkLogin = async () => {
     const notyf = new Notyf({
@@ -27,7 +26,7 @@ const Login = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:3003/api/login',
+      const response = await fetch('http://localhost:3006/api/login',
         {
           method: 'POST',
           headers: {
@@ -39,10 +38,10 @@ const Login = () => {
       const data = await response.json();
       console.log("login data", data);
 
-      if (response.ok) {
-        const { token ,is_first_login } = data;
-       login(token);
-               
+      if (response.ok){
+        const { token, is_first_login } = data;
+        login(token);
+
         const decodeToken = JSON.parse(atob(token.split('.')[1]));
         const role = decodeToken.role;
 
@@ -51,16 +50,16 @@ const Login = () => {
         if (is_first_login) {
           notyf.success('Please change your password.');
           setTimeout(() => {
-            navigate('employee/change-password'); 
+            navigate('employee/change-password');
           }, 1000);
-          return; 
+          return;
         }
 
-        if (role == 'Hr') {
-          notyf.success('Login in successfully!')
-          setTimeout(() => {
-            navigate('/dashboard/userdashboard');
-          }, 1000);
+        if (role == 'hr') {
+        notyf.success('Login in successfully!')
+        setTimeout(() => {
+          navigate('/dashboard/userdashboard');
+        }, 1000);
         } else {
           notyf.success('Login in successfully!');
           setTimeout(() => {

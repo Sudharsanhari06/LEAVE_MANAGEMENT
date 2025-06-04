@@ -8,8 +8,11 @@ const Stepper = ({ currentStep, approvals }) => {
     name: a.approver_name
   }))];
 
+ 
+  
   return (
     <div className="stepper-container">
+
       {steps.map((step, index) => {
         const stepNum = index + 1;
         const isCompleted = currentStep > stepNum;

@@ -22,7 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path='/employee/change-password' element={<ChangePassword />} />
-
+          
           <Route path="/dashboard" element={<Dashboard />} >
             <Route path="userdashboard" element={<DashBoardRight />} />
             <Route path="leaverequest'" element={<ManagerRequest />} />

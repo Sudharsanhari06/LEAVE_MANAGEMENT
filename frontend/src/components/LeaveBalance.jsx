@@ -12,7 +12,7 @@ const LeaveBalance = ({ employee_id }) => {
         const fetchLeaveBalance = async () => {
             const token = localStorage.getItem('token');
             try {
-                const response = await fetch(`http://localhost:3003/leavebalance/employee/${employee_id}`, {
+                const response = await fetch(`http://localhost:3006/leavebalance/employee/${employee_id}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`

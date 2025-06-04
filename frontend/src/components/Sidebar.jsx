@@ -21,7 +21,6 @@ const Sidebar = () => {
     };
 
     useEffect(() => {
-        
         const token = localStorage.getItem('token');
         if (!token) {
             alert('Unauthorized. Please login first.');
@@ -31,7 +30,7 @@ const Sidebar = () => {
 
         const fetchUserData = async () => {
             try {
-                const res = await fetch('http://localhost:3003/api/dashboard', {
+                const res = await fetch('http://localhost:3006/api/dashboard', {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -55,9 +54,10 @@ const Sidebar = () => {
 
     useEffect(() => {
         if (userData?.employee_id) {
+            console.log("userData employee_id", typeof (userData.employee_id))
             const fetchLeaveRequests = async () => {
                 try {
-                    const res = await fetch(`http://localhost:3003/leaverequest/employee/${userData.employee_id}`, {
+                    const res = await fetch(`http://localhost:3006/leaverequest/employee/${userData.employee_id}`, {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem('token')}`
                         }
@@ -84,29 +84,29 @@ const Sidebar = () => {
                     </NavLink>
                 </li>
 
-                {isHR && (
+                {['manager','hr','director'].includes(userData?.role) && (
                     <>
                         <li>
                             <NavLink to='/dashboard/add-employee' className='sidebar-btn'>
                                 <span><BsPersonFillAdd className='sidebar-icon' /></span> Employee
                             </NavLink>
                         </li>
-                        <li>
-                            <NavLink to='/dashboard/add-holiday' className='sidebar-btn'>
-                                <span><IoIosAddCircleOutline className='sidebar-icon' /></span> Holidays
-                            </NavLink>
-                        </li>
+
                     </>
                 )}
 
-                {leaveRequests.length > 0 && (
 
                     <li>
-                        <NavLink to={`/dashboard/leaveapproval/${leaveRequests[0].request_id}`} className='sidebar-btn'>
+                        <NavLink className='sidebar-btn'>
                             <span><SiPivotaltracker className='sidebar-icon' /></span> Leave Approvals
                         </NavLink>
                     </li>
-             )} 
+             
+                <li>
+                    <NavLink to='/dashboard/add-holiday' className='sidebar-btn'>
+                        <span><IoIosAddCircleOutline className='sidebar-icon' /></span> Holidays
+                    </NavLink>
+                </li>
 
                 <li>
                     <NavLink to='/dashboard/calender' className='sidebar-btn'>
@@ -119,6 +119,7 @@ const Sidebar = () => {
                         <span><BiLogOut className='sidebar-icon' /></span> Logout
                     </NavLink>
                 </li>
+                
             </ul>
         </section>
     );

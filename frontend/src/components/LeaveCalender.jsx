@@ -22,12 +22,12 @@ const MyCalendar = () => {
     const fetchData = async () => {
       try {
         const [leavesResponse, holidaysResponse] = await Promise.all([
-          fetch(`http://localhost:3003/leaverequest/statusapproved?start=${startDate}&end=${endDate}`, {
+          fetch(`http://localhost:3006/leaverequest/statusapproved?start=${startDate}&end=${endDate}`, {
             headers: { authorization: `Bearer ${token}` },
           }),
-          fetch(`http://localhost:3003/holidays/calender?start=${startDate}&end=${endDate}`, {
+          fetch(`http://localhost:3006/holidays/calender?start=${startDate}&end=${endDate}`, {
             headers: { authorization: `Bearer ${token}` },
-          }),
+          })
         ]);
 
         const leavesData = await leavesResponse.json();

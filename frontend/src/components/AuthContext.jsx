@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    
+
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('token'));
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         if (token) {
-            fetch('http://localhost:3003/api/dashboard', {
+            fetch('http://localhost:3006/api/dashboard', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', newToken);
         setToken(newToken);
     };
-
+    
     const logout = () => {
         localStorage.removeItem('token');
         setUser(null);
@@ -41,3 +41,4 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+

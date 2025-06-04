@@ -9,11 +9,13 @@ import ManagerRequest from './ManagerRequest';
 const DashBoardRight = () => {
 
     const [userData, setUserData] = useState(null);
+    // const [showRequest, setShowRequest] = useState(false);
+    const [leaveCount, setLeaveCount] = useState(0);
     const [showRequest, setShowRequest] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        
+
         console.log("dashboard right side");
         const fetchDashboard = async () => {
             const token = localStorage.getItem('token');
@@ -22,9 +24,8 @@ const DashBoardRight = () => {
                 navigate('/');
                 return;
             }
-
             try {
-                const response = await fetch('http://localhost:3003/api/dashboard', {
+                const response = await fetch('http://localhost:3006/api/dashboard', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -48,23 +49,58 @@ const DashBoardRight = () => {
     }, []);
 
 
+    useEffect(() => {
+        const fetchLeaveCount = async () => {
+            const token = localStorage.getItem('token');
+            try {
+                const role = userData?.role;
+                const approverId = userData?.employee_id;
+
+                const response = await fetch(
+                    `http://localhost:3006/leaveapproval/mapped?role=${role}&approved_by=${approverId}`,
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        },
+                    }
+                );
+                const data = await response.json();
+                setLeaveCount(data.length); // Set notification count
+            } catch (error) {
+                console.error("Error fetching initial leave count:", error);
+            }
+        };
+
+
+        fetchLeaveCount();
+    }, [userData]);
+
+
+
+
     return (
         <section className="right-side">
             <div className="right-side__header">
                 <div className='header-firstside'>
-                <p> Hey, <span>{userData ? userData.name : 'username'} </span> Welcome To Lumel </p>
-                <div className='employee_role'>-  {userData ? userData.role : 'userrole'}</div>
+                    <p> Hey, <span>{userData ? userData.name : 'username'} </span> Welcome To Lumel </p>
+                    <div className='employee_role'>-  {userData ? userData.role : 'userrole'}</div>
                 </div>
-                {['manager','hr','director'].includes(userData?.role) && (
-                      <p onClick={() => setShowRequest(prev => !prev)} >
-                      <FaBell  className='bell-icon'/>
+                {['manager', 'hr', 'director'].includes(userData?.role) && (
+                    <p onClick={() => {
+                        setShowRequest(prev => !prev)
+                    }} >
+                        <FaBell className='bell-icon' />
+                        {leaveCount > 0 && (
+                            <span className='bell-circle'>{leaveCount}</span>
+                        )}
+
                     </p>
-                ) }
-              
+                )}
+
             </div>
 
-            {showRequest && userData ? ( 
-                <ManagerRequest role={userData.role} approverId={userData.employee_id} />
+            {showRequest && userData ? (
+                <ManagerRequest role={userData.role} approverId={userData.employee_id} setLeaveCount={setLeaveCount} />
             ) : (
                 <div>
 

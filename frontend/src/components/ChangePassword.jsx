@@ -24,7 +24,7 @@ const ChangePassword = () => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3003/employee/change-password', {
+            const response = await fetch('http://localhost:3006/employee/change-password', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

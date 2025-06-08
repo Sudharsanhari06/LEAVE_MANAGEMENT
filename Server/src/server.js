@@ -14,8 +14,8 @@ import { holidaysRoutes } from './routes/holidaysRoutes.js';
 
 const init = async () => {
   const server = Hapi.server({
-    port: process.env.PORT || 3006,
-    host: process.env.HOST || 'localhost',
+    port: 3006,
+    host: process.env.DB_HOST,
     routes: {
       cors: {
         origin: ['*'],

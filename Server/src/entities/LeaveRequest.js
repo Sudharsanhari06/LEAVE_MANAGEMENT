@@ -13,12 +13,13 @@ export const LeaveRequest = new EntitySchema({
     start_date: {
       type: 'date',
       name: 'start_date',
-      nullable:false
+      nullable:true
     },
     end_date: {
       type: 'date',
       name: 'end_date',
-      nullable:false
+      nullable:true
+
     },
     reason: {
       type: 'text',

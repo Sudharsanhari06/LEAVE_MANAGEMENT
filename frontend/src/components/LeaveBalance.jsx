@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import '../styles/dashboard.css';
 import CountUp from 'react-countup';
 
-const LeaveBalance = ({ employee_id }) => {
+const LeaveBalance = ({ employee_id,refreshKey }) => {
 
     const [leaveBalance, setLeaveBalance] = useState({});
 
@@ -34,7 +34,7 @@ const LeaveBalance = ({ employee_id }) => {
         }
         fetchLeaveBalance()
 
-    }, [employee_id])
+    }, [employee_id,refreshKey])
 
     return (
         <section>
@@ -47,8 +47,17 @@ const LeaveBalance = ({ employee_id }) => {
                 }
                 {leaveBalance.leave_types && leaveBalance.leave_types.map((leave, index) => (
                     <div className={`leave-box ${leave.type_name}`} key={index}>
-                        <h2>  <CountUp end={leave.remaining_days} duration={3} />  </h2>
-                        <p>Total {leave.type_name} Leaves</p>
+                        {
+                            leave.remaining_days > 0 ? (
+                                <>
+                                    <h2>  <CountUp end={leave.remaining_days} duration={3} />  </h2>
+                                    <p>Total {leave.type_name} Leaves</p>
+                                </>
+                            ) : (
+                                <p className='no-leaves'>No Leaves Available</p>
+                            )
+                        }
+
                     </div>
                 ))}
             </div>

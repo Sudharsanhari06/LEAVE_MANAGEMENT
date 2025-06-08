@@ -211,6 +211,7 @@ export const getLeaveApprovalStatusByRequestId = async (request_id) => {
     .select([
       'la.role AS role',
       'la.status AS status',
+      'la.reason AS reason',
       'emp.name AS approved_by_name'
     ])
     .getRawMany();
@@ -226,23 +227,7 @@ export const getMappedRequestsService = async ({ role, approved_by }) => {
 
   const repository = AppDataSource.getRepository(LeaveApprovals);
   console.log("role approved_by", role, approved_by);
-  // const results = await repository.find({
-  //     where: {
-  //         role,
-  //         status: 'pending',
-  //         approved_by: { employee_id: Number(approved_by) }
-  //     },
-  //     relations: [
-  //         'request_id',
-  //         'request_id.employee_id',
-  //         'request_id.leavetype_id'
-  //     ],
-  //     order: {
-  //         request_id: {
-  //             start_date: 'DESC'
-  //         }
-  //     }
-  // });
+
   const result = await AppDataSource.getRepository(LeaveApprovals)
     .createQueryBuilder('la')
     .leftJoinAndSelect('la.request_id', 'lr')
@@ -252,6 +237,7 @@ export const getMappedRequestsService = async ({ role, approved_by }) => {
     .where('la.role = :role', { role })
     .andWhere('la.approved_by = :approved_by', { approved_by: Number(approved_by) })
     .andWhere('la.status = :status', { status: 'pending' })
+    .andWhere('lr.status != :cancelled', { cancelled: 'cancelled' }) 
     .orderBy('lr.start_date', 'DESC')
     .getMany();
 

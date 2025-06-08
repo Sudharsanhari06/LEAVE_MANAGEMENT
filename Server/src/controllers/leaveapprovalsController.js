@@ -80,6 +80,7 @@ export const updateApprovalStatus = async (request, h) => {
 
 
 export const getLeaveApprovalStatusByRequestId = async (request, h) => {
+    
     const { requestId } = request.params;
     console.log("request_id approval", requestId);
     try {

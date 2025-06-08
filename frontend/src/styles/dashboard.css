@@ -169,6 +169,11 @@ vilot #4a2dcf
     text-transform: capitalize;
 }
 
+.leave-box .no-leaves{
+    font-size: 1.2rem;
+    width: 100%;
+}
+
 .leave-box.total {
     background-color: #ebf8f1;
 }

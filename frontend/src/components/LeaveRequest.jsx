@@ -10,22 +10,15 @@ import 'tippy.js/dist/tippy.css';
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 
-const LeaveRequest = ({ employee_id }) => {
+const LeaveRequest = ({ employee_id,refreshKey,setRefreshKey }) => {
     const navigate = useNavigate();
-
     const [leaveTypes, setLeaveTypes] = useState([]);
     const [leaveRequestData, setLeaveRequeastData] = useState([]);
     const [showPopup, setshowPopup] = useState(false);
-    const [canceledRequests, setCanceledRequests] = useState([]);
     const [holidayData, setHolidayData] = useState([]);
     const [requestDate, setRequestDate] = useState([]);
     const [selectedLeave, setSelectedLeave] = useState(null);
 
-
-
-
-    // take request to show.
-    const [refreshKey, setRefreshKey] = useState(0);
     const [formData, setFormData] = useState({
         leavetype_id: '',
         start_date: '',
@@ -42,7 +35,6 @@ const LeaveRequest = ({ employee_id }) => {
     });
 
     useEffect(() => {
-
         const fetchLeaveTypes = async () => {
 
             const token = localStorage.getItem('token');
@@ -99,17 +91,18 @@ const LeaveRequest = ({ employee_id }) => {
                 }
             })
             if (response.ok) {
-                const data = response.json();
+                const data = await response.json();
                 console.log("update status", data);
+                setRefreshKey((item)=>item+1);
 
-                setCanceledRequests(prev => {
-                    const updated = [...prev, request_id];
-                    localStorage.setItem('canceledRequests', JSON.stringify(updated));
-                    return updated;
-                });
+                setLeaveRequeastData(prev =>
+                    prev.map(req =>
+                        req.request_id === request_id ? { ...req, status: 'cancelled' } : req
+                    )
+                );
 
             } else {
-                console.log("update status else part");
+                console.log("Cancel failed.");
             }
         } catch (error) {
             console.error('Cancel failed:', error);
@@ -138,13 +131,6 @@ const LeaveRequest = ({ employee_id }) => {
         fetchLeaveRequest(employee_id);
     }, [refreshKey])
 
-
-    useEffect(() => {
-        const stored = localStorage.getItem('canceledRequests');
-        if (stored) {
-            setCanceledRequests(JSON.parse(stored));
-        }
-    }, []);
 
 
     const handleCancelClick = async (request_id) => {
@@ -212,7 +198,7 @@ const LeaveRequest = ({ employee_id }) => {
 
     const holidays = holidayData?.result?.map(item =>
         new Date(item.holiday_date).toISOString().split('T')[0]
-    ) || [];
+    );
 
     const calculateLeaveDays = (start, end, holidays) => {
         let tempDate = new Date(start);
@@ -242,6 +228,9 @@ const LeaveRequest = ({ employee_id }) => {
         }
     }, [formData.start_date, formData.end_date, holidays]);
 
+
+
+
     const openPopup = () => {
         setshowPopup(true);
     }
@@ -251,6 +240,7 @@ const LeaveRequest = ({ employee_id }) => {
     }
 
     const dateReverse = (date) => {
+        if (!date) return '';
         const da = date.split('T')[0];
         const reversed = da.split('-').reverse().join('-');
         return reversed;
@@ -259,7 +249,6 @@ const LeaveRequest = ({ employee_id }) => {
     const viewApprovals = (requestId) => {
         navigate(`/dashboard/leaveapproval/${requestId}`)
     }
-
 
     return (
         <section className='leave-request__section'>
@@ -294,6 +283,7 @@ const LeaveRequest = ({ employee_id }) => {
                 )}
             </div>
 
+
             <section className='all-leaverequest'>
                 <table>
                     <thead>
@@ -310,7 +300,7 @@ const LeaveRequest = ({ employee_id }) => {
                     <tbody>
                         {leaveRequestData &&
                             leaveRequestData.map((request) => (
-                                <tr key={request.request_id} onClick={() => viewApprovals(request.request_id)} title='View Approvals'>
+                                <tr key={request.request_id} >  
                                     <td>{request.leavetype_id.
                                         type_name}</td>
                                     <td>{dateReverse(request.start_date)}</td>
@@ -329,15 +319,22 @@ const LeaveRequest = ({ employee_id }) => {
                                     <td className={`leavestatus ${request.status}`} onClick={() => {
                                         if (request.status === 'rejected') {
                                             setSelectedLeave(request);
+                                            viewApprovals(request.request_id)
                                         }
-
+                                        else{
+                                            
+                                        }
                                     }} style={{ cursor: request.status === 'rejected' ? 'pointer' : 'default' }} >{request.status}</td>
-                                    <td><button onClick={() => handleCancelClick(request.request_id)} className='action-btn' disabled={canceledRequests.includes(request.request_id)}><i className="fa-regular fa-circle-xmark"></i></button></td>
+
+                                    <td><button onClick={() => handleCancelClick(request.request_id)}
+                                        className='action-btn' disabled={request.status === 'cancelled' || request.status=='rejected'}
+                                    ><i className="fa-regular fa-circle-xmark"></i></button></td>
                                 </tr>
                             ))
                         }
                     </tbody>
-                    
+
+
                     {selectedLeave && (
                         <div className="leave-modal-overlay">
                             <div className="leave-modal-content">
@@ -359,9 +356,7 @@ const LeaveRequest = ({ employee_id }) => {
                     )}
                 </table>
             </section>
-
         </section>
-
     )
 }
 

@@ -12,6 +12,7 @@ const DashBoardRight = () => {
     // const [showRequest, setShowRequest] = useState(false);
     const [leaveCount, setLeaveCount] = useState(0);
     const [showRequest, setShowRequest] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -108,14 +109,14 @@ const DashBoardRight = () => {
                     <div className="leave-boxes__container">
                         <h2>Leaves</h2>
                         {userData &&
-                            <LeaveBalance employee_id={userData.employee_id} />
+                            <LeaveBalance employee_id={userData.employee_id} refreshKey={refreshKey} />
                         }
 
                     </div>
 
                     <div className="leave-request__container">
                         {userData &&
-                            <LeaveRequest employee_id={userData.employee_id} />
+                            <LeaveRequest employee_id={userData.employee_id} refreshKey={refreshKey} setRefreshKey={setRefreshKey}/>
                         }
                     </div>
                 </div>

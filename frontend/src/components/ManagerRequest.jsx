@@ -30,6 +30,7 @@ const ManagerRequest = ({ role, approverId,setLeaveCount }) => {
           }
         });
         const data = await response.json();
+        console.log("leaveapproval/mapped :",data)
         setLeaveRequests(data);
         if(setLeaveCount){
           setLeaveCount(data.length);

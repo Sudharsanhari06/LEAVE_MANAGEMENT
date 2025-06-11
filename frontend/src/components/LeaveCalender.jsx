@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 const localizer = momentLocalizer(moment);
+import TeamLeaveCalendar from './TeamCalender';
 
 const MyCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -12,7 +13,7 @@ const MyCalendar = () => {
   });
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState('month');
-
+  const [viewMode, setViewMode] = useState('team');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -100,20 +101,35 @@ const MyCalendar = () => {
 
   return (
     <div style={{ height: '80vh', padding: '20px' }}>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        startAccessor="start"
-        endAccessor="end"
-        eventPropGetter={eventStyleGetter}
-        dayPropGetter={dayPropGetter}
-        onRangeChange={onRangeChange}
-        onNavigate={onNavigate}
-        view={currentView}
-        date={currentDate}
-        onView={view => setCurrentView(view)}
-        views={['month']}
-      />
+      <button className={viewMode == 'team' ? 'active' : ''} onClick={() => setViewMode('team')}>Team</button>
+      <button
+        className={viewMode === 'individual' ? 'active' : ''}
+        onClick={() => setViewMode('individual')}
+      >
+        Individual
+      </button>
+
+      {viewMode === 'team' ? (
+        <TeamLeaveCalendar />
+      ) : (
+        <>
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            eventPropGetter={eventStyleGetter}
+            dayPropGetter={dayPropGetter}
+            onRangeChange={onRangeChange}
+            onNavigate={onNavigate}
+            view={currentView}
+            date={currentDate}
+            onView={view => setCurrentView(view)}
+            views={['month']}
+          />
+        </>
+      )
+      }
     </div>
   );
 };

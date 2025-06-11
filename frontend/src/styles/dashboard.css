@@ -51,7 +51,7 @@ vilot #4a2dcf
     border-radius: 0.5rem;
 }
 
-.left-side .sidebar-btn.active {
+.left-side .sidebar-btn.active{
     background-color: #D0E1E9;
     color: #050407;
 }

@@ -97,7 +97,7 @@ const Sidebar = () => {
 
 
                     <li>
-                        <NavLink className='sidebar-btn'>
+                        <NavLink to={`leaveapproval/${leaveRequests[0]?.request_id}`}   className='sidebar-btn'>
                             <span><SiPivotaltracker className='sidebar-icon' /></span> Leave Approvals
                         </NavLink>
                     </li>
@@ -107,6 +107,12 @@ const Sidebar = () => {
                         <span><IoIosAddCircleOutline className='sidebar-icon' /></span> Holidays
                     </NavLink>
                 </li>
+                {/* <li>
+                    <NavLink to='/dashboard/team-calender' className='sidebar-btn'>
+                        <span><FaRegCalendarAlt className='sidebar-icon' /></span> Team Calender
+                    </NavLink>
+                </li> */}
+
 
                 <li>
                     <NavLink to='/dashboard/calender' className='sidebar-btn'>

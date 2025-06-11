@@ -10,6 +10,7 @@ import LeaveCalendar from './components/LeaveCalender';
 import ManagerRequest from './components/ManagerRequest';
 import ChangePassword from './components/ChangePassword';
 import './index.css';
+import TeamCalendar from './components/TeamCalender';
 import { AuthProvider } from './components/AuthContext';
 
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="leaverequest'" element={<ManagerRequest />} />
             <Route path="leaveapproval/:requestId" element={<LeaveApproval />} />
             <Route path="add-employee" element={<AddEmployee />} />
+            <Route path='team-calender' element={<TeamCalendar/>}/>
             <Route path="add-holiday" element={<AddHoliday />} />
             <Route path='calender' element={<LeaveCalendar />}></Route>
           </Route>

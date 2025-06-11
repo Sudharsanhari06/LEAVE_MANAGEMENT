@@ -317,13 +317,12 @@ const LeaveRequest = ({ employee_id,refreshKey,setRefreshKey }) => {
                                         </Tippy>
                                     </td>
                                     <td className={`leavestatus ${request.status}`} onClick={() => {
-                                        if (request.status === 'rejected') {
-                                            setSelectedLeave(request);
+                                        // if (request.status === 'rejected') {
+                                        //     setSelectedLeave(request);
+                                        // }
+                                        // else{
                                             viewApprovals(request.request_id)
-                                        }
-                                        else{
-                                            
-                                        }
+                                        // }
                                     }} style={{ cursor: request.status === 'rejected' ? 'pointer' : 'default' }} >{request.status}</td>
 
                                     <td><button onClick={() => handleCancelClick(request.request_id)}

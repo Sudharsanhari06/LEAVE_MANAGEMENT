@@ -1,53 +1,75 @@
-.progress-container {
-  max-width: 700px;
-  margin: 2rem auto;
-  padding: 1rem;
-  font-family: sans-serif;
-  text-align: center;
-}
+ .approval-container {
+   max-width: 700px;
+   margin: 2rem auto;
+   padding: 1.5rem;
 
-.progress-bar {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  margin-top: 2rem;
-}
+ }
 
-.progress-bar::before {
-  content: '';
-  position: absolute;
-  top: 25px;
-  left: 5%;
-  right: 5%;
-  height: 4px;
-  background: #ccc;
-  z-index: 0;
-}
+ .approval-title {
+   text-align: center;
+   color: #2c3e50;
+   margin-bottom: 2rem;
+ }
 
-.step {
-  z-index: 1;
-  background-color: white;
-  width: 33%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-}
 
-.step-icon {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
-}
+ .approval-timeline {
+   position: relative;
+   padding-left: 50px;
+ }
 
-.step-icon.done {
-  color: green;
-}
+ .timeline-step {
+   /* height: 100%; */
+   /* position: relative; */
+   padding-bottom: 2rem;
+   border-left: 2px solid #4CAF50;
+   padding-left: 48px;
+   padding-bottom: 1rem;
+ }
 
-.step-icon.pending {
-  color: orange;
-}
+ .step-marker {
+   position: absolute;
+   left: 38px;
+   width: 30px;
+   height: 30px;
+   border-radius: 50%;
+   color: white;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-weight: bold;
+   font-size: 1.2rem;
+   z-index: 1000;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
 
-.step.completed span {
-  color: green;
-  font-weight: bold;
-}
+ .step-content {
+   background: #fff;
+   padding: 1.2rem;
+   border-radius: 8px;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+   margin-bottom: 1.2rem;
+ }
+
+ .step-content h3 {
+   margin-top: 0;
+   color: #2c3e50;
+ }
+
+ .approver-name,
+ .step-date {
+   color: #555;
+   margin: 0.5rem 0;
+ }
+
+ .step-status {
+   font-weight: 600;
+   margin: 0.5rem 0;
+ }
+
+ .reason-box {
+   background: #f5f5f5;
+   padding: 0.8rem;
+   border-radius: 4px;
+   margin-top: 0.8rem;
+   border-left: 3px solid #ddd;
+ }

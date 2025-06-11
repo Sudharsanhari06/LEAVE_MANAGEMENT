@@ -160,16 +160,6 @@ export const cancelLeaverequest = async (request, h) => {
     }
 };
 
-// export const getLeaverequestIdDelete = async (request, h) => {
-//     const { req_id } = request.params;
-//     try {
-//         await leaverequestService.getLeaverequestIdDelete(req_id);
-//         return h.response({ message: "Successfully deleted" }).code(200);
-//     } catch (error) {
-//         console.error("Failed to delete leaverequest", error);
-//         return h.response({ error: "Failed to delete leaverequest" }).code(500);
-//     }
-// };
 
 export const usedLeavedaysEmployee = async (request, h) => {
     const { employee_id } = request.params;
@@ -226,3 +216,38 @@ export const dateOverlap = async (request, h) => {
         return h.response({ message: 'Internal server error' }).code(500);
     }
 };
+
+
+
+export const getTeamLeavesByManagerController =async(request,h)=>{
+    const id = request.auth.employee_id;
+
+    const result=await employeeService.getEmployeesById(id);
+    console.log("result",result);
+  const {start, end } = request.query;
+  const manager_id=result.manager_id.employee_id;
+  console.log("manager_id",manager_id)
+  if (!manager_id || !start || !end) {
+    return h.response({ message: 'Missing required query parameters' }).code(400);
+  }
+  
+  try {
+    const leaves = await leaverequestService.getTeamLeavesByManager(manager_id, start, end);
+
+    const formatted = leaves.map((leave) => ({
+      request_id: leave.request_id,
+      employee_name: leave.employee_id.name,
+      leave_type: leave.leavetype_id.type_name,
+      start_date: leave.start_date,
+      end_date: leave.end_date,
+      days: leave.days,
+      reason: leave.reason
+    }));
+
+    return h.response(formatted).code(200);
+  } catch (err) {
+    console.error('Error fetching team calendar:', err);
+    return h.response({ message: 'Internal server controller error' }).code(500);
+  }
+
+}

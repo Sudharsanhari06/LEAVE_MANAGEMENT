@@ -75,6 +75,16 @@ export const leaveReaquestRoutes=[
         handler:leaverequestController.approvedStatus
     },
     {
+        method: 'GET',
+        path: '/leaverequest/team-calender',
+        options:{
+            pre:[
+                {method:verifyToken}
+            ]
+        },
+        handler:leaverequestController.getTeamLeavesByManagerController
+    },
+    {
         // work
         method:'GET',
         path:'/leaverequest/date-overlap/{employee_id}',

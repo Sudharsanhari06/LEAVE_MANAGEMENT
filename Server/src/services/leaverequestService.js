@@ -102,3 +102,19 @@ export const dateOverlap = async (employeeId) => {
     [Number(employeeId)]
   );
 };
+
+
+export const getTeamLeavesByManager = async (managerId, startDate, endDate) => {
+  return await AppDataSource.getRepository(LeaveRequest)
+    .createQueryBuilder('lr')
+    .leftJoinAndSelect('lr.employee_id', 'e')
+    .leftJoinAndSelect('lr.leavetype_id', 'lt')
+    .where('e.manager_id = :managerId', { managerId })
+    .andWhere('lr.status = :status', { status: 'approved' })
+    .andWhere('(lr.start_date BETWEEN :start AND :end OR lr.end_date BETWEEN :start AND :end)', {
+      start: startDate,
+      end: endDate
+    })
+    .orderBy('lr.start_date', 'ASC')
+    .getMany();
+};
